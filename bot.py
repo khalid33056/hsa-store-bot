@@ -192,100 +192,28 @@ PRODUCTS = {
 }
 
 API_TOKEN = '8673798950:AAFe8Iko5CVT5UzovpxRNcYg8qk3iP_RgQQ'
-MANDATORY_CHANNEL = '@Minifram'
-MANDATORY_CHANNEL_URL = 'https://t.me/Minifram'
-OPTIONAL_CHANNEL = 'https://t.me/HSA_ZONE_8BP'
-
-
-def build_join_keyboard() -> InlineKeyboardMarkup:
-    return InlineKeyboardMarkup([
-        [InlineKeyboardButton("📢 MINI FRAM", url=MANDATORY_CHANNEL_URL)],
-        [InlineKeyboardButton("📢 HSA STORE", url=OPTIONAL_CHANNEL)],
-        [InlineKeyboardButton("✅ Verify", callback_data="verify")]
-    ])
-
-
-def channel_url_to_username(channel_url: str) -> str:
-    if not channel_url:
-        return ""
-    normalized = channel_url.strip().rstrip("/")
-    if normalized.startswith("https://t.me/"):
-        return f"@{normalized.split('/')[-1]}"
-    if normalized.startswith("http://t.me/"):
-        return f"@{normalized.split('/')[-1]}"
-    return normalized if normalized.startswith("@") else f"@{normalized}"
-
-
-async def is_user_in_mandatory_channel(context: CallbackContext, user_id: int) -> bool:
-    candidates = [MANDATORY_CHANNEL, channel_url_to_username(MANDATORY_CHANNEL_URL)]
-    checked = set()
-
-    for channel_id in candidates:
-        if not channel_id or channel_id in checked:
-            continue
-        checked.add(channel_id)
-
-        try:
-            member = await context.bot.get_chat_member(channel_id, user_id)
-            status = str(member.status)
-            if status in ("member", "administrator", "creator"):
-                return True
-            if status == "restricted" and bool(getattr(member, "is_member", False)):
-                return True
-            logger.info(f"User {user_id} is not an active member in {channel_id}, status={status}")
-        except Exception as e:
-            logger.warning(f"Mandatory channel check failed for user {user_id} in {channel_id}: {e}")
-
-    return False
 
 async def start(update: Update, context: CallbackContext) -> None:
     logger.info(f"START command received from user: {update.effective_user.id}")
-    name_user = update.effective_user.first_name
-    welcome_text = f"<b>👋 Welcome {name_user} to our panel!</b>\n\n"
-    welcome_text += "<b>⚠️ You must join our channel first.</b>\n"
-    welcome_text += "<b>After joining click Verify ✅</b>"
-
-    channel_buttons = build_join_keyboard()
-
-    await update.message.reply_text(welcome_text, reply_markup=channel_buttons, parse_mode=ParseMode.HTML)
-    logger.info(f"START message sent to user: {update.effective_user.id}")
-
-async def verify(update: Update, context: CallbackContext) -> None:
-    query = update.callback_query
-    await query.answer()
-
-    is_joined = await is_user_in_mandatory_channel(context, query.from_user.id)
-    if not is_joined:
-        not_joined_text = "<b>❌ Verification Failed</b>\n\n"
-        not_joined_text += "<b>You must join MINI FRAM channel to continue.</b>\n"
-        not_joined_text += "Join channel and click Verify again ✅"
-
-        keyboard = build_join_keyboard()
-        try:
-            await query.edit_message_text(not_joined_text, parse_mode=ParseMode.HTML, reply_markup=keyboard)
-        except Exception:
-            try:
-                await query.edit_message_caption(caption=not_joined_text, parse_mode=ParseMode.HTML, reply_markup=keyboard)
-            except Exception:
-                await query.message.reply_text(not_joined_text, parse_mode=ParseMode.HTML, reply_markup=keyboard)
+    user = update.effective_user
+    if not user or not update.message:
         return
 
-    name_user = query.from_user.first_name
-    username = query.from_user.username or "No username"
-    user_id = query.from_user.id
+    name_user = user.first_name
+    username = user.username or "No username"
+    user_id = user.id
+
     db = load_db()
     users = db.get('users', {})
     uid = str(user_id)
-    
-    # Initialize user if doesn't exist
+
     if uid not in users:
         users[uid] = {'balance': 0.0, 'purchases': [], 'member_since': datetime.now().strftime("%Y-%m-%d")}
         save_db(db)
-    
+
     balance = users.get(uid, {}).get('balance', 0.0)
     purchases = users.get(uid, {}).get('purchases', [])
-    
-    # Get last purchase product name
+
     last_purchase_text = "No purchases yet"
     if purchases:
         last_purchase = purchases[-1]
@@ -299,41 +227,22 @@ async def verify(update: Update, context: CallbackContext) -> None:
     profile_text += "<b>⭐ Status:</b> 🔓 Active\n"
     profile_text += f"<b>🛍️ Last Purchase:</b> {last_purchase_text}\n\n"
     profile_text += "<b>🛒 Enjoy shopping from trusted sellers below ↓</b>"
+
     menu = InlineKeyboardMarkup([
         [InlineKeyboardButton("🏪 Trusted Seller", callback_data="trusted_seller")],
-        [InlineKeyboardButton("📦 Product", callback_data="product")],
+        [InlineKeyboardButton("🛍️ Product", callback_data="product")],
         [InlineKeyboardButton("💳 Add Balance", callback_data="add_balance"),
          InlineKeyboardButton("📜 History", callback_data="history")],
         [InlineKeyboardButton("👤 My Profile", callback_data="my_profile")]
     ])
 
-    # Try edit_message_media first (for media messages), then fall back to text
-    try:
-        await query.edit_message_media(
-            media=InputMediaPhoto(
-                media="https://i.postimg.cc/k4kRGdVK/file-00000000ca8c71faadd50d667e4a0509.png",
-                caption=profile_text,
-                parse_mode=ParseMode.HTML
-            ),
-            reply_markup=menu
-        )
-    except Exception as e:
-        try:
-            await query.edit_message_caption(
-                caption=profile_text,
-                parse_mode=ParseMode.HTML,
-                reply_markup=menu
-            )
-        except Exception:
-            try:
-                await query.edit_message_text(
-                    text=profile_text,
-                    parse_mode=ParseMode.HTML,
-                    reply_markup=menu
-                )
-            except Exception:
-                # Fallback: send as new message
-                await query.message.reply_text(profile_text, reply_markup=menu, parse_mode=ParseMode.HTML)
+    await update.message.reply_photo(
+        photo="https://i.postimg.cc/k4kRGdVK/file-00000000ca8c71faadd50d667e4a0509.png",
+        caption=profile_text,
+        reply_markup=menu,
+        parse_mode=ParseMode.HTML
+    )
+    logger.info(f"START message sent to user: {update.effective_user.id}")
 
 async def product(update: Update, context: CallbackContext) -> None:
     query = update.callback_query
@@ -844,13 +753,25 @@ async def show_vip_required_screen(query, image_url: str, back_callback: str) ->
     """Show VIP required screen with Become VIP and Back buttons."""
     user_id = query.from_user.id
     text = (
-        "<b>🔒 VIP ACCESS REQUIRED</b>\n\n"
-        "<b><i>🩸 You are not VIP.\n"
-        "Prices are visible to only VIP users.\n"
-        "Want to become VIP? 🩸</i></b>\n\n"
+        "━━━━━━━━━━━━━━━━━━━━━\n"
+        "          <b>🔐 VIP ACCESS ONLY</b>\n"
+        "━━━━━━━━━━━━━━━━━━━━━\n\n"
+        "⚠️ <b><i>ACCESS DENIED</i></b> ⚠️\n\n"
+        "╔═══════════════════╗\n"
+        "║  <b>💎 VIP EXCLUSIVE 💎</b>  ║\n"
+        "╚═══════════════════╝\n\n"
+        "🔒 <i>This content is available</i>\n"
+        "   <i>only for VIP members</i>\n\n"
+        "✨ <b>Unlock Premium Features:</b>\n"
+        "   • View all prices\n"
+        "   • Purchase any product\n"
+        "   • Priority support\n"
+        "   • Exclusive deals\n\n"
+        "💫 <b><i>Ready to upgrade?</i></b>\n"
+        "━━━━━━━━━━━━━━━━━━━━━\n"
     )
     buttons = InlineKeyboardMarkup([
-        [InlineKeyboardButton("💎 Become VIP", url=_vip_contact_url(user_id))],
+        [InlineKeyboardButton("✨ Become VIP Member ✨", url=_vip_contact_url(user_id))],
         [InlineKeyboardButton("🔙 Back", callback_data=back_callback)],
         [InlineKeyboardButton("🏠 Main Menu", callback_data="back_to_menu")]
     ])
@@ -2489,7 +2410,7 @@ async def admin_command(update: Update, context: CallbackContext) -> None:
          InlineKeyboardButton("👥 Manage Admins", callback_data="admin_manage_admins")],
         [InlineKeyboardButton("📢 Mailing", callback_data="admin_mailing"),
          InlineKeyboardButton("💎 Manage VIP", callback_data="admin_manage_vips")],
-        [InlineKeyboardButton("❌ Close", callback_data="admin_back")]
+        [InlineKeyboardButton("❌ Close", callback_data="admin_close")]
     ])
     
     text = (
@@ -2528,6 +2449,13 @@ async def admin_manage_balance(update: Update, context: CallbackContext) -> None
 async def admin_back(update: Update, context: CallbackContext) -> None:
     # return to admin panel
     await admin_command(update, context)
+
+
+async def admin_close(update: Update, context: CallbackContext) -> None:
+    # close admin panel and return to main menu
+    context.user_data.pop('admin_flow', None)
+    await back_to_menu(update, context)
+
 
 async def admin_add_flow(update: Update, context: CallbackContext) -> None:
     query = update.callback_query
@@ -3047,7 +2975,7 @@ async def back_to_menu(update: Update, context: CallbackContext) -> None:
 
     menu = InlineKeyboardMarkup([
         [InlineKeyboardButton("🏪 Trusted Seller", callback_data="trusted_seller")],
-        [InlineKeyboardButton("📦 Product", callback_data="product")],
+        [InlineKeyboardButton("🛍️ Product", callback_data="product")],
         [InlineKeyboardButton("💳 Add Balance", callback_data="add_balance"),
          InlineKeyboardButton("📜 History", callback_data="history")],
         [InlineKeyboardButton("🌍 Choose Language", callback_data="choose_language"),
@@ -3143,7 +3071,6 @@ def main() -> None:
 
     application.add_handler(CommandHandler("start", start))
     application.add_handler(CommandHandler("admin", admin_command))
-    application.add_handler(CallbackQueryHandler(verify, pattern="^verify$"))
     application.add_handler(CallbackQueryHandler(product, pattern="^product$"))
     application.add_handler(CallbackQueryHandler(eight_ball_pool, pattern="^product_8ball$"))
     application.add_handler(CallbackQueryHandler(caroom_pool, pattern="^product_caroom$"))
@@ -3182,6 +3109,7 @@ def main() -> None:
     application.add_handler(CallbackQueryHandler(admin_vip_list, pattern="^admin_vip_list$"))
     application.add_handler(CallbackQueryHandler(admin_bot_stats, pattern="^admin_bot_stats$"))
     application.add_handler(CallbackQueryHandler(admin_mailing, pattern="^admin_mailing$"))
+    application.add_handler(CallbackQueryHandler(admin_close, pattern="^admin_close$"))
     application.add_handler(CallbackQueryHandler(admin_back, pattern="^admin_back$"))
     application.add_handler(CallbackQueryHandler(back_to_menu, pattern="^back_to_menu$"))
     application.add_handler(CallbackQueryHandler(trusted_seller, pattern="^trusted_seller$"))
