@@ -1,0 +1,17 @@
+services:
+  - type: web
+    name: hsa-store-bot
+    env: python
+    region: oregon
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: python bot.py
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.7
+      - key: GOOGLE_APPLICATION_CREDENTIALS
+        sync: false
+      - key: BOT_TOKEN
+        sync: false
+      - key: ADMIN_ID
+        sync: false
