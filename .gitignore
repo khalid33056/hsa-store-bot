@@ -1,0 +1,17 @@
+# Environment
+.env
+firebase-key.json
+__pycache__/
+*.pyc
+
+# Database
+db.json
+
+# IDE
+.vscode/
+.idea/
+*.swp
+
+# OS
+.DS_Store
+Thumbs.db
