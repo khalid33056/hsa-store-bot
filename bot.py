@@ -851,8 +851,19 @@ def _init_firestore_client():
             elif cred_json_b64:
                 decoded = base64.b64decode(cred_json_b64).decode('utf-8')
                 firebase_admin.initialize_app(credentials.Certificate(json.loads(decoded)))
-            elif cred_path and os.path.exists(cred_path):
-                firebase_admin.initialize_app(credentials.Certificate(cred_path))
+            elif cred_path:
+                # Railway users often paste raw JSON into GOOGLE_APPLICATION_CREDENTIALS.
+                # Support both a file path and inline JSON for reliability.
+                trimmed = cred_path.strip()
+                if trimmed.startswith('{') and trimmed.endswith('}'):
+                    firebase_admin.initialize_app(credentials.Certificate(json.loads(trimmed)))
+                elif os.path.exists(cred_path):
+                    firebase_admin.initialize_app(credentials.Certificate(cred_path))
+                else:
+                    raise RuntimeError(
+                        "GOOGLE_APPLICATION_CREDENTIALS is set but not valid. "
+                        "Provide a valid file path or use FIREBASE_SERVICE_ACCOUNT_JSON."
+                    )
             else:
                 firebase_admin.initialize_app()
         _firestore_db = firestore.client()
