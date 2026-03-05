@@ -220,11 +220,14 @@ async def start(update: Update, context: CallbackContext) -> None:
         product_name = HACK_INFO.get(last_purchase.get('product', ''), {}).get('name', last_purchase.get('product', 'Unknown'))
         last_purchase_text = product_name
 
+    # Check VIP status
+    status_text = "🌟 VIP" if is_vip(user_id) else "🔓 Active"
+
     profile_text = f"<b>👋 Welcome {name_user}</b>\n\n"
     profile_text += f"<b>🆔 User ID:</b> <code>{user_id}</code>\n"
     profile_text += f"<b>💻 Username:</b> {username}\n"
     profile_text += f"<b>💰 Balance:</b> ${balance}\n"
-    profile_text += "<b>⭐ Status:</b> 🔓 Active\n"
+    profile_text += f"<b>⭐ Status:</b> {status_text}\n"
     profile_text += f"<b>🛍️ Last Purchase:</b> {last_purchase_text}\n\n"
     profile_text += "<b>🛒 Enjoy shopping from trusted sellers below ↓</b>"
 
@@ -2974,11 +2977,14 @@ async def back_to_menu(update: Update, context: CallbackContext) -> None:
         product_name = HACK_INFO.get(last_purchase.get('product', ''), {}).get('name', last_purchase.get('product', 'Unknown'))
         last_purchase_text = product_name
 
+    # Check VIP status
+    status_text = "🌟 VIP" if is_vip(user_id) else "🔓 Active"
+
     profile_text = f"<b>👋 Welcome {name_user}</b>\n\n"
     profile_text += f"<b>🆔 User ID:</b> <code>{user_id}</code>\n"
     profile_text += f"<b>💻 Username:</b> {username}\n"
     profile_text += f"<b>💰 Balance:</b> ${balance}\n"
-    profile_text += "<b>⭐ Status:</b> 🔓 Active\n"
+    profile_text += f"<b>⭐ Status:</b> {status_text}\n"
     profile_text += f"<b>🛍️ Last Purchase:</b> {last_purchase_text}\n\n"
     profile_text += "<b>🛒 Enjoy shopping from trusted sellers below ↓</b>"
 
