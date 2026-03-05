@@ -2963,14 +2963,23 @@ async def back_to_menu(update: Update, context: CallbackContext) -> None:
     username = query.from_user.username or "No username"
     user_id = query.from_user.id
     db = load_db()
-    balance = db.get('users', {}).get(str(user_id), {}).get('balance', 0.0)
+    users = db.get('users', {})
+    uid = str(user_id)
+    balance = users.get(uid, {}).get('balance', 0.0)
+    purchases = users.get(uid, {}).get('purchases', [])
+
+    last_purchase_text = "No purchases yet"
+    if purchases:
+        last_purchase = purchases[-1]
+        product_name = HACK_INFO.get(last_purchase.get('product', ''), {}).get('name', last_purchase.get('product', 'Unknown'))
+        last_purchase_text = product_name
 
     profile_text = f"<b>👋 Welcome {name_user}</b>\n\n"
-    profile_text += f"<b>🆔 User ID:</b> {user_id}\n"
+    profile_text += f"<b>🆔 User ID:</b> <code>{user_id}</code>\n"
     profile_text += f"<b>💻 Username:</b> {username}\n"
     profile_text += f"<b>💰 Balance:</b> ${balance}\n"
-    profile_text += "<b>⭐ Status:</b> 🔓 Free\n"
-    profile_text += "<b>🛍️ Last Purchase:</b> No purchases yet\n\n"
+    profile_text += "<b>⭐ Status:</b> 🔓 Active\n"
+    profile_text += f"<b>🛍️ Last Purchase:</b> {last_purchase_text}\n\n"
     profile_text += "<b>🛒 Enjoy shopping from trusted sellers below ↓</b>"
 
     menu = InlineKeyboardMarkup([
@@ -2978,15 +2987,16 @@ async def back_to_menu(update: Update, context: CallbackContext) -> None:
         [InlineKeyboardButton("🛍️ Product", callback_data="product")],
         [InlineKeyboardButton("💳 Add Balance", callback_data="add_balance"),
          InlineKeyboardButton("📜 History", callback_data="history")],
-        [InlineKeyboardButton("🌍 Choose Language", callback_data="choose_language"),
-         InlineKeyboardButton("👤 My Profile", callback_data="my_profile")]
+        [InlineKeyboardButton("👤 My Profile", callback_data="my_profile")]
     ])
 
-    await query.message.reply_photo(
-        photo="https://i.postimg.cc/k4kRGdVK/file-00000000ca8c71faadd50d667e4a0509.png",
-        caption=profile_text,
-        reply_markup=menu,
-        parse_mode=ParseMode.HTML
+    await query.edit_message_media(
+        media=InputMediaPhoto(
+            media="https://i.postimg.cc/k4kRGdVK/file-00000000ca8c71faadd50d667e4a0509.png",
+            caption=profile_text,
+            parse_mode=ParseMode.HTML
+        ),
+        reply_markup=menu
     )
 
 async def add_balance(update: Update, context: CallbackContext) -> None:
