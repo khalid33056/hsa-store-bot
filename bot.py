@@ -3502,6 +3502,25 @@ async def admin_vip_list(update: Update, context: CallbackContext) -> None:
             username = 'Unknown'
             joined_date = str(vip_data)
         
+        # If username is Unknown, try to fetch from Telegram API
+        if username == 'Unknown':
+            try:
+                chat_info = await context.bot.get_chat(int(user_id))
+                if chat_info.username:
+                    username = chat_info.username
+                    # Update database with fetched username
+                    if isinstance(vip_data, dict):
+                        vip_users[user_id]['username'] = username
+                        save_db(db)
+                elif chat_info.first_name:
+                    username = chat_info.first_name
+                    # Update database with fetched name
+                    if isinstance(vip_data, dict):
+                        vip_users[user_id]['username'] = username
+                        save_db(db)
+            except Exception as e:
+                logging.warning(f"Could not fetch username for {user_id}: {e}")
+        
         # Format username
         if username and username != 'Unknown':
             if not username.startswith('@'):
@@ -3607,11 +3626,16 @@ async def admin_message_handler(update: Update, context: CallbackContext) -> Non
             else:
                 joined_date = datetime.utcnow().strftime('%Y-%m-%d')
                 
-                # Get username from users database if available
-                users = db.get('users', {})
+                # Get username from Telegram API
                 username = 'Unknown'
-                if vip_key in users:
-                    username = users[vip_key].get('username', 'Unknown')
+                try:
+                    chat_info = await context.bot.get_chat(vip_id)
+                    if chat_info.username:
+                        username = chat_info.username
+                    elif chat_info.first_name:
+                        username = chat_info.first_name
+                except Exception as e:
+                    logging.warning(f"Could not fetch username for {vip_id}: {e}")
                 
                 # Store as dict with username and joined_date
                 vip_users[vip_key] = {
@@ -3630,9 +3654,7 @@ async def admin_message_handler(update: Update, context: CallbackContext) -> Non
                 )
                 # Send notification to the user
                 try:
-                    user_name = "User"
-                    if vip_key in users:
-                        user_name = users[vip_key].get('name', 'User')
+                    user_name = username if username != 'Unknown' else "User"
                     notification = f"🎉 <b>Welcome to VIP!</b>\n\nHello {user_name},\n\nYou are now a VIP member in HSA Store Panel!\n\n💎 Enjoy exclusive access to all premium tools and features!"
                     await context.bot.send_message(
                         chat_id=vip_id,
@@ -4166,7 +4188,7 @@ def main() -> None:
     application.add_handler(CallbackQueryHandler(admin_manage_vips, pattern="^admin_manage_vips$"))
     application.add_handler(CallbackQueryHandler(admin_add_vip_flow, pattern="^admin_add_vip$"))
     application.add_handler(CallbackQueryHandler(admin_remove_vip_flow, pattern="^admin_remove_vip$"))
-    application.add_handler(CallbackQueryHandler(admin_vip_list, pattern="^admin_vip_list$"))
+    application.add_handler(CallbackQueryHandler(admin_vip_list, pattern="^(admin_vip_list|vip_list_page_\\d+)$"))
     application.add_handler(CallbackQueryHandler(admin_bot_stats, pattern="^admin_bot_stats$"))
     application.add_handler(CallbackQueryHandler(admin_mailing, pattern="^admin_mailing$"))
     application.add_handler(CallbackQueryHandler(admin_close, pattern="^admin_close$"))
