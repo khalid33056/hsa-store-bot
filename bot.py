@@ -225,8 +225,20 @@ async def start(update: Update, context: CallbackContext) -> None:
     uid = str(user_id)
 
     if uid not in users:
-        users[uid] = {'balance': 0.0, 'purchases': [], 'member_since': datetime.now().strftime("%Y-%m-%d")}
+        users[uid] = {
+            'balance': 0.0, 
+            'purchases': [], 
+            'member_since': datetime.now().strftime("%Y-%m-%d"),
+            'username': username,
+            'first_name': name_user
+        }
         save_db(db)
+    else:
+        # Update username and first_name if changed
+        if users[uid].get('username') != username or users[uid].get('first_name') != name_user:
+            users[uid]['username'] = username
+            users[uid]['first_name'] = name_user
+            save_db(db)
 
     balance = users.get(uid, {}).get('balance', 0.0)
     purchases = users.get(uid, {}).get('purchases', [])
@@ -3489,6 +3501,9 @@ async def admin_vip_list(update: Update, context: CallbackContext) -> None:
     end_idx = start_idx + users_per_page
     page_users = vip_list[start_idx:end_idx]
     
+    # Get users database for username lookup
+    users = db.get('users', {})
+    
     # Build the list text
     lines = [f"📋 <b>VIP Users List (Page {page}/{total_pages})</b>", ""]
     
@@ -3502,30 +3517,62 @@ async def admin_vip_list(update: Update, context: CallbackContext) -> None:
             username = 'Unknown'
             joined_date = str(vip_data)
         
-        # If username is Unknown, try to fetch from Telegram API
-        if username == 'Unknown':
-            try:
-                chat_info = await context.bot.get_chat(int(user_id))
-                if chat_info.username:
-                    username = chat_info.username
-                    # Update database with fetched username
-                    if isinstance(vip_data, dict):
-                        vip_users[user_id]['username'] = username
-                        save_db(db)
-                elif chat_info.first_name:
-                    username = chat_info.first_name
-                    # Update database with fetched name
-                    if isinstance(vip_data, dict):
-                        vip_users[user_id]['username'] = username
-                        save_db(db)
-            except Exception as e:
-                logging.warning(f"Could not fetch username for {user_id}: {e}")
+        logging.info(f"VIP List - Processing user_id={user_id}, current username={username}")
         
-        # Format username
-        if username and username != 'Unknown':
-            if not username.startswith('@'):
-                username = f"@{username}"
+        # If username is Unknown, try multiple sources
+        if username == 'Unknown':
+            # First try users database
+            if user_id in users:
+                stored_username = users[user_id].get('username', 'No username')
+                stored_first_name = users[user_id].get('first_name', '')
+                
+                if stored_username and stored_username != 'No username':
+                    username = stored_username
+                    logging.info(f"VIP List - Found username in users DB: {username}")
+                    # Update VIP data
+                    if isinstance(vip_data, dict):
+                        vip_users[user_id]['username'] = username
+                        save_db(db)
+                elif stored_first_name:
+                    username = stored_first_name
+                    logging.info(f"VIP List - Using first_name from users DB: {username}")
+                    # Update VIP data
+                    if isinstance(vip_data, dict):
+                        vip_users[user_id]['username'] = username
+                        save_db(db)
+            
+            # If still Unknown, try Telegram API
+            if username == 'Unknown':
+                try:
+                    logging.info(f"VIP List - Attempting to fetch info from Telegram API for user_id={user_id}")
+                    chat_info = await context.bot.get_chat(int(user_id))
+                    logging.info(f"VIP List - Got chat_info for {user_id}: username={chat_info.username}, first_name={chat_info.first_name}")
+                    if chat_info.username:
+                        username = chat_info.username
+                        # Update database with fetched username
+                        if isinstance(vip_data, dict):
+                            vip_users[user_id]['username'] = username
+                            save_db(db)
+                        # Add @ prefix for actual usernames
+                        username = f"@{username}"
+                    elif chat_info.first_name:
+                        username = chat_info.first_name
+                        # Update database with fetched name
+                        if isinstance(vip_data, dict):
+                            vip_users[user_id]['username'] = username
+                            save_db(db)
+                        # Don't add @ for first names
+                except Exception as e:
+                    logging.warning(f"Could not fetch username for VIP {user_id}: {e}")
         else:
+            # Format existing username (only add @ if it's an actual username, not a first name)
+            if username and username != 'Unknown':
+                # If it doesn't start with @ and looks like a username (no spaces), add @
+                if not username.startswith('@') and ' ' not in username:
+                    username = f"@{username}"
+        
+        # Fallback if still Unknown
+        if not username or username == 'Unknown':
             username = 'Unknown'
         
         lines.append(f"{start_idx + idx}. 🆔 <b>ID:</b> {user_id}")
@@ -3626,16 +3673,35 @@ async def admin_message_handler(update: Update, context: CallbackContext) -> Non
             else:
                 joined_date = datetime.utcnow().strftime('%Y-%m-%d')
                 
-                # Get username from Telegram API
+                # Get username from Telegram API or users database
                 username = 'Unknown'
-                try:
-                    chat_info = await context.bot.get_chat(vip_id)
-                    if chat_info.username:
-                        username = chat_info.username
-                    elif chat_info.first_name:
-                        username = chat_info.first_name
-                except Exception as e:
-                    logging.warning(f"Could not fetch username for {vip_id}: {e}")
+                is_actual_username = False
+                
+                # First try users database
+                users = db.get('users', {})
+                if vip_key in users:
+                    stored_username = users[vip_key].get('username', 'No username')
+                    stored_first_name = users[vip_key].get('first_name', '')
+                    
+                    if stored_username and stored_username != 'No username':
+                        username = stored_username
+                        is_actual_username = True
+                    elif stored_first_name:
+                        username = stored_first_name
+                        is_actual_username = False
+                
+                # If still Unknown, try Telegram API
+                if username == 'Unknown':
+                    try:
+                        chat_info = await context.bot.get_chat(vip_id)
+                        if chat_info.username:
+                            username = chat_info.username
+                            is_actual_username = True
+                        elif chat_info.first_name:
+                            username = chat_info.first_name
+                            is_actual_username = False
+                    except Exception as e:
+                        logging.warning(f"Could not fetch username for {vip_id}: {e}")
                 
                 # Store as dict with username and joined_date
                 vip_users[vip_key] = {
@@ -3644,7 +3710,8 @@ async def admin_message_handler(update: Update, context: CallbackContext) -> Non
                 }
                 save_db(db)
                 
-                display_username = f"@{username}" if username != 'Unknown' else username
+                # Only add @ for actual usernames, not first names
+                display_username = f"@{username}" if (username != 'Unknown' and is_actual_username) else username
                 await update.message.reply_text(
                     f"✅ <b>VIP Added Successfully!</b>\n\n"
                     f"🆔 <b>User ID:</b> {vip_id}\n"
@@ -4188,7 +4255,7 @@ def main() -> None:
     application.add_handler(CallbackQueryHandler(admin_manage_vips, pattern="^admin_manage_vips$"))
     application.add_handler(CallbackQueryHandler(admin_add_vip_flow, pattern="^admin_add_vip$"))
     application.add_handler(CallbackQueryHandler(admin_remove_vip_flow, pattern="^admin_remove_vip$"))
-    application.add_handler(CallbackQueryHandler(admin_vip_list, pattern="^(admin_vip_list|vip_list_page_\\d+)$"))
+    application.add_handler(CallbackQueryHandler(admin_vip_list, pattern=r"^(admin_vip_list|vip_list_page_\d+)$"))
     application.add_handler(CallbackQueryHandler(admin_bot_stats, pattern="^admin_bot_stats$"))
     application.add_handler(CallbackQueryHandler(admin_mailing, pattern="^admin_mailing$"))
     application.add_handler(CallbackQueryHandler(admin_close, pattern="^admin_close$"))
