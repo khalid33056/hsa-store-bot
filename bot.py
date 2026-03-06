@@ -243,12 +243,6 @@ async def start(update: Update, context: CallbackContext) -> None:
     balance = users.get(uid, {}).get('balance', 0.0)
     purchases = users.get(uid, {}).get('purchases', [])
 
-    last_purchase_text = "No purchases yet"
-    if purchases:
-        last_purchase = purchases[-1]
-        product_name = HACK_INFO.get(last_purchase.get('product', ''), {}).get('name', last_purchase.get('product', 'Unknown'))
-        last_purchase_text = product_name
-
     # Check VIP status
     status_text = "🌟 VIP" if is_vip(user_id) else "🔓 Active"
 
@@ -257,7 +251,7 @@ async def start(update: Update, context: CallbackContext) -> None:
     profile_text += f"<b>💻 Username:</b> {username}\n"
     profile_text += f"<b>💰 Balance:</b> ${balance}\n"
     profile_text += f"<b>⭐ Status:</b> {status_text}\n"
-    profile_text += f"<b>🛍️ Last Purchase:</b> {last_purchase_text}\n\n"
+    profile_text += "\n"
     profile_text += "<b>🛒 Enjoy shopping from trusted sellers below ↓</b>"
 
     menu = InlineKeyboardMarkup([
@@ -428,10 +422,59 @@ async def other_back_menu(update: Update, context: CallbackContext) -> None:
         )
 
 async def product(update: Update, context: CallbackContext) -> None:
+    """Show intermediate menu: What you want - Account or Hackes"""
     query = update.callback_query
     await query.answer()
 
-    product_text = "<b>🛍️ Product Categories</b>\n\n"
+    product_text = "<b>🛍️ What you want?</b>\n\n"
+    product_text += "<b>Please select a category below 👇</b>\n\n"
+    product_text += "🎮 <b>Account:</b> Buy game accounts\n"
+    product_text += "🔧 <b>Hackes:</b> Browse premium tools & packages"
+
+    product_menu = InlineKeyboardMarkup([
+        [InlineKeyboardButton("🎮 Account", callback_data="product_accounts")],
+        [InlineKeyboardButton("🔧 Hackes", callback_data="product_hackes")],
+        [InlineKeyboardButton("🔙 Back", callback_data="back_to_menu")]
+    ])
+
+    await query.edit_message_media(
+        media=InputMediaPhoto(
+            media="https://i.postimg.cc/63SX4GDG/IMG-20260301-213107.png",
+            caption=product_text,
+            parse_mode=ParseMode.HTML
+        ),
+        reply_markup=product_menu
+    )
+
+async def product_accounts(update: Update, context: CallbackContext) -> None:
+    """Show account options (8BP Account)"""
+    query = update.callback_query
+    await query.answer()
+
+    account_text = "<b>🎮 Game Accounts</b>\n\n"
+    account_text += "<b>Choose your account type below 👇</b>\n"
+    account_text += "Buy premium game accounts with coins and features."
+
+    account_menu = InlineKeyboardMarkup([
+        [InlineKeyboardButton("🎱 8 Ball Pool Account", callback_data="product_8bp_account")],
+        [InlineKeyboardButton("🔙 Back", callback_data="product")]
+    ])
+
+    await query.edit_message_media(
+        media=InputMediaPhoto(
+            media="https://i.postimg.cc/63SX4GDG/IMG-20260301-213107.png",
+            caption=account_text,
+            parse_mode=ParseMode.HTML
+        ),
+        reply_markup=account_menu
+    )
+
+async def product_hackes(update: Update, context: CallbackContext) -> None:
+    """Show hack/tool categories"""
+    query = update.callback_query
+    await query.answer()
+
+    product_text = "<b>🔧 Hackes Categories</b>\n\n"
     product_text += "<b>Please select a category below 👇</b>\n"
     product_text += "Choose your game and explore available tools & premium packages."
 
@@ -440,9 +483,8 @@ async def product(update: Update, context: CallbackContext) -> None:
          InlineKeyboardButton("🏏 Caroom Pool", callback_data="product_caroom")],
         [InlineKeyboardButton("⚽ Score Star", callback_data="product_scorestar"),
          InlineKeyboardButton("🔥 Free Fire", callback_data="product_freefire")],
-        [InlineKeyboardButton("🎱8BP Account", callback_data="product_8bp_account")],
         [InlineKeyboardButton("📗 Certificate iOS", callback_data="product_certificate_ios")],
-        [InlineKeyboardButton("�🔙 Back", callback_data="back_to_menu")]
+        [InlineKeyboardButton("🔙 Back", callback_data="product")]
     ])
 
     await query.edit_message_media(
@@ -477,7 +519,7 @@ async def eight_ball_pool(update: Update, context: CallbackContext) -> None:
         [InlineKeyboardButton("🐺 Wolf Hack", callback_data="item_wolf"),
          InlineKeyboardButton("🧙 Wizard iOS", callback_data="item_wizard")],
         [InlineKeyboardButton("🥷 Ninja Engine", callback_data="item_ninja")],
-        [InlineKeyboardButton("🔙 Back to Product Category", callback_data="product")]
+        [InlineKeyboardButton("🔙 Back to Product Category", callback_data="product_hackes")]
     ])
     await query.edit_message_media(
         media=InputMediaPhoto(
@@ -511,9 +553,9 @@ async def eight_bp_account(update: Update, context: CallbackContext) -> None:
     )
 
     buttons = InlineKeyboardMarkup([
-        [InlineKeyboardButton("💰 1B Coin", callback_data="buy_8bp_1b"),
-         InlineKeyboardButton("💰 100M Coin", callback_data="buy_8bp_100m")],
-        [InlineKeyboardButton("🔙 Back", callback_data="product")]
+        [InlineKeyboardButton("1B Coin", callback_data="buy_8bp_1b"),
+         InlineKeyboardButton("100M Coin", callback_data="buy_8bp_100m")],
+        [InlineKeyboardButton("🔙 Back", callback_data="product_accounts")]
     ])
 
     await query.edit_message_media(
@@ -526,7 +568,7 @@ async def eight_bp_account(update: Update, context: CallbackContext) -> None:
     )
 
 async def buy_8bp_1b(update: Update, context: CallbackContext) -> None:
-    """Handle 1B Coin purchase."""
+    """Handle 1B Coin purchase - show confirmation first."""
     query = update.callback_query
     await query.answer()
 
@@ -538,27 +580,29 @@ async def buy_8bp_1b(update: Update, context: CallbackContext) -> None:
         users[uid] = {'balance': 0.0, 'purchases': [], 'member_since': datetime.now().strftime("%Y-%m-%d")}
     
     balance = users[uid].get('balance', 0.0)
-
-    text = (
-        "<b>🎱 1 Billion Coin – 8 Ball Pool Account</b>\n\n"
-        "💰 <b>Coins:</b> 1 Billion\n"
-        "🛡 <b>Fair Play Account</b>\n"
-        "🔒 <b>Full Safe & Secure</b>\n"
-        "📧 <b>Login Method:</b> Gmail\n\n"
-        f"<b>💳 Your Balance:</b> ${balance}"
-    )
+    price = 2.8
+    
+    # Show confirmation message
+    text = f"<b>🏷 1B Coin Account  →  ${price}</b>\n\n"
+    text += f"<b>📝 Are you sure about buying? 🫆</b>\n"
+    text += "<b>--------------------------------------</b>\n\n"
+    text += "<b>Please Note📣:</b>\n"
+    text += "<b>The key cannot be returned upon purchase!</b>\n"
+    text += f"<b>💰 Your Balance:</b> ${balance}\n"
+    text += f"<b>💰 Price:</b> ${price}\n"
+    text += "<b>📦 Stock: Available</b>"
 
     await query.message.reply_text(
         text,
         reply_markup=InlineKeyboardMarkup([
-            [InlineKeyboardButton("💳 Buy $2.8", callback_data="confirm_buy_8bp_1b")],
-            [InlineKeyboardButton("🔙 Back", callback_data="product_8bp_account")]
+            [InlineKeyboardButton("✅ Confirm", callback_data="confirm_buy_8bp_1b"),
+             InlineKeyboardButton("❌ Cancel", callback_data="product_8bp_account")],
         ]),
         parse_mode=ParseMode.HTML
     )
 
 async def buy_8bp_100m(update: Update, context: CallbackContext) -> None:
-    """Handle 100M Coin purchase."""
+    """Handle 100M Coin purchase - show confirmation first."""
     query = update.callback_query
     await query.answer()
 
@@ -570,21 +614,23 @@ async def buy_8bp_100m(update: Update, context: CallbackContext) -> None:
         users[uid] = {'balance': 0.0, 'purchases': [], 'member_since': datetime.now().strftime("%Y-%m-%d")}
     
     balance = users[uid].get('balance', 0.0)
-
-    text = (
-        "<b>🎱 100 Million Coin – 8 Ball Pool Account</b>\n\n"
-        "💰 <b>Coins:</b> 100 Million\n"
-        "🛡 <b>Fair Play Account</b>\n"
-        "🔒 <b>Full Safe & Secure</b>\n"
-        "📧 <b>Login Method:</b> Gmail\n\n"
-        f"<b>💳 Your Balance:</b> ${balance}"
-    )
+    price = 2.4
+    
+    # Show confirmation message
+    text = f"<b>🏷 100M Coin Account  →  ${price}</b>\n\n"
+    text += f"<b>📝 Are you sure about buying? 🫆</b>\n"
+    text += "<b>--------------------------------------</b>\n\n"
+    text += "<b>Please Note📣:</b>\n"
+    text += "<b>The key cannot be returned upon purchase!</b>\n"
+    text += f"<b>💰 Your Balance:</b> ${balance}\n"
+    text += f"<b>💰 Price:</b> ${price}\n"
+    text += "<b>📦 Stock: Available</b>"
 
     await query.message.reply_text(
         text,
         reply_markup=InlineKeyboardMarkup([
-            [InlineKeyboardButton("💳 Buy $2.4", callback_data="confirm_buy_8bp_100m")],
-            [InlineKeyboardButton("🔙 Back", callback_data="product_8bp_account")]
+            [InlineKeyboardButton("✅ Confirm", callback_data="confirm_buy_8bp_100m"),
+             InlineKeyboardButton("❌ Cancel", callback_data="product_8bp_account")],
         ]),
         parse_mode=ParseMode.HTML
     )
@@ -788,7 +834,7 @@ async def caroom_pool(update: Update, context: CallbackContext) -> None:
     caroom_menu = InlineKeyboardMarkup([
         [InlineKeyboardButton("🏏 Carrom SE", callback_data="carrom_se"),
          InlineKeyboardButton("🏏 Carrom AK", callback_data="carrom_ak")],
-        [InlineKeyboardButton("🔙 Back", callback_data="product")]
+        [InlineKeyboardButton("🔙 Back", callback_data="product_hackes")]
     ])
 
     await query.edit_message_media(
@@ -813,9 +859,9 @@ async def ninja_engine(update: Update, context: CallbackContext) -> None:
     price_30 = get_price('ninja_engine', '30_days')
     
     menu = InlineKeyboardMarkup([
-        [InlineKeyboardButton(f"⏳ 3 Days – ${price_3}", callback_data="buy_ninja_3"),
-         InlineKeyboardButton(f"⏳ 7 Days – ${price_7}", callback_data="buy_ninja_7")],
-        [InlineKeyboardButton(f"⏳ 30 Days – ${price_30}", callback_data="buy_ninja_30")],
+        [InlineKeyboardButton(f"3 Days – ${price_3}", callback_data="buy_ninja_3"),
+         InlineKeyboardButton(f"7 Days – ${price_7}", callback_data="buy_ninja_7")],
+        [InlineKeyboardButton(f"30 Days – ${price_30}", callback_data="buy_ninja_30")],
         [InlineKeyboardButton("🔙 Back", callback_data="product_8ball")]
     ])
     await query.edit_message_media(
@@ -844,9 +890,9 @@ async def snake_engine(update: Update, context: CallbackContext) -> None:
 
     # build durations
     snake_menu = InlineKeyboardMarkup([
-        [InlineKeyboardButton(f"⏳ 3 Days – ${price_3}", callback_data="buy_snake_3") ,
-         InlineKeyboardButton(f"⏳ 10 Days – ${price_10}", callback_data="buy_snake_10")],
-        [InlineKeyboardButton(f"⏳ 30 Days – ${price_30}", callback_data="buy_snake_30")],
+        [InlineKeyboardButton(f"3 Days – ${price_3}", callback_data="buy_snake_3") ,
+         InlineKeyboardButton(f"10 Days – ${price_10}", callback_data="buy_snake_10")],
+        [InlineKeyboardButton(f"30 Days – ${price_30}", callback_data="buy_snake_30")],
         [InlineKeyboardButton("🔙 Back", callback_data="product_8ball")]
     ])
 
@@ -877,11 +923,11 @@ async def aim_x_hack(update: Update, context: CallbackContext) -> None:
     price_30 = get_price('aim_x', '30_days')
 
     ax_menu = InlineKeyboardMarkup([
-        [InlineKeyboardButton(f"🎯 1 Day – ${price_1}", callback_data="buy_aimx_1"),
-         InlineKeyboardButton(f"🎯 2 Days – ${price_2}", callback_data="buy_aimx_2")],
-        [InlineKeyboardButton(f"🎯 7 Days – ${price_7}", callback_data="buy_aimx_7"),
-         InlineKeyboardButton(f"🎯 15 Days – ${price_15}", callback_data="buy_aimx_15")],
-        [InlineKeyboardButton(f"🎯 30 Days – ${price_30}", callback_data="buy_aimx_30")],
+        [InlineKeyboardButton(f"1 Day – ${price_1}", callback_data="buy_aimx_1"),
+         InlineKeyboardButton(f"2 Days – ${price_2}", callback_data="buy_aimx_2")],
+        [InlineKeyboardButton(f"7 Days – ${price_7}", callback_data="buy_aimx_7"),
+         InlineKeyboardButton(f"15 Days – ${price_15}", callback_data="buy_aimx_15")],
+        [InlineKeyboardButton(f"30 Days – ${price_30}", callback_data="buy_aimx_30")],
         [InlineKeyboardButton("🔙 Back", callback_data="product_8ball")]
     ])
 
@@ -914,10 +960,10 @@ async def kos_mode(update: Update, context: CallbackContext) -> None:
     price_30 = get_price('kos_mode', '30_days')
 
     mode_menu = InlineKeyboardMarkup([
-        [InlineKeyboardButton(f"🔥 1 Day – ${price_1}", callback_data="buy_kosmode_1"),
-         InlineKeyboardButton(f"🔥 7 Days – ${price_7}", callback_data="buy_kosmode_7")],
-        [InlineKeyboardButton(f"🔥 15 Days – ${price_15}", callback_data="buy_kosmode_15"),
-         InlineKeyboardButton(f"🔥 30 Days – ${price_30}", callback_data="buy_kosmode_30")],
+        [InlineKeyboardButton(f"1 Day – ${price_1}", callback_data="buy_kosmode_1"),
+         InlineKeyboardButton(f"7 Days – ${price_7}", callback_data="buy_kosmode_7")],
+        [InlineKeyboardButton(f"15 Days – ${price_15}", callback_data="buy_kosmode_15"),
+         InlineKeyboardButton(f"30 Days – ${price_30}", callback_data="buy_kosmode_30")],
         [InlineKeyboardButton("🔙 Back", callback_data="item_kos")]
     ])
 
@@ -947,10 +993,10 @@ async def kos_virtual(update: Update, context: CallbackContext) -> None:
     price_30 = get_price('kos_virtual', '30_days')
 
     virt_menu = InlineKeyboardMarkup([
-        [InlineKeyboardButton(f"⚡ 1 Day – ${price_1}", callback_data="buy_kosvirt_1"),
-         InlineKeyboardButton(f"⚡ 7 Days – ${price_7}", callback_data="buy_kosvirt_7")],
-        [InlineKeyboardButton(f"⚡ 15 Days – ${price_15}", callback_data="buy_kosvirt_15"),
-         InlineKeyboardButton(f"⚡ 30 Days – ${price_30}", callback_data="buy_kosvirt_30")],
+        [InlineKeyboardButton(f"1 Day – ${price_1}", callback_data="buy_kosvirt_1"),
+         InlineKeyboardButton(f"7 Days – ${price_7}", callback_data="buy_kosvirt_7")],
+        [InlineKeyboardButton(f"15 Days – ${price_15}", callback_data="buy_kosvirt_15"),
+         InlineKeyboardButton(f"30 Days – ${price_30}", callback_data="buy_kosvirt_30")],
         [InlineKeyboardButton("🔙 Back", callback_data="item_kos")]
     ])
 
@@ -1912,7 +1958,7 @@ async def score_star(update: Update, context: CallbackContext) -> None:
     score_menu = InlineKeyboardMarkup([
         [InlineKeyboardButton("⚽ Score SE", callback_data="score_se"),
          InlineKeyboardButton("⚽ Score AK", callback_data="score_ak")],
-        [InlineKeyboardButton("🔙 Back", callback_data="product")]
+        [InlineKeyboardButton("🔙 Back", callback_data="product_hackes")]
     ])
 
     await query.edit_message_media(
@@ -1997,7 +2043,7 @@ async def free_fire(update: Update, context: CallbackContext) -> None:
     ff_menu = InlineKeyboardMarkup([
         [InlineKeyboardButton("📱 FF Android", callback_data="ff_android"),
          InlineKeyboardButton("🍎 FF iOS", callback_data="ff_ios")],
-        [InlineKeyboardButton("🔙 Back", callback_data="product")]
+        [InlineKeyboardButton("🔙 Back", callback_data="product_hackes")]
     ])
 
     try:
@@ -2224,7 +2270,7 @@ async def certificate_ios(update: Update, context: CallbackContext) -> None:
     cert_menu = InlineKeyboardMarkup([
         [InlineKeyboardButton("📘 E-Sign", callback_data="esign"),
          InlineKeyboardButton("🗳️ GBOX", callback_data="gbox")],
-        [InlineKeyboardButton("🔙 Back", callback_data="product")]
+        [InlineKeyboardButton("🔙 Back", callback_data="product_hackes")]
     ])
 
     try:
@@ -2376,13 +2422,17 @@ async def buy_item(update: Update, context: CallbackContext) -> None:
         return
 
     # show confirmation (without key - will show after confirm)
-    text = "<b>🛒 Purchase Confirmation</b>\n\n"
-    text += f"<b>You are about to purchase:</b>\n\n<b>🐍 Product:</b> {HACK_INFO.get(hack, {}).get('name', hack)}\n"
-    text += f"<b>⏳ Duration:</b> {product['label']}\n"
-    text += f"<b>💵 Price:</b> ${price}\n\n"
-    text += f"<b>💰 Your Balance:</b> {balance}$\n"
-    text += f"<b>📦 Stock Available (Live):</b> {stock}\n\n"
-    text += "<b>Please confirm your purchase below.</b>"
+    product_name = HACK_INFO.get(hack, {}).get('name', hack)
+    duration_label = product['label']
+    
+    text = f"<b>🏷 {duration_label}  →  ${price}</b>\n\n"
+    text += f"<b>📝 Are you sure about buying? 🫆</b>\n"
+    text += "<b>--------------------------------------</b>\n\n"
+    text += "<b>Please Note📣:</b>\n"
+    text += "<b>The key cannot be returned upon purchase!</b>\n"
+    text += f"<b>💰 Your Balance:</b> ${balance}\n"
+    text += f"<b>💰 Price:</b> ${price}\n"
+    text += f"<b>📦 Stock:</b> {stock}"
 
     buttons = InlineKeyboardMarkup([
         [InlineKeyboardButton("✅ Confirm", callback_data=f"confirm_{data}"),
@@ -3269,6 +3319,7 @@ async def admin_command(update: Update, context: CallbackContext) -> None:
          InlineKeyboardButton("💎 Manage VIP", callback_data="admin_manage_vips")],
         [InlineKeyboardButton("🌟 Manage Sellers", callback_data="manage_reseller")],
         [InlineKeyboardButton("🎱 Manage 8BP Account", callback_data="manage_8bp_accounts")],
+        [InlineKeyboardButton("📦 See Stock", callback_data="admin_see_stock")],
         [InlineKeyboardButton("❌ Close", callback_data="admin_close")]
     ])
     
@@ -3282,7 +3333,8 @@ async def admin_command(update: Update, context: CallbackContext) -> None:
         "💎 <b>VIP:</b> Add/Remove/List VIP users\n"
         "📢 <b>Mailing:</b> Send messages to all users\n"
         "🌟 <b>Sellers:</b> Manage seller/reseller list\n"
-        "🎱 <b>8BP Account:</b> Manage game accounts"
+        "🎱 <b>8BP Account:</b> Manage game accounts\n"
+        "📦 <b>Stock:</b> View available keys stock"
     )
     
     if query:
@@ -3414,6 +3466,92 @@ async def admin_mailing(update: Update, context: CallbackContext) -> None:
     
     context.user_data['admin_flow'] = 'send_mailing'
     await admin_edit_or_reply(query, "📢 <b>Mailing Campaign</b>\n\nEnter the message to send to all users:", parse_mode=ParseMode.HTML)
+
+async def admin_see_stock(update: Update, context: CallbackContext) -> None:
+    """Show list of all hack tools for stock viewing."""
+    query = update.callback_query
+    await query.answer()
+    
+    if not is_admin(query.from_user.id):
+        await query.answer("❌ Access Denied!", show_alert=True)
+        return
+    
+    # Get unique hack tools from PRODUCTS
+    hacks = {}
+    for product_key, product_data in PRODUCTS.items():
+        hack = product_data['hack']
+        if hack not in hacks:
+            label = HACK_INFO.get(hack, {}).get('name', hack)
+            hacks[hack] = label
+    
+    # Create buttons for each hack tool
+    buttons_list = []
+    for hack, label in sorted(hacks.items()):
+        buttons_list.append([InlineKeyboardButton(f"📦 {label}", callback_data=f"admin_tool_stock_{hack}")])
+    
+    buttons_list.append([InlineKeyboardButton("🔙 Back", callback_data="admin_back")])
+    
+    text = "<b>📦 Stock Overview</b>\n\n"
+    text += "Select a hack tool to view available stock:\n\n"
+    
+    await admin_edit_or_reply(
+        query,
+        text,
+        reply_markup=InlineKeyboardMarkup(buttons_list),
+        parse_mode=ParseMode.HTML
+    )
+
+async def admin_view_tool_stock(update: Update, context: CallbackContext) -> None:
+    """Show stock details for selected hack tool with all durations."""
+    query = update.callback_query
+    await query.answer()
+    
+    if not is_admin(query.from_user.id):
+        await query.answer("❌ Access Denied!", show_alert=True)
+        return
+    
+    # Extract hack from callback data (admin_tool_stock_snake_engine)
+    hack = query.data.replace("admin_tool_stock_", "")
+    
+    # Get tool name
+    tool_name = HACK_INFO.get(hack, {}).get('name', hack)
+    
+    # Get all products for this hack and their stock
+    db = load_db()
+    keys_db = db.get('keys', {})
+    tool_keys = keys_db.get(hack, {})
+    
+    # Build stock info for all durations
+    text = f"<b>📦 Stock for {tool_name}</b>\n\n"
+    
+    # Get all durations for this hack from PRODUCTS
+    durations_for_hack = {}
+    for product_key, product_data in PRODUCTS.items():
+        if product_data['hack'] == hack:
+            duration = product_data['duration']
+            label = product_data['label']
+            if duration not in durations_for_hack:
+                durations_for_hack[duration] = label
+    
+    if not durations_for_hack:
+        text += "No products available for this tool."
+    else:
+        # Sort durations and display with stock
+        for duration, label in sorted(durations_for_hack.items()):
+            stock = len(tool_keys.get(duration, []))
+            text += f"<b>⏳ {label}</b>\n"
+            text += f"   📝 Available Keys: <b>{stock}</b>\n\n"
+    
+    buttons = InlineKeyboardMarkup([
+        [InlineKeyboardButton("🔙 Back", callback_data="admin_see_stock")]
+    ])
+    
+    await admin_edit_or_reply(
+        query,
+        text,
+        reply_markup=buttons,
+        parse_mode=ParseMode.HTML
+    )
 
 async def admin_manage_vips(update: Update, context: CallbackContext) -> None:
     query = update.callback_query
@@ -4138,13 +4276,20 @@ async def add_balance(update: Update, context: CallbackContext) -> None:
     encoded_text = quote_plus(prefill)
     deposit_url = f"https://t.me/{deposit_username}?text={encoded_text}"
     text = (
+        "<b>╔════════════════════╗</b>\n"
+        "<b>   ADD BALANCE CENTER</b>\n"
+        "<b>╚════════════════════╝</b>\n\n"
         "<b>Want to add balance 💰</b>\n"
-        "<b>Copy your ID and click deposit button below 👇</b>\n\n"
-        f"<code>{user_id}</code>"
+        "<b>Copy your User ID, then tap the Deposit button below 👇</b>\n\n"
+        "<b>Your ID:</b>\n"
+        f"<code>{user_id}</code>\n\n"
+        "<b>After payment, send your screenshot to admin.</b>"
     )
     buttons = InlineKeyboardMarkup([
-        [InlineKeyboardButton("Deposit", url=deposit_url)],
-        [InlineKeyboardButton("Back", callback_data="add_balance_back")]
+        [InlineKeyboardButton("💳 Deposit Now", url=deposit_url),
+         InlineKeyboardButton("💬 Contact Admin", url="https://t.me/Hayazi_Saheb")],
+        [InlineKeyboardButton("🔄 Refresh", callback_data="add_balance"),
+         InlineKeyboardButton("🔙 Back", callback_data="add_balance_back")]
     ])
     try:
         await query.edit_message_text(
@@ -4216,6 +4361,8 @@ def main() -> None:
     application.add_handler(CommandHandler("admin", admin_command))
     application.add_handler(CommandHandler("other", other_command))
     application.add_handler(CallbackQueryHandler(product, pattern="^product$"))
+    application.add_handler(CallbackQueryHandler(product_accounts, pattern="^product_accounts$"))
+    application.add_handler(CallbackQueryHandler(product_hackes, pattern="^product_hackes$"))
     application.add_handler(CallbackQueryHandler(eight_ball_pool, pattern="^product_8ball$"))
     application.add_handler(CallbackQueryHandler(eight_bp_account, pattern="^product_8bp_account$"))
     application.add_handler(CallbackQueryHandler(buy_8bp_1b, pattern="^buy_8bp_1b$"))
@@ -4258,6 +4405,8 @@ def main() -> None:
     application.add_handler(CallbackQueryHandler(admin_vip_list, pattern=r"^(admin_vip_list|vip_list_page_\d+)$"))
     application.add_handler(CallbackQueryHandler(admin_bot_stats, pattern="^admin_bot_stats$"))
     application.add_handler(CallbackQueryHandler(admin_mailing, pattern="^admin_mailing$"))
+    application.add_handler(CallbackQueryHandler(admin_see_stock, pattern="^admin_see_stock$"))
+    application.add_handler(CallbackQueryHandler(admin_view_tool_stock, pattern=r"^admin_tool_stock_.*$"))
     application.add_handler(CallbackQueryHandler(admin_close, pattern="^admin_close$"))
     application.add_handler(CallbackQueryHandler(admin_back, pattern="^admin_back$"))
     application.add_handler(CallbackQueryHandler(back_to_menu, pattern="^back_to_menu$"))
