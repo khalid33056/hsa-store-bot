@@ -265,6 +265,156 @@ async def start(update: Update, context: CallbackContext) -> None:
     )
     logger.info(f"START message sent to user: {update.effective_user.id}")
 
+
+def _other_menu_text() -> str:
+    return (
+        "<b>💼 Become Reseller</b>\n"
+        "Start earning by selling premium products.\n\n"
+        "<b>📱 Check Device</b>\n"
+        "Verify if your device is compatible with our tools.\n\n"
+        "<b>📘 User Guide</b>\n"
+        "Step-by-step instructions for safe & effective use."
+    )
+
+
+def _other_menu_keyboard() -> InlineKeyboardMarkup:
+    return InlineKeyboardMarkup([
+        [InlineKeyboardButton("💼 Become Reseller", callback_data="other_become_reseller")],
+        [InlineKeyboardButton("📱 Check Device", callback_data="other_check_device"),
+         InlineKeyboardButton("📘 User Guide", callback_data="other_user_guide")],
+        [InlineKeyboardButton("🔙 Back", callback_data="back_to_menu")]
+    ])
+
+
+async def other_command(update: Update, context: CallbackContext) -> None:
+    """Show reseller/device/user-guide menu for /other command."""
+    if not update.message:
+        return
+    await update.message.reply_photo(
+        photo="https://i.postimg.cc/pdtfG7LF/IMG-20260305-163542.png",
+        caption=_other_menu_text(),
+        reply_markup=_other_menu_keyboard(),
+        parse_mode=ParseMode.HTML
+    )
+
+
+async def other_become_reseller(update: Update, context: CallbackContext) -> None:
+    query = update.callback_query
+    await query.answer()
+    text = (
+        "👑 Become an Official Reseller\n\n"
+        "💼 Start earning by selling our premium products and grow your business.\n\n"
+        "1️⃣ Contact Admin: @Hayazi_Saheb\n"
+        "2️⃣ Deposit: Minimum 10 USDT\n"
+        "3️⃣ Activation: Get VIP Reseller Access\n\n"
+        "💎 Reseller Benefits\n"
+        "⚡ Access to Reseller Prices\n"
+        "🔑 Instant Auto Key Delivery\n"
+        "🚀 Sell Products & Earn Your Profit\n"
+        "📦 24/7 Automated System\n"
+        "🛡 Secure & Trusted Transactions\n"
+        "📊 Easy product selling system\n\n"
+        "🎮 Available Products\n"
+        "🎱 8 Ball Pool Hack\n"
+        "🎯 Carrom Pool Hack\n"
+        "⚡ Score Star Hack\n"
+        "🔥 Free Fire Hack\n"
+        "📱 iOS Certificate\n\n"
+        "📢 Important:\n"
+        "• Prices are visible only to VIP users\n"
+        "• Keys are delivered instantly after purchase\n"
+        "• Perfect for Telegram channels, TikTok & Facebook sellers"
+    )
+    keyboard = InlineKeyboardMarkup([
+        [InlineKeyboardButton("👑 Become Reseller", url="https://t.me/Hayazi_Saheb")],
+        [InlineKeyboardButton("🔙 Back", callback_data="other_back_menu")]
+    ])
+    try:
+        await query.edit_message_caption(caption=text, reply_markup=keyboard)
+    except Exception:
+        await query.edit_message_text(text=text, reply_markup=keyboard)
+
+
+async def other_check_device(update: Update, context: CallbackContext) -> None:
+    query = update.callback_query
+    await query.answer()
+    text = (
+        "<b>📱 Device Verification Required\n\n"
+        "🔍 Please check your device compatibility and than buy.\n\n"
+        "⚙ Supported Device\n"
+        "🟢 64-bit (arm64-v8a)\n\n"
+        "🚫 Not Supported\n"
+        "🔴 32-bit (armeabi-v7a)\n\n"
+        "📥 Step 1: Download Device Info Tool\n"
+        "📲 Step 2: Open the app and check ABI\n\n"
+        "🟢 ABI: arm64-v8a ➜ Supported ✅\n"
+        "🔴 ABI: armeabi-v7a ➜ Not Supported ❌\n\n"
+        "⚠ If your device is 32-bit, the app cannot run on your device.</b>"
+    )
+    keyboard = InlineKeyboardMarkup([
+        [InlineKeyboardButton("📥 Download", url="https://www.mediafire.com/file/91tl7ko41da8xh2/deviceinfo.apk/file")],
+        [InlineKeyboardButton("🔙 Back", callback_data="other_back_menu")]
+    ])
+    try:
+        await query.edit_message_caption(caption=text, parse_mode=ParseMode.HTML, reply_markup=keyboard)
+    except Exception:
+        await query.edit_message_text(text=text, parse_mode=ParseMode.HTML, reply_markup=keyboard)
+
+
+async def other_user_guide(update: Update, context: CallbackContext) -> None:
+    query = update.callback_query
+    await query.answer()
+    text = (
+        "<b>🧠 Power Without Fear — Use Our Products with Confidence\n\n"
+        "⚡ Our tools are built to deliver power, safety & smooth performance.\n"
+        "A pro-grade system designed for the best gaming experience.\n\n"
+        "⚙️ Golden Rules for Safe Use:\n"
+        "• 🏟 Start in Private/Training Matches to test settings\n"
+        "• 🎯 In competitive modes, play smart & balanced\n"
+        "• 📹 Avoid using tools during live streams or recordings\n"
+        "• 💎 Buy keys only from trusted resellers\n"
+        "• 🔄 Always use the latest updated version\n\n"
+        "📱 Device & Version Support:\n"
+        "• ✅ Works best on Android 64-bit devices\n"
+        "• 📱 Compatible with Samsung, Xiaomi, Realme, Vivo, Oppo & Huawei\n"
+        "• 🔓 Some tools require Root, while others work without Root\n\n"
+        "🧩 Technical Support:\n"
+        "• 💬 Support team available when you need help\n"
+        "• 🔧 Regular updates for stability & performance\n"
+        "• 📝 All user reports are reviewed carefully\n\n"
+        "💡 Remember:\n"
+        "Safety depends on how you use the tools.\n"
+        "Our products are built with security, stability & performance in mind.</b>"
+    )
+    keyboard = InlineKeyboardMarkup([
+        [InlineKeyboardButton("❌ Close", callback_data="other_back_menu")]
+    ])
+    try:
+        await query.edit_message_caption(caption=text, parse_mode=ParseMode.HTML, reply_markup=keyboard)
+    except Exception:
+        await query.edit_message_text(text=text, parse_mode=ParseMode.HTML, reply_markup=keyboard)
+
+
+async def other_back_menu(update: Update, context: CallbackContext) -> None:
+    """Return from /other sub-pages to the /other menu page."""
+    query = update.callback_query
+    await query.answer()
+    try:
+        await query.edit_message_media(
+            media=InputMediaPhoto(
+                media="https://i.postimg.cc/pdtfG7LF/IMG-20260305-163542.png",
+                caption=_other_menu_text(),
+                parse_mode=ParseMode.HTML
+            ),
+            reply_markup=_other_menu_keyboard()
+        )
+    except Exception:
+        await query.edit_message_text(
+            text=_other_menu_text(),
+            parse_mode=ParseMode.HTML,
+            reply_markup=_other_menu_keyboard()
+        )
+
 async def product(update: Update, context: CallbackContext) -> None:
     query = update.callback_query
     await query.answer()
@@ -472,6 +622,31 @@ async def confirm_buy_8bp_1b(update: Update, context: CallbackContext) -> None:
         users[uid]['purchases'].append(entry)
         save_db(db)
 
+        # Send admin notification
+        db = load_db()
+        admins_list = db.get('admins', [ADMIN_ID])
+        user_name = query.from_user.username or "Unknown"
+        if user_name != "Unknown":
+            user_name = f"@{user_name}"
+        
+        admin_notification = f"🛒 <b>New Purchase Notification</b>\n\n"
+        admin_notification += f"🆔 <b>User ID:</b> {user_id}\n"
+        admin_notification += f"👤 <b>User name:</b> {user_name}\n"
+        admin_notification += f"📦 <b>Product:</b> 1 Billion Coin Account\n"
+        admin_notification += f"⏳ <b>Duration:</b> Lifetime\n"
+        admin_notification += f"💰 <b>Price:</b> {price}$\n"
+        admin_notification += f"📅 <b>Purchase Time:</b> {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}"
+        
+        for admin_id in admins_list:
+            try:
+                await context.bot.send_message(
+                    chat_id=admin_id,
+                    text=admin_notification,
+                    parse_mode=ParseMode.HTML
+                )
+            except Exception:
+                pass  # Silently fail if admin notification doesn't send
+
         await query.message.reply_text(
             f"✅ <b>Purchase Successful!</b>\n\n"
             f"🎱 <b>Product:</b> 1 Billion Coin Account\n"
@@ -540,6 +715,31 @@ async def confirm_buy_8bp_100m(update: Update, context: CallbackContext) -> None
         }
         users[uid]['purchases'].append(entry)
         save_db(db)
+
+        # Send admin notification
+        db = load_db()
+        admins_list = db.get('admins', [ADMIN_ID])
+        user_name = query.from_user.username or "Unknown"
+        if user_name != "Unknown":
+            user_name = f"@{user_name}"
+        
+        admin_notification = f"🛒 <b>New Purchase Notification</b>\n\n"
+        admin_notification += f"🆔 <b>User ID:</b> {user_id}\n"
+        admin_notification += f"👤 <b>User name:</b> {user_name}\n"
+        admin_notification += f"📦 <b>Product:</b> 100 Million Coin Account\n"
+        admin_notification += f"⏳ <b>Duration:</b> Lifetime\n"
+        admin_notification += f"💰 <b>Price:</b> {price}$\n"
+        admin_notification += f"📅 <b>Purchase Time:</b> {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}"
+        
+        for admin_id in admins_list:
+            try:
+                await context.bot.send_message(
+                    chat_id=admin_id,
+                    text=admin_notification,
+                    parse_mode=ParseMode.HTML
+                )
+            except Exception:
+                pass  # Silently fail if admin notification doesn't send
 
         await query.message.reply_text(
             f"✅ <b>Purchase Successful!</b>\n\n"
@@ -2402,7 +2602,7 @@ async def manage_reseller(update: Update, context: CallbackContext) -> None:
     await admin_edit_or_reply(query, text, reply_markup=buttons, parse_mode=ParseMode.HTML)
 
 async def seller_add_flow(update: Update, context: CallbackContext) -> None:
-    """Prompt admin to add seller."""
+    """Prompt admin to add multiple sellers at once."""
     query = update.callback_query
     await query.answer()
     
@@ -2410,13 +2610,17 @@ async def seller_add_flow(update: Update, context: CallbackContext) -> None:
         await query.answer("❌ Access Denied!", show_alert=True)
         return
     
-    context.user_data['admin_flow'] = 'add_seller'
+    context.user_data['admin_flow'] = 'add_sellers_bulk'
     text = (
-        "📝 <b>Add New Seller</b>\n\n"
-        "Send seller details in this format:\n"
+        "📝 <b>Add Multiple Sellers</b>\n\n"
+        "Send all seller entries at once, one per line:\n\n"
+        "Format:\n"
         "Name: @username or link\n\n"
         "Example:\n"
-        "Ali Khan: https://t.me/seller1"
+        "Ali Khan: https://t.me/seller1\n"
+        "Ahmed: https://t.me/seller2\n"
+        "Sara: @seller3\n\n"
+        "<i>All entries will be added to the list once.</i>"
     )
     await admin_edit_or_reply(query, text, parse_mode=ParseMode.HTML)
 
@@ -2444,7 +2648,7 @@ async def seller_list_view(update: Update, context: CallbackContext) -> None:
     await admin_edit_or_reply(query, text, reply_markup=buttons, parse_mode=ParseMode.HTML)
 
 async def seller_remove_flow(update: Update, context: CallbackContext) -> None:
-    """Prompt admin to remove seller."""
+    """Prompt admin to confirm bulk removal of all sellers."""
     query = update.callback_query
     await query.answer()
     
@@ -2463,14 +2667,47 @@ async def seller_remove_flow(update: Update, context: CallbackContext) -> None:
         await admin_edit_or_reply(query, text, reply_markup=buttons, parse_mode=ParseMode.HTML)
         return
     
-    context.user_data['admin_flow'] = 'remove_seller'
     text = (
-        "❌ <b>Remove Seller</b>\n\n"
-        "<b>Current list:</b>\n" + reseller_list + "\n\n"
-        "Send the seller name or part of it to remove:\n"
-        "Example: Ali Khan or seller1"
+        "❌ <b>Remove All Sellers</b>\n\n"
+        "<b>Current Seller List:</b>\n" + reseller_list + "\n\n"
+        "⚠️ <b>Confirm:</b> This will remove ALL sellers from the list!\n"
+        "This action cannot be undone."
     )
-    await admin_edit_or_reply(query, text, parse_mode=ParseMode.HTML)
+    
+    buttons = InlineKeyboardMarkup([
+        [InlineKeyboardButton("✅ Confirm - Remove All", callback_data="seller_remove_confirm"),
+         InlineKeyboardButton("❌ Cancel", callback_data="manage_reseller")]
+    ])
+    
+    await admin_edit_or_reply(query, text, reply_markup=buttons, parse_mode=ParseMode.HTML)
+
+async def seller_remove_confirm(update: Update, context: CallbackContext) -> None:
+    """Confirm and remove all sellers."""
+    query = update.callback_query
+    await query.answer()
+    
+    if not is_admin(query.from_user.id):
+        await query.answer("❌ Access Denied!", show_alert=True)
+        return
+    
+    db = load_db()
+    old_list = db.get('reseller_list', '')
+    
+    # Remove all sellers
+    db['reseller_list'] = ''
+    save_db(db)
+    
+    text = (
+        "✅ <b>All Sellers Removed Successfully!</b>\n\n"
+        "<b>Removed List:</b>\n" + old_list + "\n\n"
+        "The seller list is now empty."
+    )
+    
+    buttons = InlineKeyboardMarkup([
+        [InlineKeyboardButton("🔙 Back", callback_data="manage_reseller")]
+    ])
+    
+    await admin_edit_or_reply(query, text, reply_markup=buttons, parse_mode=ParseMode.HTML)
 
 async def trusted_seller(update: Update, context: CallbackContext) -> None:
     """Show trusted seller list to user."""
@@ -2798,8 +3035,8 @@ async def my_profile(update: Update, context: CallbackContext) -> None:
     profile_text += f"<b>🛍️ Last Purchase:</b> {last_purchase_text}\n"
     
     keyboard = InlineKeyboardMarkup([
-        [InlineKeyboardButton("💳 Add Balance", callback_data="add_balance")],
-        [InlineKeyboardButton("📜 Purchase History", callback_data="history")],
+        [InlineKeyboardButton("💳 Add Balance", callback_data="add_balance"),
+         InlineKeyboardButton("📜 Purchase History", callback_data="history")],
         [InlineKeyboardButton("🔙 Back to Menu", callback_data="back_to_menu")]
     ])
     
@@ -2905,9 +3142,13 @@ async def confirm_buy(update: Update, context: CallbackContext) -> None:
     admins_list = db.get('admins', [ADMIN_ID])
     product_name = HACK_INFO.get(hack, {}).get('name', hack)
     duration_label = product['label']
+    user_name = query.from_user.username or "Unknown"
+    if user_name != "Unknown":
+        user_name = f"@{user_name}"
     
     admin_notification = f"🛒 <b>New Purchase Notification</b>\n\n"
-    admin_notification += f"👤 <b>User ID:</b> {user_id}\n"
+    admin_notification += f"🆔 <b>User ID:</b> {user_id}\n"
+    admin_notification += f"👤 <b>User name:</b> {user_name}\n"
     admin_notification += f"📦 <b>Product:</b> {product_name}\n"
     admin_notification += f"⏳ <b>Duration:</b> {duration_label}\n"
     admin_notification += f"🔑 <b>Key:</b> <code>{key_value}</code>\n"
@@ -3190,7 +3431,12 @@ async def admin_add_vip_flow(update: Update, context: CallbackContext) -> None:
         await query.answer("❌ Access Denied!", show_alert=True)
         return
     context.user_data['admin_flow'] = 'add_vip_user'
-    await admin_edit_or_reply(query, "Send user ID to add VIP:")
+    text = (
+        "➕ <b>Add User to VIP</b>\n\n"
+        "Send the user ID to add to VIP list:\n\n"
+        "Example: 123456789"
+    )
+    await admin_edit_or_reply(query, text, parse_mode=ParseMode.HTML)
 
 async def admin_remove_vip_flow(update: Update, context: CallbackContext) -> None:
     query = update.callback_query
@@ -3210,17 +3456,83 @@ async def admin_vip_list(update: Update, context: CallbackContext) -> None:
 
     db = load_db()
     vip_users = db.get('vip_users', {})
+    
+    # Get page number from callback data (default to 1)
+    page = 1
+    if query.data.startswith('vip_list_page_'):
+        try:
+            page = int(query.data.split('_')[-1])
+        except:
+            page = 1
+    
     if not vip_users:
         text = "📋 <b>VIP List</b>\n\n❌ No VIP users yet."
-    else:
-        lines = ["📋 <b>VIP List</b>", ""]
-        for user_id, joined_at in vip_users.items():
-            lines.append(f"👤 <b>{user_id}</b> — {joined_at}")
-        text = "\n".join(lines)
-
-    buttons = InlineKeyboardMarkup([
-        [InlineKeyboardButton("🔙 Back", callback_data="admin_manage_vips")]
-    ])
+        buttons = InlineKeyboardMarkup([
+            [InlineKeyboardButton("🔙 Back", callback_data="admin_manage_vips")]
+        ])
+        await admin_edit_or_reply(query, text, reply_markup=buttons, parse_mode=ParseMode.HTML)
+        return
+    
+    # Pagination settings
+    users_per_page = 5
+    vip_list = list(vip_users.items())
+    total_pages = (len(vip_list) + users_per_page - 1) // users_per_page
+    
+    # Validate page number
+    if page < 1:
+        page = 1
+    if page > total_pages:
+        page = total_pages
+    
+    # Get users for current page
+    start_idx = (page - 1) * users_per_page
+    end_idx = start_idx + users_per_page
+    page_users = vip_list[start_idx:end_idx]
+    
+    # Build the list text
+    lines = [f"📋 <b>VIP Users List (Page {page}/{total_pages})</b>", ""]
+    
+    for idx, (user_id, vip_data) in enumerate(page_users, 1):
+        # Handle both old format (just string) and new format (dict with username and date)
+        if isinstance(vip_data, dict):
+            username = vip_data.get('username', 'Unknown')
+            joined_date = vip_data.get('joined_date', 'N/A')
+        else:
+            # Old format, migration
+            username = 'Unknown'
+            joined_date = str(vip_data)
+        
+        # Format username
+        if username and username != 'Unknown':
+            if not username.startswith('@'):
+                username = f"@{username}"
+        else:
+            username = 'Unknown'
+        
+        lines.append(f"{start_idx + idx}. 🆔 <b>ID:</b> {user_id}")
+        lines.append(f"   👤 <b>Name:</b> {username}")
+        lines.append(f"   📅 <b>Joined:</b> {joined_date}")
+        lines.append("")
+    
+    text = "\n".join(lines)
+    
+    # Build pagination buttons
+    buttons_list = []
+    
+    # Previous and Next buttons
+    nav_buttons = []
+    if page > 1:
+        nav_buttons.append(InlineKeyboardButton("⬅️ Prev", callback_data=f"vip_list_page_{page-1}"))
+    if page < total_pages:
+        nav_buttons.append(InlineKeyboardButton("Next ➡️", callback_data=f"vip_list_page_{page+1}"))
+    
+    if nav_buttons:
+        buttons_list.append(nav_buttons)
+    
+    # Back button
+    buttons_list.append([InlineKeyboardButton("🔙 Back", callback_data="admin_manage_vips")])
+    
+    buttons = InlineKeyboardMarkup(buttons_list)
     await admin_edit_or_reply(query, text, reply_markup=buttons, parse_mode=ParseMode.HTML)
 
 async def admin_message_handler(update: Update, context: CallbackContext) -> None:
@@ -3293,19 +3605,35 @@ async def admin_message_handler(update: Update, context: CallbackContext) -> Non
             if vip_key in vip_users:
                 await update.message.reply_text(f"❌ User ID {vip_id} is already VIP.")
             else:
-                joined_at = datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S UTC')
-                vip_users[vip_key] = joined_at
+                joined_date = datetime.utcnow().strftime('%Y-%m-%d')
+                
+                # Get username from users database if available
+                users = db.get('users', {})
+                username = 'Unknown'
+                if vip_key in users:
+                    username = users[vip_key].get('username', 'Unknown')
+                
+                # Store as dict with username and joined_date
+                vip_users[vip_key] = {
+                    'username': username,
+                    'joined_date': joined_date
+                }
                 save_db(db)
+                
+                display_username = f"@{username}" if username != 'Unknown' else username
                 await update.message.reply_text(
-                    f"✅ VIP Added Successfully!\n\n👤 User ID: {vip_id}\n📅 Joined: {joined_at}"
+                    f"✅ <b>VIP Added Successfully!</b>\n\n"
+                    f"🆔 <b>User ID:</b> {vip_id}\n"
+                    f"👤 <b>Username:</b> {display_username}\n"
+                    f"📅 <b>Joined:</b> {joined_date}",
+                    parse_mode=ParseMode.HTML
                 )
                 # Send notification to the user
                 try:
                     user_name = "User"
-                    users = db.get('users', {})
                     if vip_key in users:
                         user_name = users[vip_key].get('name', 'User')
-                    notification = f"🎉 Hello {user_name},\n\nYou are now a VIP member in HSA Store Panel!\n\nEnjoy exclusive access to all premium tools and features!"
+                    notification = f"🎉 <b>Welcome to VIP!</b>\n\nHello {user_name},\n\nYou are now a VIP member in HSA Store Panel!\n\n💎 Enjoy exclusive access to all premium tools and features!"
                     await context.bot.send_message(
                         chat_id=vip_id,
                         text=notification,
@@ -3430,7 +3758,7 @@ async def admin_message_handler(update: Update, context: CallbackContext) -> Non
             )
             context.user_data.pop('admin_flow', None)
             return
-        if flow == 'add_seller':
+        if flow == 'add_sellers_bulk':
             seller_text = text
             db = load_db()
             current_list = db.get('reseller_list', '')
@@ -3441,41 +3769,9 @@ async def admin_message_handler(update: Update, context: CallbackContext) -> Non
             db['reseller_list'] = new_list
             save_db(db)
             await update.message.reply_text(
-                f"✅ <b>Seller Added Successfully!</b>\n\n"
-                f"📝 Entry: {seller_text}\n\n"
-                f"Total List:\n{new_list}",
-                parse_mode=ParseMode.HTML
-            )
-            context.user_data.pop('admin_flow', None)
-            return
-        if flow == 'remove_seller':
-            search_text = text.lower()
-            db = load_db()
-            current_list = db.get('reseller_list', '')
-            
-            lines = current_list.split('\n')
-            removed_lines = []
-            remaining_lines = []
-            
-            for line in lines:
-                if search_text in line.lower():
-                    removed_lines.append(line)
-                else:
-                    remaining_lines.append(line)
-            
-            if not removed_lines:
-                await update.message.reply_text(f"❌ No seller found matching: {search_text}")
-                return
-            
-            new_list = '\n'.join(remaining_lines).strip()
-            db['reseller_list'] = new_list
-            save_db(db)
-            
-            removed_text = '\n'.join(removed_lines)
-            await update.message.reply_text(
-                f"✅ <b>Seller(s) Removed Successfully!</b>\n\n"
-                f"🗑️ Removed:\n{removed_text}\n\n"
-                f"📋 Remaining List:\n{new_list if new_list else 'Empty'}",
+                f"✅ <b>All Sellers Added Successfully!</b>\n\n"
+                f"📝 New Entries:\n{seller_text}\n\n"
+                f"<b>Complete List:</b>\n{new_list}",
                 parse_mode=ParseMode.HTML
             )
             context.user_data.pop('admin_flow', None)
@@ -3829,6 +4125,7 @@ def main() -> None:
 
     application.add_handler(CommandHandler("start", start))
     application.add_handler(CommandHandler("admin", admin_command))
+    application.add_handler(CommandHandler("other", other_command))
     application.add_handler(CallbackQueryHandler(product, pattern="^product$"))
     application.add_handler(CallbackQueryHandler(eight_ball_pool, pattern="^product_8ball$"))
     application.add_handler(CallbackQueryHandler(eight_bp_account, pattern="^product_8bp_account$"))
@@ -3878,10 +4175,15 @@ def main() -> None:
     application.add_handler(CallbackQueryHandler(trusted_seller, pattern="^trusted_seller$"))
     application.add_handler(CallbackQueryHandler(help_support, pattern="^help_support$"))
     application.add_handler(CallbackQueryHandler(help_support_back, pattern="^help_support_back$"))
+    application.add_handler(CallbackQueryHandler(other_become_reseller, pattern="^other_become_reseller$"))
+    application.add_handler(CallbackQueryHandler(other_check_device, pattern="^other_check_device$"))
+    application.add_handler(CallbackQueryHandler(other_user_guide, pattern="^other_user_guide$"))
+    application.add_handler(CallbackQueryHandler(other_back_menu, pattern="^other_back_menu$"))
     application.add_handler(CallbackQueryHandler(manage_reseller, pattern="^manage_reseller$"))
     application.add_handler(CallbackQueryHandler(seller_add_flow, pattern="^seller_add$"))
     application.add_handler(CallbackQueryHandler(seller_list_view, pattern="^seller_view$"))
     application.add_handler(CallbackQueryHandler(seller_remove_flow, pattern="^seller_remove$"))
+    application.add_handler(CallbackQueryHandler(seller_remove_confirm, pattern="^seller_remove_confirm$"))
     # 8BP account management handlers
     application.add_handler(CallbackQueryHandler(manage_8bp_accounts, pattern="^manage_8bp_accounts$"))
     application.add_handler(CallbackQueryHandler(add_8bp_account_flow, pattern="^8bp_add_account$"))
