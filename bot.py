@@ -432,9 +432,10 @@ async def product(update: Update, context: CallbackContext) -> None:
     product_text += "🔧 <b>Hackes:</b> Browse premium tools & packages"
 
     product_menu = InlineKeyboardMarkup([
-        [InlineKeyboardButton("🎮 Account", callback_data="product_accounts")],
-        [InlineKeyboardButton("🔧 Hackes", callback_data="product_hackes")],
-        [InlineKeyboardButton("🔙 Back", callback_data="back_to_menu")]
+        [InlineKeyboardButton("🎮 Account", callback_data="product_accounts"),
+         InlineKeyboardButton("🔧 Hackes", callback_data="product_hackes")],
+        [InlineKeyboardButton("🔙 Back", callback_data="back_to_menu"),
+         InlineKeyboardButton("💳 Add Balance", callback_data="add_balance")]
     ])
 
     await query.edit_message_media(
@@ -3484,10 +3485,15 @@ async def admin_see_stock(update: Update, context: CallbackContext) -> None:
             label = HACK_INFO.get(hack, {}).get('name', hack)
             hacks[hack] = label
     
-    # Create buttons for each hack tool
+    # Create buttons in 2-column grid
     buttons_list = []
-    for hack, label in sorted(hacks.items()):
-        buttons_list.append([InlineKeyboardButton(f"📦 {label}", callback_data=f"admin_tool_stock_{hack}")])
+    stock_buttons = [
+        InlineKeyboardButton(f"📦 {label}", callback_data=f"admin_tool_stock_{hack}")
+        for hack, label in sorted(hacks.items())
+    ]
+
+    for i in range(0, len(stock_buttons), 2):
+        buttons_list.append(stock_buttons[i:i + 2])
     
     buttons_list.append([InlineKeyboardButton("🔙 Back", callback_data="admin_back")])
     
@@ -3536,11 +3542,21 @@ async def admin_view_tool_stock(update: Update, context: CallbackContext) -> Non
     if not durations_for_hack:
         text += "No products available for this tool."
     else:
-        # Sort durations and display with stock
+        # Sort durations and display stock + all keys under each duration
         for duration, label in sorted(durations_for_hack.items()):
-            stock = len(tool_keys.get(duration, []))
+            keys_list = tool_keys.get(duration, [])
+            stock = len(keys_list)
             text += f"<b>⏳ {label}</b>\n"
             text += f"   📝 Available Keys: <b>{stock}</b>\n\n"
+
+            if stock > 0:
+                for idx, key_code in enumerate(keys_list, 1):
+                    safe_key = str(key_code).replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
+                    text += f"   {idx}. <code>{safe_key}</code>\n"
+            else:
+                text += "   <i>No keys available</i>\n"
+
+            text += "\n"
     
     buttons = InlineKeyboardMarkup([
         [InlineKeyboardButton("🔙 Back", callback_data="admin_see_stock")]
