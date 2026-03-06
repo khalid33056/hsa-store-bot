@@ -434,8 +434,7 @@ async def product(update: Update, context: CallbackContext) -> None:
     product_menu = InlineKeyboardMarkup([
         [InlineKeyboardButton("🎮 Account", callback_data="product_accounts"),
          InlineKeyboardButton("🔧 Hackes", callback_data="product_hackes")],
-        [InlineKeyboardButton("🔙 Back", callback_data="back_to_menu"),
-         InlineKeyboardButton("💳 Add Balance", callback_data="add_balance")]
+        [InlineKeyboardButton("🔙 Back", callback_data="back_to_menu")]
     ])
 
     await query.edit_message_media(
@@ -3318,9 +3317,9 @@ async def admin_command(update: Update, context: CallbackContext) -> None:
          InlineKeyboardButton("👥 Manage Admins", callback_data="admin_manage_admins")],
         [InlineKeyboardButton("📢 Mailing", callback_data="admin_mailing"),
          InlineKeyboardButton("💎 Manage VIP", callback_data="admin_manage_vips")],
-        [InlineKeyboardButton("🌟 Manage Sellers", callback_data="manage_reseller")],
+        [InlineKeyboardButton("🌟 Manage Sellers", callback_data="manage_reseller"),
+         InlineKeyboardButton("📦 See Stock", callback_data="admin_see_stock")],
         [InlineKeyboardButton("🎱 Manage 8BP Account", callback_data="manage_8bp_accounts")],
-        [InlineKeyboardButton("📦 See Stock", callback_data="admin_see_stock")],
         [InlineKeyboardButton("❌ Close", callback_data="admin_close")]
     ])
     
