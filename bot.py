@@ -3406,6 +3406,25 @@ def _get_total_deposit(user_record: dict) -> float:
     return round(total_deposit, 2)
 
 
+def _get_ledger_deposit_totals(db: dict) -> dict:
+    """Return cumulative deposit totals by user_id from global deposit ledger."""
+    totals = {}
+    ledger = db.get('deposit_ledger', [])
+    if not isinstance(ledger, list):
+        return totals
+
+    for item in ledger:
+        if not isinstance(item, dict):
+            continue
+        uid = str(item.get('user_id', '')).strip()
+        if not uid:
+            continue
+        amount = float(item.get('amount', 0.0) or 0.0)
+        totals[uid] = round(float(totals.get(uid, 0.0)) + amount, 2)
+
+    return totals
+
+
 async def admin_balance_users(update: Update, context: CallbackContext) -> None:
     """Show paginated list of users with total deposit and current balance."""
     query = update.callback_query
@@ -3417,6 +3436,7 @@ async def admin_balance_users(update: Update, context: CallbackContext) -> None:
 
     db = load_db()
     users = db.get('users', {})
+    ledger_totals = _get_ledger_deposit_totals(db)
 
     page = 1
     if query.data.startswith('admin_balance_users_page_'):
@@ -3461,7 +3481,7 @@ async def admin_balance_users(update: Update, context: CallbackContext) -> None:
     end_idx = start_idx + users_per_page
     page_users = user_items[start_idx:end_idx]
 
-    total_deposit_all = sum(_get_total_deposit(rec) for _, rec in user_items)
+    total_deposit_all = sum(float(ledger_totals.get(uid, _get_total_deposit(rec))) for uid, rec in user_items)
     total_balance_all = sum(float(rec.get('balance', 0.0) or 0.0) for _, rec in user_items)
 
     lines = [
@@ -3473,7 +3493,7 @@ async def admin_balance_users(update: Update, context: CallbackContext) -> None:
 
     for idx, (uid, user_rec) in enumerate(page_users, 1):
         balance = float(user_rec.get('balance', 0.0) or 0.0)
-        total_deposit = _get_total_deposit(user_rec)
+        total_deposit = float(ledger_totals.get(uid, _get_total_deposit(user_rec)))
         username = _user_display_name(user_rec)
 
         lines.append(f"{start_idx + idx}. 🆔 <b>ID:</b> {uid}")
@@ -4079,6 +4099,17 @@ async def admin_message_handler(update: Update, context: CallbackContext) -> Non
             users[tid]['balance'] = users[tid].get('balance', 0.0) + amount
             users[tid]['total_deposit'] = float(users[tid].get('total_deposit', 0.0) or 0.0) + amount
             users[tid]['deposit_history'].append({
+                'amount': amount,
+                'date': datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+            })
+
+            # Global ledger keeps all-time deposits even if per-user structure changes later.
+            deposit_ledger = db.setdefault('deposit_ledger', [])
+            if not isinstance(deposit_ledger, list):
+                deposit_ledger = []
+                db['deposit_ledger'] = deposit_ledger
+            deposit_ledger.append({
+                'user_id': str(tid),
                 'amount': amount,
                 'date': datetime.now().strftime('%Y-%m-%d %H:%M:%S')
             })
