@@ -3377,6 +3377,35 @@ def _user_display_name(user_record: dict) -> str:
     return 'Unknown'
 
 
+def _get_total_deposit(user_record: dict) -> float:
+    """Get cumulative total deposit with backward-compatible fallbacks."""
+    # Primary source (new tracking)
+    total_deposit = float(user_record.get('total_deposit', 0.0) or 0.0)
+
+    # Secondary source: explicit deposit history list
+    if total_deposit <= 0:
+        deposit_history = user_record.get('deposit_history', [])
+        if isinstance(deposit_history, list) and deposit_history:
+            try:
+                total_deposit = sum(float(item.get('amount', 0.0) or 0.0) for item in deposit_history if isinstance(item, dict))
+            except Exception:
+                total_deposit = 0.0
+
+    # Backward-compatible estimate for old users without deposit tracking.
+    # Estimate: current balance + total spent from purchases that include a price.
+    if total_deposit <= 0:
+        balance = float(user_record.get('balance', 0.0) or 0.0)
+        purchases = user_record.get('purchases', [])
+        spent = 0.0
+        if isinstance(purchases, list):
+            for p in purchases:
+                if isinstance(p, dict):
+                    spent += float(p.get('price', 0.0) or 0.0)
+        total_deposit = max(0.0, balance + spent)
+
+    return round(total_deposit, 2)
+
+
 async def admin_balance_users(update: Update, context: CallbackContext) -> None:
     """Show paginated list of users with total deposit and current balance."""
     query = update.callback_query
@@ -3432,7 +3461,7 @@ async def admin_balance_users(update: Update, context: CallbackContext) -> None:
     end_idx = start_idx + users_per_page
     page_users = user_items[start_idx:end_idx]
 
-    total_deposit_all = sum(float(rec.get('total_deposit', 0.0) or 0.0) for _, rec in user_items)
+    total_deposit_all = sum(_get_total_deposit(rec) for _, rec in user_items)
     total_balance_all = sum(float(rec.get('balance', 0.0) or 0.0) for _, rec in user_items)
 
     lines = [
@@ -3444,7 +3473,7 @@ async def admin_balance_users(update: Update, context: CallbackContext) -> None:
 
     for idx, (uid, user_rec) in enumerate(page_users, 1):
         balance = float(user_rec.get('balance', 0.0) or 0.0)
-        total_deposit = float(user_rec.get('total_deposit', 0.0) or 0.0)
+        total_deposit = _get_total_deposit(user_rec)
         username = _user_display_name(user_rec)
 
         lines.append(f"{start_idx + idx}. 🆔 <b>ID:</b> {uid}")
@@ -4041,8 +4070,18 @@ async def admin_message_handler(update: Update, context: CallbackContext) -> Non
                 users[tid] = {"balance": 0.0, "purchases": []}
             if 'purchases' not in users[tid]:
                 users[tid]['purchases'] = []
+
+            # Ensure cumulative deposit starts from best-known value for old records
+            users[tid]['total_deposit'] = _get_total_deposit(users[tid])
+            if 'deposit_history' not in users[tid] or not isinstance(users[tid].get('deposit_history'), list):
+                users[tid]['deposit_history'] = []
+
             users[tid]['balance'] = users[tid].get('balance', 0.0) + amount
             users[tid]['total_deposit'] = float(users[tid].get('total_deposit', 0.0) or 0.0) + amount
+            users[tid]['deposit_history'].append({
+                'amount': amount,
+                'date': datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+            })
             save_db(db)
             await update.message.reply_text(
                 f"✅ Balance Updated Successfully!\n\n👤 User ID: {tid}\n💰 Added Amount: {amount} USDT\n💵 New Balance: {users[tid]['balance']} USDT"
