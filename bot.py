@@ -3315,6 +3315,7 @@ async def admin_command(update: Update, context: CallbackContext) -> None:
          InlineKeyboardButton("💰 Manage Balance", callback_data="admin_manage_balance")],
         [InlineKeyboardButton("📊 Bot Stats", callback_data="admin_bot_stats"),
          InlineKeyboardButton("👥 Manage Admins", callback_data="admin_manage_admins")],
+        [InlineKeyboardButton("💳 Balance Users", callback_data="admin_balance_users")],
         [InlineKeyboardButton("📢 Mailing", callback_data="admin_mailing"),
          InlineKeyboardButton("💎 Manage VIP", callback_data="admin_manage_vips")],
         [InlineKeyboardButton("🌟 Manage Sellers", callback_data="manage_reseller"),
@@ -3330,6 +3331,7 @@ async def admin_command(update: Update, context: CallbackContext) -> None:
         "💰 <b>Balance:</b> Add/Remove user balance\n"
         "📊 <b>Stats:</b> View bot statistics\n"
         "👥 <b>Admins:</b> Manage admin users\n"
+        "💳 <b>Balance Users:</b> View user balances and deposits\n"
         "💎 <b>VIP:</b> Add/Remove/List VIP users\n"
         "📢 <b>Mailing:</b> Send messages to all users\n"
         "🌟 <b>Sellers:</b> Manage seller/reseller list\n"
@@ -3358,6 +3360,93 @@ async def admin_manage_balance(update: Update, context: CallbackContext) -> None
         [InlineKeyboardButton("🔙 Back", callback_data="admin_back")]
     ])
     await admin_edit_or_reply(query, "💰 Balance Management\n\nHere you can add or remove user balance.\nChoose an action below.", reply_markup=buttons)
+
+
+def _user_display_name(user_record: dict) -> str:
+    """Build a readable username for admin lists."""
+    username = user_record.get('username', '')
+    first_name = user_record.get('first_name', '')
+    name = user_record.get('name', '')
+
+    if username and username != 'No username':
+        return username if username.startswith('@') else f"@{username}"
+    if first_name:
+        return first_name
+    if name:
+        return name
+    return 'Unknown'
+
+
+async def admin_balance_users(update: Update, context: CallbackContext) -> None:
+    """Show paginated list of users with total deposit and current balance."""
+    query = update.callback_query
+    await query.answer()
+
+    if not is_admin(query.from_user.id):
+        await query.answer("❌ Access Denied!", show_alert=True)
+        return
+
+    db = load_db()
+    users = db.get('users', {})
+
+    page = 1
+    if query.data.startswith('admin_balance_users_page_'):
+        try:
+            page = int(query.data.split('_')[-1])
+        except Exception:
+            page = 1
+
+    if not users:
+        text = "💳 <b>Balance Users</b>\n\n❌ No users found."
+        buttons = InlineKeyboardMarkup([
+            [InlineKeyboardButton("🔙 Back", callback_data="admin_back")]
+        ])
+        await admin_edit_or_reply(query, text, reply_markup=buttons, parse_mode=ParseMode.HTML)
+        return
+
+    user_items = sorted(users.items(), key=lambda item: int(item[0]) if str(item[0]).isdigit() else 0)
+    users_per_page = 5
+    total_pages = (len(user_items) + users_per_page - 1) // users_per_page
+
+    if page < 1:
+        page = 1
+    if page > total_pages:
+        page = total_pages
+
+    start_idx = (page - 1) * users_per_page
+    end_idx = start_idx + users_per_page
+    page_users = user_items[start_idx:end_idx]
+
+    lines = [f"💳 <b>Balance Users (Page {page}/{total_pages})</b>", ""]
+
+    for idx, (uid, user_rec) in enumerate(page_users, 1):
+        balance = float(user_rec.get('balance', 0.0) or 0.0)
+        total_deposit = float(user_rec.get('total_deposit', 0.0) or 0.0)
+        username = _user_display_name(user_rec)
+
+        lines.append(f"{start_idx + idx}. 🆔 <b>ID:</b> {uid}")
+        lines.append(f"   👤 <b>User:</b> {username}")
+        lines.append(f"   📥 <b>Total Deposit:</b> {total_deposit:.2f} USDT")
+        lines.append(f"   💰 <b>Current Balance:</b> {balance:.2f} USDT")
+        lines.append("")
+
+    nav_row = []
+    if page > 1:
+        nav_row.append(InlineKeyboardButton("⬅️ Prev", callback_data=f"admin_balance_users_page_{page-1}"))
+    if page < total_pages:
+        nav_row.append(InlineKeyboardButton("Next ➡️", callback_data=f"admin_balance_users_page_{page+1}"))
+
+    buttons_rows = []
+    if nav_row:
+        buttons_rows.append(nav_row)
+    buttons_rows.append([InlineKeyboardButton("🔙 Back", callback_data="admin_back")])
+
+    await admin_edit_or_reply(
+        query,
+        "\n".join(lines),
+        reply_markup=InlineKeyboardMarkup(buttons_rows),
+        parse_mode=ParseMode.HTML
+    )
 
 async def admin_back(update: Update, context: CallbackContext) -> None:
     # return to admin panel
@@ -3930,6 +4019,7 @@ async def admin_message_handler(update: Update, context: CallbackContext) -> Non
             if 'purchases' not in users[tid]:
                 users[tid]['purchases'] = []
             users[tid]['balance'] = users[tid].get('balance', 0.0) + amount
+            users[tid]['total_deposit'] = float(users[tid].get('total_deposit', 0.0) or 0.0) + amount
             save_db(db)
             await update.message.reply_text(
                 f"✅ Balance Updated Successfully!\n\n👤 User ID: {tid}\n💰 Added Amount: {amount} USDT\n💵 New Balance: {users[tid]['balance']} USDT"
@@ -4409,6 +4499,7 @@ def main() -> None:
     application.add_handler(CallbackQueryHandler(ninja_engine, pattern="^item_ninja$"))
     application.add_handler(CallbackQueryHandler(buy_item, pattern="^buy_"))
     application.add_handler(CallbackQueryHandler(admin_manage_balance, pattern="^admin_manage_balance$"))
+    application.add_handler(CallbackQueryHandler(admin_balance_users, pattern=r"^(admin_balance_users|admin_balance_users_page_\d+)$"))
     application.add_handler(CallbackQueryHandler(admin_add_flow, pattern="^admin_add_balance$"))
     application.add_handler(CallbackQueryHandler(admin_remove_flow, pattern="^admin_remove_balance$"))
     application.add_handler(CallbackQueryHandler(admin_manage_admins, pattern="^admin_manage_admins$"))
