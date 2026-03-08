@@ -3404,7 +3404,22 @@ async def admin_balance_users(update: Update, context: CallbackContext) -> None:
         await admin_edit_or_reply(query, text, reply_markup=buttons, parse_mode=ParseMode.HTML)
         return
 
-    user_items = sorted(users.items(), key=lambda item: int(item[0]) if str(item[0]).isdigit() else 0)
+    # Show only users who currently have balance > 0
+    user_items = [
+        (uid, rec)
+        for uid, rec in users.items()
+        if float(rec.get('balance', 0.0) or 0.0) > 0
+    ]
+
+    if not user_items:
+        text = "💳 <b>Balance Users</b>\n\n❌ No users with balance found."
+        buttons = InlineKeyboardMarkup([
+            [InlineKeyboardButton("🔙 Back", callback_data="admin_back")]
+        ])
+        await admin_edit_or_reply(query, text, reply_markup=buttons, parse_mode=ParseMode.HTML)
+        return
+
+    user_items = sorted(user_items, key=lambda item: int(item[0]) if str(item[0]).isdigit() else 0)
     users_per_page = 5
     total_pages = (len(user_items) + users_per_page - 1) // users_per_page
 
@@ -3417,7 +3432,15 @@ async def admin_balance_users(update: Update, context: CallbackContext) -> None:
     end_idx = start_idx + users_per_page
     page_users = user_items[start_idx:end_idx]
 
-    lines = [f"💳 <b>Balance Users (Page {page}/{total_pages})</b>", ""]
+    total_deposit_all = sum(float(rec.get('total_deposit', 0.0) or 0.0) for _, rec in user_items)
+    total_balance_all = sum(float(rec.get('balance', 0.0) or 0.0) for _, rec in user_items)
+
+    lines = [
+        f"💳 <b>Balance Users (Page {page}/{total_pages})</b>",
+        f"📥 <b>Total Deposit (Users With Balance):</b> {total_deposit_all:.2f} USDT",
+        f"💰 <b>Total Current Balance:</b> {total_balance_all:.2f} USDT",
+        ""
+    ]
 
     for idx, (uid, user_rec) in enumerate(page_users, 1):
         balance = float(user_rec.get('balance', 0.0) or 0.0)
