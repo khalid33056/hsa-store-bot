@@ -547,12 +547,16 @@ async def eight_bp_account(update: Update, context: CallbackContext) -> None:
     text = (
         "<b>🎱 8 Ball Pool Accounts</b>\n\n"
         "<b>Choose your account if you want to buy:</b>\n\n"
+        "💰 <b>3B Coin Account</b>\n"
+        "💰 <b>2B Coin Account</b>\n"
         "💰 <b>1B Coin Account</b>\n"
         "💰 <b>100M Coin Account</b>\n\n"
         f"<b>💳 Your Balance:</b> ${balance}"
     )
 
     buttons = InlineKeyboardMarkup([
+        [InlineKeyboardButton("3B Coin", callback_data="buy_8bp_3b"),
+         InlineKeyboardButton("2B Coin", callback_data="buy_8bp_2b")],
         [InlineKeyboardButton("1B Coin", callback_data="buy_8bp_1b"),
          InlineKeyboardButton("100M Coin", callback_data="buy_8bp_100m")],
         [InlineKeyboardButton("🔙 Back", callback_data="product_accounts")]
@@ -630,6 +634,74 @@ async def buy_8bp_100m(update: Update, context: CallbackContext) -> None:
         text,
         reply_markup=InlineKeyboardMarkup([
             [InlineKeyboardButton("✅ Confirm", callback_data="confirm_buy_8bp_100m"),
+             InlineKeyboardButton("❌ Cancel", callback_data="product_8bp_account")],
+        ]),
+        parse_mode=ParseMode.HTML
+    )
+
+
+async def buy_8bp_2b(update: Update, context: CallbackContext) -> None:
+    """Handle 2B Coin purchase - show confirmation first."""
+    query = update.callback_query
+    await query.answer()
+
+    user_id = query.from_user.id
+    db = load_db()
+    users = db.setdefault('users', {})
+    uid = str(user_id)
+    if uid not in users:
+        users[uid] = {'balance': 0.0, 'purchases': [], 'member_since': datetime.now().strftime("%Y-%m-%d")}
+
+    balance = users[uid].get('balance', 0.0)
+    price = 5.5
+
+    text = f"<b>🏷 2B Coin Account  →  ${price}</b>\n\n"
+    text += f"<b>📝 Are you sure about buying? 🫆</b>\n"
+    text += "<b>--------------------------------------</b>\n\n"
+    text += "<b>Please Note📣:</b>\n"
+    text += "<b>The key cannot be returned upon purchase!</b>\n"
+    text += f"<b>💰 Your Balance:</b> ${balance}\n"
+    text += f"<b>💰 Price:</b> ${price}\n"
+    text += "<b>📦 Stock: Available</b>"
+
+    await query.message.reply_text(
+        text,
+        reply_markup=InlineKeyboardMarkup([
+            [InlineKeyboardButton("✅ Confirm", callback_data="confirm_buy_8bp_2b"),
+             InlineKeyboardButton("❌ Cancel", callback_data="product_8bp_account")],
+        ]),
+        parse_mode=ParseMode.HTML
+    )
+
+
+async def buy_8bp_3b(update: Update, context: CallbackContext) -> None:
+    """Handle 3B Coin purchase - show confirmation first."""
+    query = update.callback_query
+    await query.answer()
+
+    user_id = query.from_user.id
+    db = load_db()
+    users = db.setdefault('users', {})
+    uid = str(user_id)
+    if uid not in users:
+        users[uid] = {'balance': 0.0, 'purchases': [], 'member_since': datetime.now().strftime("%Y-%m-%d")}
+
+    balance = users[uid].get('balance', 0.0)
+    price = 8.0
+
+    text = f"<b>🏷 3B Coin Account  →  ${price}</b>\n\n"
+    text += f"<b>📝 Are you sure about buying? 🫆</b>\n"
+    text += "<b>--------------------------------------</b>\n\n"
+    text += "<b>Please Note📣:</b>\n"
+    text += "<b>The key cannot be returned upon purchase!</b>\n"
+    text += f"<b>💰 Your Balance:</b> ${balance}\n"
+    text += f"<b>💰 Price:</b> ${price}\n"
+    text += "<b>📦 Stock: Available</b>"
+
+    await query.message.reply_text(
+        text,
+        reply_markup=InlineKeyboardMarkup([
+            [InlineKeyboardButton("✅ Confirm", callback_data="confirm_buy_8bp_3b"),
              InlineKeyboardButton("❌ Cancel", callback_data="product_8bp_account")],
         ]),
         parse_mode=ParseMode.HTML
@@ -802,6 +874,190 @@ async def confirm_buy_8bp_100m(update: Update, context: CallbackContext) -> None
         await query.message.reply_text(
             f"✅ <b>Purchase Successful!</b>\n\n"
             f"🎱 <b>Product:</b> 100 Million Coin Account\n"
+            f"💰 <b>Price:</b> ${price}\n"
+            f"💳 <b>Remaining Balance:</b> ${users[uid]['balance']}\n\n"
+            f"          ✓ <b>Account Details</b>\n"
+            f"📥 <b>Gmail:</b> {account['gmail']}\n"
+            f"🔐 <b>Password:</b> {account['password']}",
+            parse_mode=ParseMode.HTML
+        )
+    else:
+        await query.message.reply_text(
+            f"❌ <b>Insufficient Balance</b>\n\n"
+            f"💰 <b>Price:</b> ${price}\n"
+            f"💳 <b>Your Balance:</b> ${balance}\n"
+            f"📊 <b>Shortfall:</b> ${round(price - balance, 2)}\n\n"
+            f"Please add balance to your account.",
+            reply_markup=InlineKeyboardMarkup([
+                [InlineKeyboardButton("💳 Add Balance", callback_data="add_balance")],
+                [InlineKeyboardButton("🔙 Back", callback_data="product_8bp_account")]
+            ]),
+            parse_mode=ParseMode.HTML
+        )
+
+
+async def confirm_buy_8bp_2b(update: Update, context: CallbackContext) -> None:
+    """Confirm 2B Coin purchase."""
+    query = update.callback_query
+    await query.answer()
+
+    user_id = query.from_user.id
+    db = load_db()
+    users = db.setdefault('users', {})
+    uid = str(user_id)
+    if uid not in users:
+        users[uid] = {'balance': 0.0, 'purchases': [], 'member_since': datetime.now().strftime("%Y-%m-%d")}
+
+    balance = users[uid].get('balance', 0.0)
+    price = 5.5
+
+    if balance >= price:
+        accounts = db.get('8bp_accounts_2b', [])
+
+        if not accounts:
+            await query.message.reply_text(
+                "❌ <b>Account Not Available</b>\n\n"
+                "Sorry, no 2B Coin accounts are available at the moment.\n"
+                "Please contact admin or try again later.",
+                reply_markup=InlineKeyboardMarkup([
+                    [InlineKeyboardButton("💬 Contact Admin", url="https://t.me/Hayazi_Saheb")],
+                    [InlineKeyboardButton("🔙 Back", callback_data="product_8bp_account")]
+                ]),
+                parse_mode=ParseMode.HTML
+            )
+            return
+
+        account = accounts.pop(0)
+
+        users[uid]['balance'] = round(balance - price, 8)
+        entry = {
+            'product': '2B Coin Account',
+            'category': '8 Ball Pool',
+            'price': price,
+            'date': datetime.now().strftime('%d/%m/%Y %H:%M:%S')
+        }
+        users[uid]['purchases'].append(entry)
+        save_db(db)
+
+        db = load_db()
+        admins_list = db.get('admins', [ADMIN_ID])
+        user_name = query.from_user.username or "Unknown"
+        if user_name != "Unknown":
+            user_name = f"@{user_name}"
+
+        admin_notification = f"🛒 <b>New Purchase Notification</b>\n\n"
+        admin_notification += f"🆔 <b>User ID:</b> {user_id}\n"
+        admin_notification += f"👤 <b>User name:</b> {user_name}\n"
+        admin_notification += f"📦 <b>Product:</b> 2 Billion Coin Account\n"
+        admin_notification += f"⏳ <b>Duration:</b> Lifetime\n"
+        admin_notification += f"💰 <b>Price:</b> {price}$\n"
+        admin_notification += f"📅 <b>Purchase Time:</b> {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}"
+
+        for admin_id in admins_list:
+            try:
+                await context.bot.send_message(
+                    chat_id=admin_id,
+                    text=admin_notification,
+                    parse_mode=ParseMode.HTML
+                )
+            except Exception:
+                pass
+
+        await query.message.reply_text(
+            f"✅ <b>Purchase Successful!</b>\n\n"
+            f"🎱 <b>Product:</b> 2 Billion Coin Account\n"
+            f"💰 <b>Price:</b> ${price}\n"
+            f"💳 <b>Remaining Balance:</b> ${users[uid]['balance']}\n\n"
+            f"          ✓ <b>Account Details</b>\n"
+            f"📥 <b>Gmail:</b> {account['gmail']}\n"
+            f"🔐 <b>Password:</b> {account['password']}",
+            parse_mode=ParseMode.HTML
+        )
+    else:
+        await query.message.reply_text(
+            f"❌ <b>Insufficient Balance</b>\n\n"
+            f"💰 <b>Price:</b> ${price}\n"
+            f"💳 <b>Your Balance:</b> ${balance}\n"
+            f"📊 <b>Shortfall:</b> ${round(price - balance, 2)}\n\n"
+            f"Please add balance to your account.",
+            reply_markup=InlineKeyboardMarkup([
+                [InlineKeyboardButton("💳 Add Balance", callback_data="add_balance")],
+                [InlineKeyboardButton("🔙 Back", callback_data="product_8bp_account")]
+            ]),
+            parse_mode=ParseMode.HTML
+        )
+
+
+async def confirm_buy_8bp_3b(update: Update, context: CallbackContext) -> None:
+    """Confirm 3B Coin purchase."""
+    query = update.callback_query
+    await query.answer()
+
+    user_id = query.from_user.id
+    db = load_db()
+    users = db.setdefault('users', {})
+    uid = str(user_id)
+    if uid not in users:
+        users[uid] = {'balance': 0.0, 'purchases': [], 'member_since': datetime.now().strftime("%Y-%m-%d")}
+
+    balance = users[uid].get('balance', 0.0)
+    price = 8.0
+
+    if balance >= price:
+        accounts = db.get('8bp_accounts_3b', [])
+
+        if not accounts:
+            await query.message.reply_text(
+                "❌ <b>Account Not Available</b>\n\n"
+                "Sorry, no 3B Coin accounts are available at the moment.\n"
+                "Please contact admin or try again later.",
+                reply_markup=InlineKeyboardMarkup([
+                    [InlineKeyboardButton("💬 Contact Admin", url="https://t.me/Hayazi_Saheb")],
+                    [InlineKeyboardButton("🔙 Back", callback_data="product_8bp_account")]
+                ]),
+                parse_mode=ParseMode.HTML
+            )
+            return
+
+        account = accounts.pop(0)
+
+        users[uid]['balance'] = round(balance - price, 8)
+        entry = {
+            'product': '3B Coin Account',
+            'category': '8 Ball Pool',
+            'price': price,
+            'date': datetime.now().strftime('%d/%m/%Y %H:%M:%S')
+        }
+        users[uid]['purchases'].append(entry)
+        save_db(db)
+
+        db = load_db()
+        admins_list = db.get('admins', [ADMIN_ID])
+        user_name = query.from_user.username or "Unknown"
+        if user_name != "Unknown":
+            user_name = f"@{user_name}"
+
+        admin_notification = f"🛒 <b>New Purchase Notification</b>\n\n"
+        admin_notification += f"🆔 <b>User ID:</b> {user_id}\n"
+        admin_notification += f"👤 <b>User name:</b> {user_name}\n"
+        admin_notification += f"📦 <b>Product:</b> 3 Billion Coin Account\n"
+        admin_notification += f"⏳ <b>Duration:</b> Lifetime\n"
+        admin_notification += f"💰 <b>Price:</b> {price}$\n"
+        admin_notification += f"📅 <b>Purchase Time:</b> {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}"
+
+        for admin_id in admins_list:
+            try:
+                await context.bot.send_message(
+                    chat_id=admin_id,
+                    text=admin_notification,
+                    parse_mode=ParseMode.HTML
+                )
+            except Exception:
+                pass
+
+        await query.message.reply_text(
+            f"✅ <b>Purchase Successful!</b>\n\n"
+            f"🎱 <b>Product:</b> 3 Billion Coin Account\n"
             f"💰 <b>Price:</b> ${price}\n"
             f"💳 <b>Remaining Balance:</b> ${users[uid]['balance']}\n\n"
             f"          ✓ <b>Account Details</b>\n"
@@ -2813,12 +3069,16 @@ async def manage_8bp_accounts(update: Update, context: CallbackContext) -> None:
         return
     
     db = load_db()
+    accounts_3b = db.get('8bp_accounts_3b', [])
+    accounts_2b = db.get('8bp_accounts_2b', [])
     accounts_1b = db.get('8bp_accounts_1b', [])
     accounts_100m = db.get('8bp_accounts_100m', [])
     
     text = (
         "<b>🎱 8BP Account Management</b>\n\n"
         f"📊 <b>Available Accounts:</b>\n"
+        f"💰 <b>3B Coin:</b> {len(accounts_3b)} accounts\n"
+        f"💰 <b>2B Coin:</b> {len(accounts_2b)} accounts\n"
         f"💰 <b>1B Coin:</b> {len(accounts_1b)} accounts\n"
         f"💰 <b>100M Coin:</b> {len(accounts_100m)} accounts\n\n"
         "Choose an action:"
@@ -2848,6 +3108,8 @@ async def add_8bp_account_flow(update: Update, context: CallbackContext) -> None
     )
     
     buttons = InlineKeyboardMarkup([
+        [InlineKeyboardButton("💰 3B Coin Account", callback_data="8bp_add_3b")],
+        [InlineKeyboardButton("💰 2B Coin Account", callback_data="8bp_add_2b")],
         [InlineKeyboardButton("💰 1B Coin Account", callback_data="8bp_add_1b")],
         [InlineKeyboardButton("💰 100M Coin Account", callback_data="8bp_add_100m")],
         [InlineKeyboardButton("🔙 Back", callback_data="manage_8bp_accounts")]
@@ -2872,6 +3134,46 @@ async def add_8bp_1b_start(update: Update, context: CallbackContext) -> None:
         "Example: account@gmail.com"
     )
     
+    await admin_edit_or_reply(query, text, parse_mode=ParseMode.HTML)
+
+
+async def add_8bp_2b_start(update: Update, context: CallbackContext) -> None:
+    """Start adding 2B account."""
+    query = update.callback_query
+    await query.answer()
+
+    if not is_admin(query.from_user.id):
+        await query.answer("❌ Access Denied!", show_alert=True)
+        return
+
+    context.user_data['admin_flow'] = 'add_8bp_2b_gmail'
+
+    text = (
+        "<b>➕ Add 2B Coin Account</b>\n\n"
+        "📧 Send the Gmail address:\n\n"
+        "Example: account@gmail.com"
+    )
+
+    await admin_edit_or_reply(query, text, parse_mode=ParseMode.HTML)
+
+
+async def add_8bp_3b_start(update: Update, context: CallbackContext) -> None:
+    """Start adding 3B account."""
+    query = update.callback_query
+    await query.answer()
+
+    if not is_admin(query.from_user.id):
+        await query.answer("❌ Access Denied!", show_alert=True)
+        return
+
+    context.user_data['admin_flow'] = 'add_8bp_3b_gmail'
+
+    text = (
+        "<b>➕ Add 3B Coin Account</b>\n\n"
+        "📧 Send the Gmail address:\n\n"
+        "Example: account@gmail.com"
+    )
+
     await admin_edit_or_reply(query, text, parse_mode=ParseMode.HTML)
 
 async def add_8bp_100m_start(update: Update, context: CallbackContext) -> None:
@@ -2903,10 +3205,28 @@ async def view_8bp_accounts(update: Update, context: CallbackContext) -> None:
         return
     
     db = load_db()
+    accounts_3b = db.get('8bp_accounts_3b', [])
+    accounts_2b = db.get('8bp_accounts_2b', [])
     accounts_1b = db.get('8bp_accounts_1b', [])
     accounts_100m = db.get('8bp_accounts_100m', [])
     
     text = "<b>📋 8BP Account List</b>\n\n"
+
+    if accounts_3b:
+        text += "<b>💰 3B Coin Accounts:</b>\n"
+        for i, acc in enumerate(accounts_3b, 1):
+            text += f"{i}. {acc['gmail']} | {acc['password'][:3]}***\n"
+        text += "\n"
+    else:
+        text += "<b>💰 3B Coin:</b> No accounts\n\n"
+
+    if accounts_2b:
+        text += "<b>💰 2B Coin Accounts:</b>\n"
+        for i, acc in enumerate(accounts_2b, 1):
+            text += f"{i}. {acc['gmail']} | {acc['password'][:3]}***\n"
+        text += "\n"
+    else:
+        text += "<b>💰 2B Coin:</b> No accounts\n\n"
     
     if accounts_1b:
         text += "<b>💰 1B Coin Accounts:</b>\n"
@@ -2939,10 +3259,12 @@ async def remove_8bp_account_flow(update: Update, context: CallbackContext) -> N
         return
     
     db = load_db()
+    accounts_3b = db.get('8bp_accounts_3b', [])
+    accounts_2b = db.get('8bp_accounts_2b', [])
     accounts_1b = db.get('8bp_accounts_1b', [])
     accounts_100m = db.get('8bp_accounts_100m', [])
     
-    if not accounts_1b and not accounts_100m:
+    if not accounts_3b and not accounts_2b and not accounts_1b and not accounts_100m:
         text = "❌ <b>No Accounts Available</b>\n\nThere are no accounts to remove."
         buttons = InlineKeyboardMarkup([
             [InlineKeyboardButton("🔙 Back", callback_data="manage_8bp_accounts")]
@@ -2956,6 +3278,8 @@ async def remove_8bp_account_flow(update: Update, context: CallbackContext) -> N
     )
     
     buttons = InlineKeyboardMarkup([
+        [InlineKeyboardButton("💰 3B Coin Account", callback_data="8bp_remove_3b")],
+        [InlineKeyboardButton("💰 2B Coin Account", callback_data="8bp_remove_2b")],
         [InlineKeyboardButton("💰 1B Coin Account", callback_data="8bp_remove_1b")],
         [InlineKeyboardButton("💰 100M Coin Account", callback_data="8bp_remove_100m")],
         [InlineKeyboardButton("🔙 Back", callback_data="manage_8bp_accounts")]
@@ -2986,6 +3310,58 @@ async def remove_8bp_1b_start(update: Update, context: CallbackContext) -> None:
         text += f"{i}. {acc['gmail']}\n"
     text += "\nSend the account number to remove (e.g., 1)"
     
+    await admin_edit_or_reply(query, text, parse_mode=ParseMode.HTML)
+
+
+async def remove_8bp_2b_start(update: Update, context: CallbackContext) -> None:
+    """Start removing 2B account."""
+    query = update.callback_query
+    await query.answer()
+
+    if not is_admin(query.from_user.id):
+        await query.answer("❌ Access Denied!", show_alert=True)
+        return
+
+    db = load_db()
+    accounts = db.get('8bp_accounts_2b', [])
+
+    if not accounts:
+        await query.answer("No 2B accounts available!", show_alert=True)
+        return
+
+    context.user_data['admin_flow'] = 'remove_8bp_2b'
+
+    text = "<b>❌ Remove 2B Account</b>\n\n<b>Current Accounts:</b>\n"
+    for i, acc in enumerate(accounts, 1):
+        text += f"{i}. {acc['gmail']}\n"
+    text += "\nSend the account number to remove (e.g., 1)"
+
+    await admin_edit_or_reply(query, text, parse_mode=ParseMode.HTML)
+
+
+async def remove_8bp_3b_start(update: Update, context: CallbackContext) -> None:
+    """Start removing 3B account."""
+    query = update.callback_query
+    await query.answer()
+
+    if not is_admin(query.from_user.id):
+        await query.answer("❌ Access Denied!", show_alert=True)
+        return
+
+    db = load_db()
+    accounts = db.get('8bp_accounts_3b', [])
+
+    if not accounts:
+        await query.answer("No 3B accounts available!", show_alert=True)
+        return
+
+    context.user_data['admin_flow'] = 'remove_8bp_3b'
+
+    text = "<b>❌ Remove 3B Account</b>\n\n<b>Current Accounts:</b>\n"
+    for i, acc in enumerate(accounts, 1):
+        text += f"{i}. {acc['gmail']}\n"
+    text += "\nSend the account number to remove (e.g., 1)"
+
     await admin_edit_or_reply(query, text, parse_mode=ParseMode.HTML)
 
 async def remove_8bp_100m_start(update: Update, context: CallbackContext) -> None:
@@ -4237,6 +4613,76 @@ async def admin_message_handler(update: Update, context: CallbackContext) -> Non
             context.user_data.pop('admin_flow', None)
             context.user_data.pop('8bp_gmail', None)
             return
+
+        if flow == 'add_8bp_2b_gmail':
+            gmail = text
+            context.user_data['8bp_gmail'] = gmail
+            context.user_data['admin_flow'] = 'add_8bp_2b_password'
+            await update.message.reply_text(
+                f"📧 <b>Gmail:</b> {gmail}\n\n"
+                f"🔐 Now send the password:",
+                parse_mode=ParseMode.HTML
+            )
+            return
+
+        if flow == 'add_8bp_2b_password':
+            password = text
+            gmail = context.user_data.get('8bp_gmail', '')
+
+            db = load_db()
+            accounts = db.setdefault('8bp_accounts_2b', [])
+            accounts.append({'gmail': gmail, 'password': password})
+            save_db(db)
+
+            await update.message.reply_text(
+                f"✅ <b>2B Account Added!</b>\n\n"
+                f"📧 <b>Gmail:</b> {gmail}\n"
+                f"🔐 <b>Password:</b> {password}\n\n"
+                f"Total 2B accounts: {len(accounts)}",
+                reply_markup=InlineKeyboardMarkup([
+                    [InlineKeyboardButton("➕ Add Another", callback_data="8bp_add_2b")],
+                    [InlineKeyboardButton("🔙 Back", callback_data="manage_8bp_accounts")]
+                ]),
+                parse_mode=ParseMode.HTML
+            )
+            context.user_data.pop('admin_flow', None)
+            context.user_data.pop('8bp_gmail', None)
+            return
+
+        if flow == 'add_8bp_3b_gmail':
+            gmail = text
+            context.user_data['8bp_gmail'] = gmail
+            context.user_data['admin_flow'] = 'add_8bp_3b_password'
+            await update.message.reply_text(
+                f"📧 <b>Gmail:</b> {gmail}\n\n"
+                f"🔐 Now send the password:",
+                parse_mode=ParseMode.HTML
+            )
+            return
+
+        if flow == 'add_8bp_3b_password':
+            password = text
+            gmail = context.user_data.get('8bp_gmail', '')
+
+            db = load_db()
+            accounts = db.setdefault('8bp_accounts_3b', [])
+            accounts.append({'gmail': gmail, 'password': password})
+            save_db(db)
+
+            await update.message.reply_text(
+                f"✅ <b>3B Account Added!</b>\n\n"
+                f"📧 <b>Gmail:</b> {gmail}\n"
+                f"🔐 <b>Password:</b> {password}\n\n"
+                f"Total 3B accounts: {len(accounts)}",
+                reply_markup=InlineKeyboardMarkup([
+                    [InlineKeyboardButton("➕ Add Another", callback_data="8bp_add_3b")],
+                    [InlineKeyboardButton("🔙 Back", callback_data="manage_8bp_accounts")]
+                ]),
+                parse_mode=ParseMode.HTML
+            )
+            context.user_data.pop('admin_flow', None)
+            context.user_data.pop('8bp_gmail', None)
+            return
         
         if flow == 'add_8bp_100m_gmail':
             gmail = text
@@ -4286,6 +4732,54 @@ async def admin_message_handler(update: Update, context: CallbackContext) -> Non
                 removed = accounts.pop(index)
                 save_db(db)
                 
+                await update.message.reply_text(
+                    f"✅ <b>Account Removed!</b>\n\n"
+                    f"📧 {removed['gmail']}\n"
+                    f"Remaining: {len(accounts)} accounts",
+                    parse_mode=ParseMode.HTML
+                )
+                context.user_data.pop('admin_flow', None)
+            except ValueError:
+                await update.message.reply_text("❌ Please send a valid number!")
+            return
+
+        if flow == 'remove_8bp_2b':
+            try:
+                index = int(text) - 1
+                db = load_db()
+                accounts = db.get('8bp_accounts_2b', [])
+
+                if index < 0 or index >= len(accounts):
+                    await update.message.reply_text("❌ Invalid account number!")
+                    return
+
+                removed = accounts.pop(index)
+                save_db(db)
+
+                await update.message.reply_text(
+                    f"✅ <b>Account Removed!</b>\n\n"
+                    f"📧 {removed['gmail']}\n"
+                    f"Remaining: {len(accounts)} accounts",
+                    parse_mode=ParseMode.HTML
+                )
+                context.user_data.pop('admin_flow', None)
+            except ValueError:
+                await update.message.reply_text("❌ Please send a valid number!")
+            return
+
+        if flow == 'remove_8bp_3b':
+            try:
+                index = int(text) - 1
+                db = load_db()
+                accounts = db.get('8bp_accounts_3b', [])
+
+                if index < 0 or index >= len(accounts):
+                    await update.message.reply_text("❌ Invalid account number!")
+                    return
+
+                removed = accounts.pop(index)
+                save_db(db)
+
                 await update.message.reply_text(
                     f"✅ <b>Account Removed!</b>\n\n"
                     f"📧 {removed['gmail']}\n"
@@ -4563,8 +5057,12 @@ def main() -> None:
     application.add_handler(CallbackQueryHandler(product_hackes, pattern="^product_hackes$"))
     application.add_handler(CallbackQueryHandler(eight_ball_pool, pattern="^product_8ball$"))
     application.add_handler(CallbackQueryHandler(eight_bp_account, pattern="^product_8bp_account$"))
+    application.add_handler(CallbackQueryHandler(buy_8bp_3b, pattern="^buy_8bp_3b$"))
+    application.add_handler(CallbackQueryHandler(buy_8bp_2b, pattern="^buy_8bp_2b$"))
     application.add_handler(CallbackQueryHandler(buy_8bp_1b, pattern="^buy_8bp_1b$"))
     application.add_handler(CallbackQueryHandler(buy_8bp_100m, pattern="^buy_8bp_100m$"))
+    application.add_handler(CallbackQueryHandler(confirm_buy_8bp_3b, pattern="^confirm_buy_8bp_3b$"))
+    application.add_handler(CallbackQueryHandler(confirm_buy_8bp_2b, pattern="^confirm_buy_8bp_2b$"))
     application.add_handler(CallbackQueryHandler(confirm_buy_8bp_1b, pattern="^confirm_buy_8bp_1b$"))
     application.add_handler(CallbackQueryHandler(confirm_buy_8bp_100m, pattern="^confirm_buy_8bp_100m$"))
     application.add_handler(CallbackQueryHandler(caroom_pool, pattern="^product_caroom$"))
@@ -4626,8 +5124,12 @@ def main() -> None:
     application.add_handler(CallbackQueryHandler(add_8bp_account_flow, pattern="^8bp_add_account$"))
     application.add_handler(CallbackQueryHandler(view_8bp_accounts, pattern="^8bp_view_accounts$"))
     application.add_handler(CallbackQueryHandler(remove_8bp_account_flow, pattern="^8bp_remove_account$"))
+    application.add_handler(CallbackQueryHandler(add_8bp_3b_start, pattern="^8bp_add_3b$"))
+    application.add_handler(CallbackQueryHandler(add_8bp_2b_start, pattern="^8bp_add_2b$"))
     application.add_handler(CallbackQueryHandler(add_8bp_1b_start, pattern="^8bp_add_1b$"))
     application.add_handler(CallbackQueryHandler(add_8bp_100m_start, pattern="^8bp_add_100m$"))
+    application.add_handler(CallbackQueryHandler(remove_8bp_3b_start, pattern="^8bp_remove_3b$"))
+    application.add_handler(CallbackQueryHandler(remove_8bp_2b_start, pattern="^8bp_remove_2b$"))
     application.add_handler(CallbackQueryHandler(remove_8bp_1b_start, pattern="^8bp_remove_1b$"))
     application.add_handler(CallbackQueryHandler(remove_8bp_100m_start, pattern="^8bp_remove_100m$"))
     # purchase confirmation/cancel
