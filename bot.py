@@ -288,6 +288,7 @@ def _other_menu_keyboard() -> InlineKeyboardMarkup:
         [InlineKeyboardButton("💼 Become Reseller", callback_data="other_become_reseller")],
         [InlineKeyboardButton("📱 Check Device", callback_data="other_check_device"),
          InlineKeyboardButton("📘 User Guide", callback_data="other_user_guide")],
+        [InlineKeyboardButton("🌐 Open Site", callback_data="other_open_site")],
         [InlineKeyboardButton("🔙 Back", callback_data="back_to_menu")]
     ])
 
@@ -394,6 +395,37 @@ async def other_user_guide(update: Update, context: CallbackContext) -> None:
     )
     keyboard = InlineKeyboardMarkup([
         [InlineKeyboardButton("❌ Close", callback_data="other_back_menu")]
+    ])
+    try:
+        await query.edit_message_caption(caption=text, parse_mode=ParseMode.HTML, reply_markup=keyboard)
+    except Exception:
+        await query.edit_message_text(text=text, parse_mode=ParseMode.HTML, reply_markup=keyboard)
+
+
+async def other_open_site(update: Update, context: CallbackContext) -> None:
+    query = update.callback_query
+    await query.answer()
+    text = (
+        "<b>🎮 INSTANT GAMING STORE 🎮</b>\n\n"
+        "<b>💎 Want to Buy Game Items Instantly?</b>\n"
+        "<b>⚡ Fast • Safe • Trusted Delivery</b>\n\n"
+        "<b>🎯 Available Services:</b>\n\n"
+        "<b>🎱 8 Ball Pool Hacks</b>\n"
+        "<b>💰 Coin & Cash Top-Up</b>\n"
+        "<b>🏆 Golden Shot / Golden Shop</b>\n"
+        "<b>🔫 PUBG UC Top-Up</b>\n"
+        "<b>🛒 Premium Gaming Items</b>\n\n"
+        "<b>━━━━━━━━━━━━━━━━━━━━</b>\n\n"
+        "<b>🚀 Click The Button Below</b>\n"
+        "<b>🌐 Open The Website & Explore All Products</b>\n\n"
+        "<b>💥 Instant Delivery</b>\n"
+        "<b>🔐 Secure System</b>\n"
+        "<b>⭐ Trusted Service</b>\n\n"
+        "<b>👇 TAP BELOW TO OPEN SITE 👇</b>"
+    )
+    keyboard = InlineKeyboardMarkup([
+        [InlineKeyboardButton("🌐 Open Site", url="https://studio-5771407601-823f3.web.app")],
+        [InlineKeyboardButton("🔙 Back", callback_data="other_back_menu")]
     ])
     try:
         await query.edit_message_caption(caption=text, parse_mode=ParseMode.HTML, reply_markup=keyboard)
@@ -577,6 +609,14 @@ async def buy_8bp_1b(update: Update, context: CallbackContext) -> None:
     await query.answer()
 
     user_id = query.from_user.id
+    if not has_vip_access(user_id):
+        await show_vip_required_screen(
+            query,
+            "https://i.postimg.cc/63SX4GDG/IMG-20260301-213107.png",
+            "product_8bp_account"
+        )
+        return
+
     db = load_db()
     users = db.setdefault('users', {})
     uid = str(user_id)
@@ -611,6 +651,14 @@ async def buy_8bp_100m(update: Update, context: CallbackContext) -> None:
     await query.answer()
 
     user_id = query.from_user.id
+    if not has_vip_access(user_id):
+        await show_vip_required_screen(
+            query,
+            "https://i.postimg.cc/63SX4GDG/IMG-20260301-213107.png",
+            "product_8bp_account"
+        )
+        return
+
     db = load_db()
     users = db.setdefault('users', {})
     uid = str(user_id)
@@ -646,6 +694,14 @@ async def buy_8bp_2b(update: Update, context: CallbackContext) -> None:
     await query.answer()
 
     user_id = query.from_user.id
+    if not has_vip_access(user_id):
+        await show_vip_required_screen(
+            query,
+            "https://i.postimg.cc/63SX4GDG/IMG-20260301-213107.png",
+            "product_8bp_account"
+        )
+        return
+
     db = load_db()
     users = db.setdefault('users', {})
     uid = str(user_id)
@@ -680,6 +736,14 @@ async def buy_8bp_3b(update: Update, context: CallbackContext) -> None:
     await query.answer()
 
     user_id = query.from_user.id
+    if not has_vip_access(user_id):
+        await show_vip_required_screen(
+            query,
+            "https://i.postimg.cc/63SX4GDG/IMG-20260301-213107.png",
+            "product_8bp_account"
+        )
+        return
+
     db = load_db()
     users = db.setdefault('users', {})
     uid = str(user_id)
@@ -5113,6 +5177,7 @@ def main() -> None:
     application.add_handler(CallbackQueryHandler(other_become_reseller, pattern="^other_become_reseller$"))
     application.add_handler(CallbackQueryHandler(other_check_device, pattern="^other_check_device$"))
     application.add_handler(CallbackQueryHandler(other_user_guide, pattern="^other_user_guide$"))
+    application.add_handler(CallbackQueryHandler(other_open_site, pattern="^other_open_site$"))
     application.add_handler(CallbackQueryHandler(other_back_menu, pattern="^other_back_menu$"))
     application.add_handler(CallbackQueryHandler(manage_reseller, pattern="^manage_reseller$"))
     application.add_handler(CallbackQueryHandler(seller_add_flow, pattern="^seller_add$"))
