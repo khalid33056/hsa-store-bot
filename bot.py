@@ -6,6 +6,7 @@ from urllib.parse import quote_plus
 import asyncio
 import base64
 import copy
+import html
 import json
 import os
 import threading
@@ -464,19 +465,29 @@ async def start(update: Update, context: CallbackContext) -> None:
 
     lang = get_user_language(user_id, db)
     balance = users.get(uid, {}).get('balance', 0.0)
+    safe_name_user = html.escape(name_user or 'User')
     display_username = user.username or t(user_id, 'no_username', lang=lang)
+    safe_display_username = html.escape(display_username)
 
     # Check VIP status
     status_text = t(user_id, 'status_vip', lang=lang) if is_vip(user_id) else t(user_id, 'status_active', lang=lang)
-    profile_text = build_main_profile_text(user_id, name_user, display_username, balance, status_text, lang=lang)
+    profile_text = build_main_profile_text(user_id, safe_name_user, safe_display_username, balance, status_text, lang=lang)
     menu = build_main_menu(user_id, lang=lang)
 
-    await update.message.reply_photo(
-        photo="https://i.postimg.cc/k4kRGdVK/file-00000000ca8c71faadd50d667e4a0509.png",
-        caption=profile_text,
-        reply_markup=menu,
-        parse_mode=ParseMode.HTML
-    )
+    try:
+        await update.message.reply_photo(
+            photo="https://i.postimg.cc/k4kRGdVK/file-00000000ca8c71faadd50d667e4a0509.png",
+            caption=profile_text,
+            reply_markup=menu,
+            parse_mode=ParseMode.HTML
+        )
+    except Exception as exc:
+        logger.warning(f"START photo send failed for user {user_id}: {exc}")
+        await update.message.reply_text(
+            text=profile_text,
+            reply_markup=menu,
+            parse_mode=ParseMode.HTML
+        )
     logger.info(f"START message sent to user: {update.effective_user.id}")
 
 
@@ -3740,14 +3751,18 @@ async def my_profile(update: Update, context: CallbackContext) -> None:
         product_name = HACK_INFO.get(last_purchase.get('product', ''), {}).get('name', last_purchase.get('product', 'Unknown'))
         last_purchase_text = f"{product_name}"
     
+    safe_first_name = html.escape(first_name)
+    safe_username = html.escape(username)
+    safe_last_purchase = html.escape(last_purchase_text)
+
     # Build profile message
     profile_text = f"{t(user_id, 'profile_title')}\n\n"
-    profile_text += f"{t(user_id, 'profile_name', name=first_name)}\n"
-    profile_text += f"{t(user_id, 'profile_username', username=username)}\n"
+    profile_text += f"{t(user_id, 'profile_name', name=safe_first_name)}\n"
+    profile_text += f"{t(user_id, 'profile_username', username=safe_username)}\n"
     profile_text += f"{t(user_id, 'label_user_id', user_id=user_id)}\n"
     profile_text += f"{t(user_id, 'profile_member_since', date=member_since)}\n"
     profile_text += f"{t(user_id, 'label_balance', balance=balance)}\n"
-    profile_text += f"{t(user_id, 'label_last_purchase', last_purchase=last_purchase_text)}\n"
+    profile_text += f"{t(user_id, 'label_last_purchase', last_purchase=safe_last_purchase)}\n"
     
     keyboard = InlineKeyboardMarkup([
         [InlineKeyboardButton(t(user_id, 'btn_add_balance'), callback_data="add_balance"),
@@ -5214,13 +5229,17 @@ async def back_to_menu(update: Update, context: CallbackContext) -> None:
     # Check VIP status
     status_text = t(user_id, 'status_vip', lang=lang) if is_vip(user_id) else t(user_id, 'status_active', lang=lang)
 
+    safe_name_user = html.escape(name_user or 'User')
+    safe_username = html.escape(username)
+    safe_last_purchase = html.escape(last_purchase_text)
+
     profile_text = build_main_profile_text(
         user_id,
-        name_user,
-        username,
+        safe_name_user,
+        safe_username,
         balance,
         status_text,
-        last_purchase_text=last_purchase_text,
+        last_purchase_text=safe_last_purchase,
         show_last_purchase=True,
         lang=lang,
     )
