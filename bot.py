@@ -389,40 +389,40 @@ def set_user_language(user_id: int, language: str) -> None:
     save_db(db)
 
 
-def t(user_id: int, key: str, **kwargs) -> str:
-    lang = get_user_language(user_id)
-    template = LANG_STRINGS.get(lang, LANG_STRINGS['en']).get(key, LANG_STRINGS['en'].get(key, key))
+def t(user_id: int, key: str, lang: str | None = None, **kwargs) -> str:
+    resolved_lang = lang if lang in LANG_STRINGS else get_user_language(user_id)
+    template = LANG_STRINGS.get(resolved_lang, LANG_STRINGS['en']).get(key, LANG_STRINGS['en'].get(key, key))
     try:
         return template.format(**kwargs)
     except Exception:
         return template
 
 
-def build_main_menu(user_id: int) -> InlineKeyboardMarkup:
+def build_main_menu(user_id: int, lang: str | None = None) -> InlineKeyboardMarkup:
     return InlineKeyboardMarkup([
-        [InlineKeyboardButton(t(user_id, 'btn_trusted_seller'), callback_data='trusted_seller')],
-        [InlineKeyboardButton(t(user_id, 'btn_product'), callback_data='product')],
-        [InlineKeyboardButton(t(user_id, 'btn_add_balance'), callback_data='add_balance'),
-         InlineKeyboardButton(t(user_id, 'btn_history'), callback_data='history')],
-        [InlineKeyboardButton(t(user_id, 'btn_profile'), callback_data='my_profile'),
-         InlineKeyboardButton(t(user_id, 'btn_help'), callback_data='help_support')],
-        [InlineKeyboardButton(t(user_id, 'btn_choose_language'), callback_data='choose_language')]
+        [InlineKeyboardButton(t(user_id, 'btn_trusted_seller', lang=lang), callback_data='trusted_seller')],
+        [InlineKeyboardButton(t(user_id, 'btn_product', lang=lang), callback_data='product')],
+        [InlineKeyboardButton(t(user_id, 'btn_add_balance', lang=lang), callback_data='add_balance'),
+         InlineKeyboardButton(t(user_id, 'btn_history', lang=lang), callback_data='history')],
+        [InlineKeyboardButton(t(user_id, 'btn_profile', lang=lang), callback_data='my_profile'),
+         InlineKeyboardButton(t(user_id, 'btn_help', lang=lang), callback_data='help_support')],
+        [InlineKeyboardButton(t(user_id, 'btn_choose_language', lang=lang), callback_data='choose_language')]
     ])
 
 
-def build_main_profile_text(user_id: int, name_user: str, username: str, balance: float, status_text: str, last_purchase_text: str = '', show_last_purchase: bool = False) -> str:
+def build_main_profile_text(user_id: int, name_user: str, username: str, balance: float, status_text: str, last_purchase_text: str = '', show_last_purchase: bool = False, lang: str | None = None) -> str:
     lines = [
-        t(user_id, 'welcome', name=name_user),
+        t(user_id, 'welcome', lang=lang, name=name_user),
         '',
-        t(user_id, 'label_user_id', user_id=user_id),
-        t(user_id, 'label_username', username=username),
-        t(user_id, 'label_balance', balance=balance),
-        t(user_id, 'label_status', status=status_text),
+        t(user_id, 'label_user_id', lang=lang, user_id=user_id),
+        t(user_id, 'label_username', lang=lang, username=username),
+        t(user_id, 'label_balance', lang=lang, balance=balance),
+        t(user_id, 'label_status', lang=lang, status=status_text),
     ]
     if show_last_purchase:
-        lines.append(t(user_id, 'label_last_purchase', last_purchase=last_purchase_text))
+        lines.append(t(user_id, 'label_last_purchase', lang=lang, last_purchase=last_purchase_text))
     lines.append('')
-    lines.append(t(user_id, 'menu_intro'))
+    lines.append(t(user_id, 'menu_intro', lang=lang))
     return '\n'.join(lines)
 
 async def start(update: Update, context: CallbackContext) -> None:
@@ -462,13 +462,14 @@ async def start(update: Update, context: CallbackContext) -> None:
         if changed:
             save_db(db)
 
+    lang = get_user_language(user_id, db)
     balance = users.get(uid, {}).get('balance', 0.0)
-    display_username = user.username or t(user_id, 'no_username')
+    display_username = user.username or t(user_id, 'no_username', lang=lang)
 
     # Check VIP status
-    status_text = t(user_id, 'status_vip') if is_vip(user_id) else t(user_id, 'status_active')
-    profile_text = build_main_profile_text(user_id, name_user, display_username, balance, status_text)
-    menu = build_main_menu(user_id)
+    status_text = t(user_id, 'status_vip', lang=lang) if is_vip(user_id) else t(user_id, 'status_active', lang=lang)
+    profile_text = build_main_profile_text(user_id, name_user, display_username, balance, status_text, lang=lang)
+    menu = build_main_menu(user_id, lang=lang)
 
     await update.message.reply_photo(
         photo="https://i.postimg.cc/k4kRGdVK/file-00000000ca8c71faadd50d667e4a0509.png",
@@ -5203,14 +5204,15 @@ async def back_to_menu(update: Update, context: CallbackContext) -> None:
     balance = users.get(uid, {}).get('balance', 0.0)
     purchases = users.get(uid, {}).get('purchases', [])
 
-    last_purchase_text = t(user_id, 'no_purchases')
+    lang = get_user_language(user_id, db)
+    last_purchase_text = t(user_id, 'no_purchases', lang=lang)
     if purchases:
         last_purchase = purchases[-1]
         product_name = HACK_INFO.get(last_purchase.get('product', ''), {}).get('name', last_purchase.get('product', 'Unknown'))
         last_purchase_text = product_name
 
     # Check VIP status
-    status_text = t(user_id, 'status_vip') if is_vip(user_id) else t(user_id, 'status_active')
+    status_text = t(user_id, 'status_vip', lang=lang) if is_vip(user_id) else t(user_id, 'status_active', lang=lang)
 
     profile_text = build_main_profile_text(
         user_id,
@@ -5220,9 +5222,10 @@ async def back_to_menu(update: Update, context: CallbackContext) -> None:
         status_text,
         last_purchase_text=last_purchase_text,
         show_last_purchase=True,
+        lang=lang,
     )
 
-    menu = build_main_menu(user_id)
+    menu = build_main_menu(user_id, lang=lang)
 
     await query.edit_message_media(
         media=InputMediaPhoto(
