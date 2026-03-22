@@ -231,6 +231,9 @@ LANG_STRINGS = {
         'btn_profile': '👤 My Profile',
         'btn_help': '🆘 Help & Support',
         'btn_choose_language': '🌐 Chose Language',
+        'btn_terms': '📋 Terms',
+        'btn_become_reseller': '💼 Become Reseller',
+        'terms_message': '<b>📋 𝗢𝗳𝗳𝗶𝗰𝗶𝗮𝗹 𝗥𝗲𝘀𝘀𝗲𝗹𝗹𝗲𝗿 𝗧𝗲𝗿𝗺𝘀</b>\n\n<b>⚠️ Important: Contacting us without accepting these terms may result in messages being ignored or blocked.</b>\n<b>💼 Become a Top Reseller on HSA PANEL</b>\n<b>Step into the fast lane of sales and connect with thousands of customers &amp; stores.</b>\n\n<b>✨ Requirements to Join:</b>\n<b>• 🤝 Loyalty: Full loyalty to HSA PANEL is required.</b>\n<b>• 🌐 Support: Must have active channels to share purchase links and confirm payments.</b>\n<b>• 📱 Knowledge: Basic Android app skills to use tools &amp; handle sales efficiently.</b>\n<b>💰 Activation Fee: $10 🔑</b>\n<b>💡 Note: This amount is credited to your account balance and can be used for future transactions.</b>\n\n<b>🚀 After Activation:</b>\n<b>• 📋 Your name listed in the official Reseller list.</b>\n<b>• 👥 Sell to individual customers.</b>\n<b>• 🏪 Sell to stores.</b>\n<b>• 🤝 Collaborate with approved resellers.</b>\n\n<b>🔥 Activate now &amp; unlock premium reseller status!</b>',
         'choose_language_title': '<b>🌐 Choose Language</b>',
         'choose_language_desc': 'Select your preferred bot language.',
         'btn_english': '🇬🇧 English',
@@ -250,7 +253,7 @@ LANG_STRINGS = {
         'account_desc': '<b>Choose your account type below 👇</b>\nBuy premium game accounts with coins and features.',
         'hackes_title': '<b>🔧 Hackes Categories</b>',
         'hackes_desc': '<b>Please select a category below 👇</b>\nChoose your game and explore available tools & premium packages.',
-        'no_resellers': '❌ No resellers available yet.',
+        'no_resellers': '❌ No reseller found.',
         'trusted_sellers_title': '⭐ <b>Trusted Sellers</b>',
         'trusted_sellers_footer': '📞 Contact any seller to purchase!',
         'help_title': '<b>🛠 Need Help?</b>',
@@ -286,6 +289,43 @@ LANG_STRINGS = {
         'history_expires_on': '<i>Expires on: {date}</i>',
         'btn_previous': '⬅️ Previous',
         'btn_next': 'Next ➡️',
+        'confirm_sure': '<b>📝 Are you sure about buying? 🫆</b>',
+        'confirm_separator': '<b>--------------------------------------</b>',
+        'confirm_note': '<b>Please Note📣:</b>',
+        'confirm_no_return': '<b>The key cannot be returned upon purchase!</b>',
+        'confirm_your_balance': '<b>💰 Your Balance:</b> ${balance}',
+        'confirm_price': '<b>💰 Price:</b> ${price}',
+        'confirm_stock': '<b>📦 Stock:</b> {stock}',
+        'confirm_stock_available': '<b>📦 Stock: Available</b>',
+        'btn_confirm': '✅ Confirm',
+        'btn_cancel': '❌ Cancel',
+        'out_of_stock_title': '❌ Product Out of Stock',
+        'out_of_stock_product': '🐍 Product: {product}',
+        'out_of_stock_duration': '⏳ Duration: {duration}',
+        'out_of_stock_footer': '📦 Stock Available: 0\n\nPlease try again later.',
+        'not_vip_msg': '❌ You are not VIP. Prices are visible only to VIP users.',
+        'unknown_product': 'Unknown product.',
+        'out_of_stock_error': '❌ Sorry, the product went out of stock.',
+        'insufficient_balance_title': '❌ Insufficient Balance',
+        'insufficient_balance_body': 'Your balance is too low to complete this purchase.\n\nPlease add funds and try again.',
+        'success_title': '<b>✅ Purchase Successful!</b>',
+        'success_product': '<b>📦 Product:</b> {product}',
+        'success_duration': '<b>⏳ Duration:</b> {duration}',
+        'success_remaining': '<b>💰 Remaining Balance:</b> {balance}$',
+        'success_key': '<b>🔑 Your Key:</b> <code>{key}</code>',
+        'success_enjoy': '<b>Enjoy your premium access 🚀</b>',
+        'account_not_available_title': '❌ Account Not Available',
+        'account_not_available_body': 'Sorry, no accounts are available at the moment.\nPlease contact admin or try again later.',
+        'success_8bp_product': '🎱 <b>Product:</b> {product}',
+        'success_8bp_price': '💰 <b>Price:</b> ${price}',
+        'success_8bp_remaining': '💳 <b>Remaining Balance:</b> ${balance}',
+        'success_8bp_account_header': '          ✓ <b>Account Details</b>',
+        'success_8bp_gmail': '📥 <b>Gmail:</b> {gmail}',
+        'success_8bp_password': '🔐 <b>Password:</b> {password}',
+        'insuf_price': '💰 <b>Price:</b> ${price}',
+        'insuf_your_balance': '💳 <b>Your Balance:</b> ${balance}',
+        'insuf_shortfall': '📊 <b>Shortfall:</b> ${shortfall}',
+        'insuf_footer': 'Please add balance to your account.',
     },
     'ar': {
         'status_vip': '🌟 VIP',
@@ -306,6 +346,9 @@ LANG_STRINGS = {
         'btn_profile': '👤 ملفي الشخصي',
         'btn_help': '🆘 المساعدة والدعم',
         'btn_choose_language': '🌐 اختيار اللغة',
+        'btn_terms': '📋 الشروط',
+        'btn_become_reseller': '💼 كن بائعا',
+        'terms_message': '<b>📋 شروط الموزع الرسمي</b>\n\n<b>⚠️ مهم: التواصل معنا بدون قبول هذه الشروط قد يؤدي إلى تجاهل الرسائل أو حظرها.</b>\n<b>💼 كن موزعا مميزا في HSA PANEL</b>\n<b>ادخل طريق الربح السريع وتواصل مع آلاف العملاء والمتاجر.</b>\n\n<b>✨ متطلبات الانضمام:</b>\n<b>• 🤝 الولاء: الولاء الكامل لـ HSA PANEL مطلوب.</b>\n<b>• 🌐 الدعم: يجب امتلاك قنوات نشطة لمشاركة روابط الشراء وتأكيد الدفع.</b>\n<b>• 📱 المعرفة: خبرة أساسية في تطبيقات الأندرويد لاستخدام الأدوات وإدارة المبيعات بكفاءة.</b>\n<b>💰 رسوم التفعيل: $10 🔑</b>\n<b>💡 ملاحظة: هذا المبلغ يضاف إلى رصيد حسابك ويمكن استخدامه في المعاملات القادمة.</b>\n\n<b>🚀 بعد التفعيل:</b>\n<b>• 📋 إدراج اسمك في قائمة الموزعين الرسمية.</b>\n<b>• 👥 البيع للعملاء الأفراد.</b>\n<b>• 🏪 البيع للمتاجر.</b>\n<b>• 🤝 التعاون مع الموزعين المعتمدين.</b>\n\n<b>🔥 فعّل الآن وافتح حالة الموزع المميز!</b>',
         'choose_language_title': '<b>🌐 اختيار اللغة</b>',
         'choose_language_desc': 'اختر لغة البوت المفضلة لديك.',
         'btn_english': '🇬🇧 الانجليزية',
@@ -325,7 +368,7 @@ LANG_STRINGS = {
         'account_desc': '<b>اختر نوع الحساب من الاسفل 👇</b>\nشراء حسابات العاب مميزة مع العملات والمميزات.',
         'hackes_title': '<b>🔧 فئات الهاكات</b>',
         'hackes_desc': '<b>اختر فئة من الاسفل 👇</b>\nاختر لعبتك واستكشف الادوات والباقات المتاحة.',
-        'no_resellers': '❌ لا يوجد بائعون حاليا.',
+        'no_resellers': '❌ لا يوجد بائعون.',
         'trusted_sellers_title': '⭐ <b>البائعون الموثوقون</b>',
         'trusted_sellers_footer': '📞 تواصل مع اي بائع للشراء!',
         'help_title': '<b>🛠 تحتاج مساعدة؟</b>',
@@ -361,6 +404,43 @@ LANG_STRINGS = {
         'history_expires_on': '<i>ينتهي بتاريخ: {date}</i>',
         'btn_previous': '⬅️ السابق',
         'btn_next': 'التالي ➡️',
+        'confirm_sure': '<b>📝 هل أنت متأكد من الشراء؟ 🫆</b>',
+        'confirm_separator': '<b>--------------------------------------</b>',
+        'confirm_note': '<b>ملاحظة📣:</b>',
+        'confirm_no_return': '<b>لا يمكن إرجاع المفتاح بعد الشراء!</b>',
+        'confirm_your_balance': '<b>💰 رصيدك:</b> ${balance}',
+        'confirm_price': '<b>💰 السعر:</b> ${price}',
+        'confirm_stock': '<b>📦 المخزون:</b> {stock}',
+        'confirm_stock_available': '<b>📦 المخزون: متاح</b>',
+        'btn_confirm': '✅ تأكيد',
+        'btn_cancel': '❌ إلغاء',
+        'out_of_stock_title': '❌ المنتج غير متوفر',
+        'out_of_stock_product': '🐍 المنتج: {product}',
+        'out_of_stock_duration': '⏳ المدة: {duration}',
+        'out_of_stock_footer': '📦 المخزون المتاح: 0\n\nالرجاء المحاولة لاحقاً.',
+        'not_vip_msg': '❌ أنت لست VIP. الأسعار مرئية فقط لأعضاء VIP.',
+        'unknown_product': 'منتج غير معروف.',
+        'out_of_stock_error': '❌ عذراً، نفذ المنتج من المخزون.',
+        'insufficient_balance_title': '❌ رصيد غير كافٍ',
+        'insufficient_balance_body': 'رصيدك غير كافٍ لإتمام هذا الشراء.\n\nالرجاء إضافة رصيد والمحاولة مجدداً.',
+        'success_title': '<b>✅ تم الشراء بنجاح!</b>',
+        'success_product': '<b>📦 المنتج:</b> {product}',
+        'success_duration': '<b>⏳ المدة:</b> {duration}',
+        'success_remaining': '<b>💰 الرصيد المتبقي:</b> {balance}$',
+        'success_key': '<b>🔑 مفتاحك:</b> <code>{key}</code>',
+        'success_enjoy': '<b>استمتع بصلاحياتك المميزة 🚀</b>',
+        'account_not_available_title': '❌ الحساب غير متاح',
+        'account_not_available_body': 'عذراً، لا توجد حسابات متاحة في الوقت الحالي.\nالرجاء التواصل مع الادمن أو المحاولة لاحقاً.',
+        'success_8bp_product': '🎱 <b>المنتج:</b> {product}',
+        'success_8bp_price': '💰 <b>السعر:</b> ${price}',
+        'success_8bp_remaining': '💳 <b>الرصيد المتبقي:</b> ${balance}',
+        'success_8bp_account_header': '          ✓ <b>تفاصيل الحساب</b>',
+        'success_8bp_gmail': '📥 <b>الجيميل:</b> {gmail}',
+        'success_8bp_password': '🔐 <b>كلمة المرور:</b> {password}',
+        'insuf_price': '💰 <b>السعر:</b> ${price}',
+        'insuf_your_balance': '💳 <b>رصيدك:</b> ${balance}',
+        'insuf_shortfall': '📊 <b>الفرق:</b> ${shortfall}',
+        'insuf_footer': 'الرجاء إضافة رصيد إلى حسابك.',
     }
 }
 
@@ -407,7 +487,8 @@ def build_main_menu(user_id: int, lang: str | None = None) -> InlineKeyboardMark
          InlineKeyboardButton(t(user_id, 'btn_history', lang=lang), callback_data='history')],
         [InlineKeyboardButton(t(user_id, 'btn_profile', lang=lang), callback_data='my_profile'),
          InlineKeyboardButton(t(user_id, 'btn_help', lang=lang), callback_data='help_support')],
-        [InlineKeyboardButton(t(user_id, 'btn_choose_language', lang=lang), callback_data='choose_language')]
+        [InlineKeyboardButton(t(user_id, 'btn_choose_language', lang=lang), callback_data='choose_language'),
+         InlineKeyboardButton(t(user_id, 'btn_terms', lang=lang), callback_data='terms')]
     ])
 
 
@@ -848,19 +929,19 @@ async def buy_8bp_1b(update: Update, context: CallbackContext) -> None:
     
     # Show confirmation message
     text = f"<b>🏷 1B Coin Account  →  ${price}</b>\n\n"
-    text += f"<b>📝 Are you sure about buying? 🫆</b>\n"
-    text += "<b>--------------------------------------</b>\n\n"
-    text += "<b>Please Note📣:</b>\n"
-    text += "<b>The key cannot be returned upon purchase!</b>\n"
-    text += f"<b>💰 Your Balance:</b> ${balance}\n"
-    text += f"<b>💰 Price:</b> ${price}\n"
-    text += "<b>📦 Stock: Available</b>"
+    text += f"{t(user_id, 'confirm_sure')}\n"
+    text += f"{t(user_id, 'confirm_separator')}\n\n"
+    text += f"{t(user_id, 'confirm_note')}\n"
+    text += f"{t(user_id, 'confirm_no_return')}\n"
+    text += f"{t(user_id, 'confirm_your_balance', balance=balance)}\n"
+    text += f"{t(user_id, 'confirm_price', price=price)}\n"
+    text += t(user_id, 'confirm_stock_available')
 
     await query.message.reply_text(
         text,
         reply_markup=InlineKeyboardMarkup([
-            [InlineKeyboardButton("✅ Confirm", callback_data="confirm_buy_8bp_1b"),
-             InlineKeyboardButton("❌ Cancel", callback_data="product_8bp_account")],
+            [InlineKeyboardButton(t(user_id, 'btn_confirm'), callback_data="confirm_buy_8bp_1b"),
+             InlineKeyboardButton(t(user_id, 'btn_cancel'), callback_data="product_8bp_account")],
         ]),
         parse_mode=ParseMode.HTML
     )
@@ -890,19 +971,19 @@ async def buy_8bp_100m(update: Update, context: CallbackContext) -> None:
     
     # Show confirmation message
     text = f"<b>🏷 100M Coin Account  →  ${price}</b>\n\n"
-    text += f"<b>📝 Are you sure about buying? 🫆</b>\n"
-    text += "<b>--------------------------------------</b>\n\n"
-    text += "<b>Please Note📣:</b>\n"
-    text += "<b>The key cannot be returned upon purchase!</b>\n"
-    text += f"<b>💰 Your Balance:</b> ${balance}\n"
-    text += f"<b>💰 Price:</b> ${price}\n"
-    text += "<b>📦 Stock: Available</b>"
+    text += f"{t(user_id, 'confirm_sure')}\n"
+    text += f"{t(user_id, 'confirm_separator')}\n\n"
+    text += f"{t(user_id, 'confirm_note')}\n"
+    text += f"{t(user_id, 'confirm_no_return')}\n"
+    text += f"{t(user_id, 'confirm_your_balance', balance=balance)}\n"
+    text += f"{t(user_id, 'confirm_price', price=price)}\n"
+    text += t(user_id, 'confirm_stock_available')
 
     await query.message.reply_text(
         text,
         reply_markup=InlineKeyboardMarkup([
-            [InlineKeyboardButton("✅ Confirm", callback_data="confirm_buy_8bp_100m"),
-             InlineKeyboardButton("❌ Cancel", callback_data="product_8bp_account")],
+            [InlineKeyboardButton(t(user_id, 'btn_confirm'), callback_data="confirm_buy_8bp_100m"),
+             InlineKeyboardButton(t(user_id, 'btn_cancel'), callback_data="product_8bp_account")],
         ]),
         parse_mode=ParseMode.HTML
     )
@@ -932,19 +1013,19 @@ async def buy_8bp_2b(update: Update, context: CallbackContext) -> None:
     price = 5.5
 
     text = f"<b>🏷 2B Coin Account  →  ${price}</b>\n\n"
-    text += f"<b>📝 Are you sure about buying? 🫆</b>\n"
-    text += "<b>--------------------------------------</b>\n\n"
-    text += "<b>Please Note📣:</b>\n"
-    text += "<b>The key cannot be returned upon purchase!</b>\n"
-    text += f"<b>💰 Your Balance:</b> ${balance}\n"
-    text += f"<b>💰 Price:</b> ${price}\n"
-    text += "<b>📦 Stock: Available</b>"
+    text += f"{t(user_id, 'confirm_sure')}\n"
+    text += f"{t(user_id, 'confirm_separator')}\n\n"
+    text += f"{t(user_id, 'confirm_note')}\n"
+    text += f"{t(user_id, 'confirm_no_return')}\n"
+    text += f"{t(user_id, 'confirm_your_balance', balance=balance)}\n"
+    text += f"{t(user_id, 'confirm_price', price=price)}\n"
+    text += t(user_id, 'confirm_stock_available')
 
     await query.message.reply_text(
         text,
         reply_markup=InlineKeyboardMarkup([
-            [InlineKeyboardButton("✅ Confirm", callback_data="confirm_buy_8bp_2b"),
-             InlineKeyboardButton("❌ Cancel", callback_data="product_8bp_account")],
+            [InlineKeyboardButton(t(user_id, 'btn_confirm'), callback_data="confirm_buy_8bp_2b"),
+             InlineKeyboardButton(t(user_id, 'btn_cancel'), callback_data="product_8bp_account")],
         ]),
         parse_mode=ParseMode.HTML
     )
@@ -974,19 +1055,19 @@ async def buy_8bp_3b(update: Update, context: CallbackContext) -> None:
     price = 8.0
 
     text = f"<b>🏷 3B Coin Account  →  ${price}</b>\n\n"
-    text += f"<b>📝 Are you sure about buying? 🫆</b>\n"
-    text += "<b>--------------------------------------</b>\n\n"
-    text += "<b>Please Note📣:</b>\n"
-    text += "<b>The key cannot be returned upon purchase!</b>\n"
-    text += f"<b>💰 Your Balance:</b> ${balance}\n"
-    text += f"<b>💰 Price:</b> ${price}\n"
-    text += "<b>📦 Stock: Available</b>"
+    text += f"{t(user_id, 'confirm_sure')}\n"
+    text += f"{t(user_id, 'confirm_separator')}\n\n"
+    text += f"{t(user_id, 'confirm_note')}\n"
+    text += f"{t(user_id, 'confirm_no_return')}\n"
+    text += f"{t(user_id, 'confirm_your_balance', balance=balance)}\n"
+    text += f"{t(user_id, 'confirm_price', price=price)}\n"
+    text += t(user_id, 'confirm_stock_available')
 
     await query.message.reply_text(
         text,
         reply_markup=InlineKeyboardMarkup([
-            [InlineKeyboardButton("✅ Confirm", callback_data="confirm_buy_8bp_3b"),
-             InlineKeyboardButton("❌ Cancel", callback_data="product_8bp_account")],
+            [InlineKeyboardButton(t(user_id, 'btn_confirm'), callback_data="confirm_buy_8bp_3b"),
+             InlineKeyboardButton(t(user_id, 'btn_cancel'), callback_data="product_8bp_account")],
         ]),
         parse_mode=ParseMode.HTML
     )
@@ -1012,12 +1093,10 @@ async def confirm_buy_8bp_1b(update: Update, context: CallbackContext) -> None:
         
         if not accounts:
             await query.message.reply_text(
-                "❌ <b>Account Not Available</b>\n\n"
-                "Sorry, no 1B Coin accounts are available at the moment.\n"
-                "Please contact admin or try again later.",
+                f"{t(user_id, 'account_not_available_title')}\n\n{t(user_id, 'account_not_available_body')}",
                 reply_markup=InlineKeyboardMarkup([
-                    [InlineKeyboardButton("💬 Contact Admin", url="https://t.me/Hayazi_Saheb")],
-                    [InlineKeyboardButton("🔙 Back", callback_data="product_8bp_account")]
+                    [InlineKeyboardButton(t(user_id, 'btn_contact_admin'), url="https://t.me/Hayazi_Saheb")],
+                    [InlineKeyboardButton(t(user_id, 'btn_back'), callback_data="product_8bp_account")]
                 ]),
                 parse_mode=ParseMode.HTML
             )
@@ -1062,25 +1141,25 @@ async def confirm_buy_8bp_1b(update: Update, context: CallbackContext) -> None:
                 pass  # Silently fail if admin notification doesn't send
 
         await query.message.reply_text(
-            f"✅ <b>Purchase Successful!</b>\n\n"
-            f"🎱 <b>Product:</b> 1 Billion Coin Account\n"
-            f"💰 <b>Price:</b> ${price}\n"
-            f"💳 <b>Remaining Balance:</b> ${users[uid]['balance']}\n\n"
-            f"          ✓ <b>Account Details</b>\n"
-            f"📥 <b>Gmail:</b> {account['gmail']}\n"
-            f"🔐 <b>Password:</b> {account['password']}",
+            f"{t(user_id, 'success_title')}\n\n"
+            f"{t(user_id, 'success_8bp_product', product='1 Billion Coin Account')}\n"
+            f"{t(user_id, 'success_8bp_price', price=price)}\n"
+            f"{t(user_id, 'success_8bp_remaining', balance=users[uid]['balance'])}\n\n"
+            f"{t(user_id, 'success_8bp_account_header')}\n"
+            f"{t(user_id, 'success_8bp_gmail', gmail=account['gmail'])}\n"
+            f"{t(user_id, 'success_8bp_password', password=account['password'])}",
             parse_mode=ParseMode.HTML
         )
     else:
         await query.message.reply_text(
-            f"❌ <b>Insufficient Balance</b>\n\n"
-            f"💰 <b>Price:</b> ${price}\n"
-            f"💳 <b>Your Balance:</b> ${balance}\n"
-            f"📊 <b>Shortfall:</b> ${round(price - balance, 2)}\n\n"
-            f"Please add balance to your account.",
+            f"{t(user_id, 'insufficient_balance_title')}\n\n"
+            f"{t(user_id, 'insuf_price', price=price)}\n"
+            f"{t(user_id, 'insuf_your_balance', balance=balance)}\n"
+            f"{t(user_id, 'insuf_shortfall', shortfall=round(price - balance, 2))}\n\n"
+            f"{t(user_id, 'insuf_footer')}",
             reply_markup=InlineKeyboardMarkup([
-                [InlineKeyboardButton("💳 Add Balance", callback_data="add_balance")],
-                [InlineKeyboardButton("🔙 Back", callback_data="product_8bp_account")]
+                [InlineKeyboardButton(t(user_id, 'btn_add_balance'), callback_data="add_balance")],
+                [InlineKeyboardButton(t(user_id, 'btn_back'), callback_data="product_8bp_account")]
             ]),
             parse_mode=ParseMode.HTML
         )
@@ -1106,12 +1185,10 @@ async def confirm_buy_8bp_100m(update: Update, context: CallbackContext) -> None
         
         if not accounts:
             await query.message.reply_text(
-                "❌ <b>Account Not Available</b>\n\n"
-                "Sorry, no 100M Coin accounts are available at the moment.\n"
-                "Please contact admin or try again later.",
+                f"{t(user_id, 'account_not_available_title')}\n\n{t(user_id, 'account_not_available_body')}",
                 reply_markup=InlineKeyboardMarkup([
-                    [InlineKeyboardButton("💬 Contact Admin", url="https://t.me/Hayazi_Saheb")],
-                    [InlineKeyboardButton("🔙 Back", callback_data="product_8bp_account")]
+                    [InlineKeyboardButton(t(user_id, 'btn_contact_admin'), url="https://t.me/Hayazi_Saheb")],
+                    [InlineKeyboardButton(t(user_id, 'btn_back'), callback_data="product_8bp_account")]
                 ]),
                 parse_mode=ParseMode.HTML
             )
@@ -1156,25 +1233,25 @@ async def confirm_buy_8bp_100m(update: Update, context: CallbackContext) -> None
                 pass  # Silently fail if admin notification doesn't send
 
         await query.message.reply_text(
-            f"✅ <b>Purchase Successful!</b>\n\n"
-            f"🎱 <b>Product:</b> 100 Million Coin Account\n"
-            f"💰 <b>Price:</b> ${price}\n"
-            f"💳 <b>Remaining Balance:</b> ${users[uid]['balance']}\n\n"
-            f"          ✓ <b>Account Details</b>\n"
-            f"📥 <b>Gmail:</b> {account['gmail']}\n"
-            f"🔐 <b>Password:</b> {account['password']}",
+            f"{t(user_id, 'success_title')}\n\n"
+            f"{t(user_id, 'success_8bp_product', product='100 Million Coin Account')}\n"
+            f"{t(user_id, 'success_8bp_price', price=price)}\n"
+            f"{t(user_id, 'success_8bp_remaining', balance=users[uid]['balance'])}\n\n"
+            f"{t(user_id, 'success_8bp_account_header')}\n"
+            f"{t(user_id, 'success_8bp_gmail', gmail=account['gmail'])}\n"
+            f"{t(user_id, 'success_8bp_password', password=account['password'])}",
             parse_mode=ParseMode.HTML
         )
     else:
         await query.message.reply_text(
-            f"❌ <b>Insufficient Balance</b>\n\n"
-            f"💰 <b>Price:</b> ${price}\n"
-            f"💳 <b>Your Balance:</b> ${balance}\n"
-            f"📊 <b>Shortfall:</b> ${round(price - balance, 2)}\n\n"
-            f"Please add balance to your account.",
+            f"{t(user_id, 'insufficient_balance_title')}\n\n"
+            f"{t(user_id, 'insuf_price', price=price)}\n"
+            f"{t(user_id, 'insuf_your_balance', balance=balance)}\n"
+            f"{t(user_id, 'insuf_shortfall', shortfall=round(price - balance, 2))}\n\n"
+            f"{t(user_id, 'insuf_footer')}",
             reply_markup=InlineKeyboardMarkup([
-                [InlineKeyboardButton("💳 Add Balance", callback_data="add_balance")],
-                [InlineKeyboardButton("🔙 Back", callback_data="product_8bp_account")]
+                [InlineKeyboardButton(t(user_id, 'btn_add_balance'), callback_data="add_balance")],
+                [InlineKeyboardButton(t(user_id, 'btn_back'), callback_data="product_8bp_account")]
             ]),
             parse_mode=ParseMode.HTML
         )
@@ -1200,12 +1277,10 @@ async def confirm_buy_8bp_2b(update: Update, context: CallbackContext) -> None:
 
         if not accounts:
             await query.message.reply_text(
-                "❌ <b>Account Not Available</b>\n\n"
-                "Sorry, no 2B Coin accounts are available at the moment.\n"
-                "Please contact admin or try again later.",
+                f"{t(user_id, 'account_not_available_title')}\n\n{t(user_id, 'account_not_available_body')}",
                 reply_markup=InlineKeyboardMarkup([
-                    [InlineKeyboardButton("💬 Contact Admin", url="https://t.me/Hayazi_Saheb")],
-                    [InlineKeyboardButton("🔙 Back", callback_data="product_8bp_account")]
+                    [InlineKeyboardButton(t(user_id, 'btn_contact_admin'), url="https://t.me/Hayazi_Saheb")],
+                    [InlineKeyboardButton(t(user_id, 'btn_back'), callback_data="product_8bp_account")]
                 ]),
                 parse_mode=ParseMode.HTML
             )
@@ -1248,25 +1323,25 @@ async def confirm_buy_8bp_2b(update: Update, context: CallbackContext) -> None:
                 pass
 
         await query.message.reply_text(
-            f"✅ <b>Purchase Successful!</b>\n\n"
-            f"🎱 <b>Product:</b> 2 Billion Coin Account\n"
-            f"💰 <b>Price:</b> ${price}\n"
-            f"💳 <b>Remaining Balance:</b> ${users[uid]['balance']}\n\n"
-            f"          ✓ <b>Account Details</b>\n"
-            f"📥 <b>Gmail:</b> {account['gmail']}\n"
-            f"🔐 <b>Password:</b> {account['password']}",
+            f"{t(user_id, 'success_title')}\n\n"
+            f"{t(user_id, 'success_8bp_product', product='2 Billion Coin Account')}\n"
+            f"{t(user_id, 'success_8bp_price', price=price)}\n"
+            f"{t(user_id, 'success_8bp_remaining', balance=users[uid]['balance'])}\n\n"
+            f"{t(user_id, 'success_8bp_account_header')}\n"
+            f"{t(user_id, 'success_8bp_gmail', gmail=account['gmail'])}\n"
+            f"{t(user_id, 'success_8bp_password', password=account['password'])}",
             parse_mode=ParseMode.HTML
         )
     else:
         await query.message.reply_text(
-            f"❌ <b>Insufficient Balance</b>\n\n"
-            f"💰 <b>Price:</b> ${price}\n"
-            f"💳 <b>Your Balance:</b> ${balance}\n"
-            f"📊 <b>Shortfall:</b> ${round(price - balance, 2)}\n\n"
-            f"Please add balance to your account.",
+            f"{t(user_id, 'insufficient_balance_title')}\n\n"
+            f"{t(user_id, 'insuf_price', price=price)}\n"
+            f"{t(user_id, 'insuf_your_balance', balance=balance)}\n"
+            f"{t(user_id, 'insuf_shortfall', shortfall=round(price - balance, 2))}\n\n"
+            f"{t(user_id, 'insuf_footer')}",
             reply_markup=InlineKeyboardMarkup([
-                [InlineKeyboardButton("💳 Add Balance", callback_data="add_balance")],
-                [InlineKeyboardButton("🔙 Back", callback_data="product_8bp_account")]
+                [InlineKeyboardButton(t(user_id, 'btn_add_balance'), callback_data="add_balance")],
+                [InlineKeyboardButton(t(user_id, 'btn_back'), callback_data="product_8bp_account")]
             ]),
             parse_mode=ParseMode.HTML
         )
@@ -1292,12 +1367,10 @@ async def confirm_buy_8bp_3b(update: Update, context: CallbackContext) -> None:
 
         if not accounts:
             await query.message.reply_text(
-                "❌ <b>Account Not Available</b>\n\n"
-                "Sorry, no 3B Coin accounts are available at the moment.\n"
-                "Please contact admin or try again later.",
+                f"{t(user_id, 'account_not_available_title')}\n\n{t(user_id, 'account_not_available_body')}",
                 reply_markup=InlineKeyboardMarkup([
-                    [InlineKeyboardButton("💬 Contact Admin", url="https://t.me/Hayazi_Saheb")],
-                    [InlineKeyboardButton("🔙 Back", callback_data="product_8bp_account")]
+                    [InlineKeyboardButton(t(user_id, 'btn_contact_admin'), url="https://t.me/Hayazi_Saheb")],
+                    [InlineKeyboardButton(t(user_id, 'btn_back'), callback_data="product_8bp_account")]
                 ]),
                 parse_mode=ParseMode.HTML
             )
@@ -1340,25 +1413,25 @@ async def confirm_buy_8bp_3b(update: Update, context: CallbackContext) -> None:
                 pass
 
         await query.message.reply_text(
-            f"✅ <b>Purchase Successful!</b>\n\n"
-            f"🎱 <b>Product:</b> 3 Billion Coin Account\n"
-            f"💰 <b>Price:</b> ${price}\n"
-            f"💳 <b>Remaining Balance:</b> ${users[uid]['balance']}\n\n"
-            f"          ✓ <b>Account Details</b>\n"
-            f"📥 <b>Gmail:</b> {account['gmail']}\n"
-            f"🔐 <b>Password:</b> {account['password']}",
+            f"{t(user_id, 'success_title')}\n\n"
+            f"{t(user_id, 'success_8bp_product', product='3 Billion Coin Account')}\n"
+            f"{t(user_id, 'success_8bp_price', price=price)}\n"
+            f"{t(user_id, 'success_8bp_remaining', balance=users[uid]['balance'])}\n\n"
+            f"{t(user_id, 'success_8bp_account_header')}\n"
+            f"{t(user_id, 'success_8bp_gmail', gmail=account['gmail'])}\n"
+            f"{t(user_id, 'success_8bp_password', password=account['password'])}",
             parse_mode=ParseMode.HTML
         )
     else:
         await query.message.reply_text(
-            f"❌ <b>Insufficient Balance</b>\n\n"
-            f"💰 <b>Price:</b> ${price}\n"
-            f"💳 <b>Your Balance:</b> ${balance}\n"
-            f"📊 <b>Shortfall:</b> ${round(price - balance, 2)}\n\n"
-            f"Please add balance to your account.",
+            f"{t(user_id, 'insufficient_balance_title')}\n\n"
+            f"{t(user_id, 'insuf_price', price=price)}\n"
+            f"{t(user_id, 'insuf_your_balance', balance=balance)}\n"
+            f"{t(user_id, 'insuf_shortfall', shortfall=round(price - balance, 2))}\n\n"
+            f"{t(user_id, 'insuf_footer')}",
             reply_markup=InlineKeyboardMarkup([
-                [InlineKeyboardButton("💳 Add Balance", callback_data="add_balance")],
-                [InlineKeyboardButton("🔙 Back", callback_data="product_8bp_account")]
+                [InlineKeyboardButton(t(user_id, 'btn_add_balance'), callback_data="add_balance")],
+                [InlineKeyboardButton(t(user_id, 'btn_back'), callback_data="product_8bp_account")]
             ]),
             parse_mode=ParseMode.HTML
         )
@@ -2936,12 +3009,12 @@ async def buy_item(update: Update, context: CallbackContext) -> None:
     await query.answer()
     user_id = query.from_user.id
     if not has_vip_access(user_id):
-        await query.message.reply_text("❌ You are not VIP. Prices are visible only to VIP users.")
+        await query.message.reply_text(t(user_id, 'not_vip_msg'))
         return
     data = query.data  # like buy_snake_3
     product = PRODUCTS.get(data)
     if not product:
-        await query.message.reply_text('Unknown product.')
+        await query.message.reply_text(t(user_id, 'unknown_product'))
         return
 
     hack = product['hack']
@@ -2953,11 +3026,11 @@ async def buy_item(update: Update, context: CallbackContext) -> None:
 
     if stock <= 0:
         # out of stock message
-        text = "❌ Product Out of Stock\n\n"
-        text += f"🐍 Product: {HACK_INFO.get(hack, {}).get('name', hack)}\n"
-        text += f"⏳ Duration: {product['label']}\n"
-        text += "📦 Stock Available: 0\n\nPlease try again later."
-        buttons = InlineKeyboardMarkup([[InlineKeyboardButton("🔙 Back", callback_data=f"cancel_{data}")]])
+        text = f"{t(user_id, 'out_of_stock_title')}\n\n"
+        text += f"{t(user_id, 'out_of_stock_product', product=HACK_INFO.get(hack, {}).get('name', hack))}\n"
+        text += f"{t(user_id, 'out_of_stock_duration', duration=product['label'])}\n"
+        text += t(user_id, 'out_of_stock_footer')
+        buttons = InlineKeyboardMarkup([[InlineKeyboardButton(t(user_id, 'btn_back'), callback_data=f"cancel_{data}")]])
         await query.message.reply_text(text, reply_markup=buttons)
         return
 
@@ -2966,17 +3039,17 @@ async def buy_item(update: Update, context: CallbackContext) -> None:
     duration_label = product['label']
     
     text = f"<b>🏷 {duration_label}  →  ${price}</b>\n\n"
-    text += f"<b>📝 Are you sure about buying? 🫆</b>\n"
-    text += "<b>--------------------------------------</b>\n\n"
-    text += "<b>Please Note📣:</b>\n"
-    text += "<b>The key cannot be returned upon purchase!</b>\n"
-    text += f"<b>💰 Your Balance:</b> ${balance}\n"
-    text += f"<b>💰 Price:</b> ${price}\n"
-    text += f"<b>📦 Stock:</b> {stock}"
+    text += f"{t(user_id, 'confirm_sure')}\n"
+    text += f"{t(user_id, 'confirm_separator')}\n\n"
+    text += f"{t(user_id, 'confirm_note')}\n"
+    text += f"{t(user_id, 'confirm_no_return')}\n"
+    text += f"{t(user_id, 'confirm_your_balance', balance=balance)}\n"
+    text += f"{t(user_id, 'confirm_price', price=price)}\n"
+    text += t(user_id, 'confirm_stock', stock=stock)
 
     buttons = InlineKeyboardMarkup([
-        [InlineKeyboardButton("✅ Confirm", callback_data=f"confirm_{data}"),
-         InlineKeyboardButton("❌ Cancel", callback_data=f"cancel_{data}")]
+           [InlineKeyboardButton(t(user_id, 'btn_confirm'), callback_data=f"confirm_{data}"),
+            InlineKeyboardButton(t(user_id, 'btn_cancel'), callback_data=f"cancel_{data}")]
     ])
 
     await query.message.reply_photo(
@@ -3017,6 +3090,10 @@ def save_purchase_history(user_id, product, key_value, duration, expire_date=Non
     save_db(db)
 
 async def history_handler(update: Update, context: CallbackContext) -> None:
+    query = update.callback_query
+    if query:
+        await query.answer()
+
     user_id = update.effective_user.id if update.effective_user else update.from_user.id
     db = load_db()
     
@@ -3029,7 +3106,10 @@ async def history_handler(update: Update, context: CallbackContext) -> None:
             try:
                 await update.callback_query.edit_message_text(t(user_id, 'history_empty'), reply_markup=keyboard)
             except Exception:
-                await update.callback_query.edit_message_caption(caption=t(user_id, 'history_empty'), reply_markup=keyboard)
+                try:
+                    await update.callback_query.edit_message_caption(caption=t(user_id, 'history_empty'), reply_markup=keyboard)
+                except Exception:
+                    await update.callback_query.message.reply_text(t(user_id, 'history_empty'), reply_markup=keyboard)
         else:
             await update.message.reply_text(t(user_id, 'history_empty'), reply_markup=keyboard)
         return
@@ -3072,14 +3152,14 @@ async def display_history_page(update: Update, context: CallbackContext, db, pur
     # Process each purchase on this page
     for item in page_items:
         product_key = item.get("product", "unknown")
-        product_name = HACK_INFO.get(product_key, {}).get('name', product_key)
-        key = item.get("key", "N/A")
+        product_name = html.escape(str(HACK_INFO.get(product_key, {}).get('name', product_key)))
+        key = html.escape(str(item.get("key", "N/A")))
         duration_key = item.get("duration", "N/A")
         
         # Extract duration display label
-        duration_label = duration_key.replace('_', ' ').title()
+        duration_label = html.escape(str(duration_key).replace('_', ' ').title())
         
-        expire_date = item.get("expire_date", "")
+        expire_date = str(item.get("expire_date", ""))
         status = item.get("status", "active")
         
         # Check if purchase is expired
@@ -3135,7 +3215,10 @@ async def display_history_page(update: Update, context: CallbackContext, db, pur
         try:
             await update.callback_query.edit_message_text(msg, parse_mode=ParseMode.HTML, reply_markup=keyboard)
         except Exception:
-            await update.callback_query.edit_message_caption(caption=msg, parse_mode=ParseMode.HTML, reply_markup=keyboard)
+            try:
+                await update.callback_query.edit_message_caption(caption=msg, parse_mode=ParseMode.HTML, reply_markup=keyboard)
+            except Exception:
+                await update.callback_query.message.reply_text(msg, parse_mode=ParseMode.HTML, reply_markup=keyboard)
     else:
         await update.message.reply_text(msg, parse_mode=ParseMode.HTML, reply_markup=keyboard)
 
@@ -3330,9 +3413,7 @@ async def trusted_seller(update: Update, context: CallbackContext) -> None:
         await query.message.reply_text(text, reply_markup=keyboard)
         return
     
-    text = f"{t(user_id, 'trusted_sellers_title')}\n\n"
-    text += reseller_list + "\n\n"
-    text += t(user_id, 'trusted_sellers_footer')
+    text = reseller_list
     
     keyboard = InlineKeyboardMarkup([
         [InlineKeyboardButton(t(user_id, 'btn_back_to_menu'), callback_data="back_to_menu")]
@@ -3788,7 +3869,7 @@ async def confirm_buy(update: Update, context: CallbackContext) -> None:
     orig = query.data.replace("confirm_", "")
     product = PRODUCTS.get(orig)
     if not product:
-        await query.message.reply_text('Unknown product.')
+        await query.message.reply_text(t(query.from_user.id, 'unknown_product'))
         return
     hack = product['hack']
     duration = product['duration']
@@ -3815,15 +3896,15 @@ async def confirm_buy(update: Update, context: CallbackContext) -> None:
         
         # Check stock FRESH inside lock
         if hack not in keys or duration not in keys[hack]:
-            error_msg = '❌ Sorry, the product went out of stock.'
+            error_msg = t(user_id, 'out_of_stock_error')
         elif not keys[hack][duration]:
-            error_msg = '❌ Sorry, the product went out of stock.'
+            error_msg = t(user_id, 'out_of_stock_error')
         else:
             # Check balance inside lock
             balance = users[uid].get('balance', 0.0)
             if balance < price:
                 insufficient_balance = True
-                error_msg = "❌ Insufficient Balance"
+                error_msg = t(user_id, 'insufficient_balance_title')
             else:
                 # ALL transaction operations inside lock - ATOMICALLY
                 key_value = keys[hack][duration].pop(0)  # REMOVE KEY PERMANENTLY
@@ -3857,10 +3938,10 @@ async def confirm_buy(update: Update, context: CallbackContext) -> None:
     # Handle errors OUTSIDE lock
     if error_msg:
         if insufficient_balance:
-            text = "❌ Insufficient Balance\n\nYour balance is too low to complete this purchase.\n\nPlease add funds and try again."
+            text = f"{t(user_id, 'insufficient_balance_title')}\n\n{t(user_id, 'insufficient_balance_body')}"
             buttons = InlineKeyboardMarkup([
-                [InlineKeyboardButton("💳 Add Balance", callback_data="add_balance")],
-                [InlineKeyboardButton("🔙 Back", callback_data=f"cancel_{orig}")]
+                [InlineKeyboardButton(t(user_id, 'btn_add_balance'), callback_data="add_balance")],
+                [InlineKeyboardButton(t(user_id, 'btn_back'), callback_data=f"cancel_{orig}")]
             ])
             await query.message.reply_text(text, reply_markup=buttons)
         else:
@@ -3897,15 +3978,15 @@ async def confirm_buy(update: Update, context: CallbackContext) -> None:
             pass  # Silently fail if admin notification doesn't send
     
     # Only reach here if transaction succeeded - display success message
-    success_text = "<b>✅ Purchase Successful!</b>\n\n"
-    success_text += f"<b>📦 Product:</b> {HACK_INFO.get(hack, {}).get('name', hack)}\n"
-    success_text += f"<b>⏳ Duration:</b> {product['label']}\n"
-    success_text += f"<b>💰 Remaining Balance:</b> {users[uid]['balance']}$\n"
-    success_text += f"<b>🔑 Your Key:</b> <code>{key_value}</code>\n\n"
-    success_text += "<b>Enjoy your premium access 🚀</b>"
+    success_text = f"{t(user_id, 'success_title')}\n\n"
+    success_text += f"{t(user_id, 'success_product', product=HACK_INFO.get(hack, {}).get('name', hack))}\n"
+    success_text += f"{t(user_id, 'success_duration', duration=product['label'])}\n"
+    success_text += f"{t(user_id, 'success_remaining', balance=users[uid]['balance'])}\n"
+    success_text += f"{t(user_id, 'success_key', key=key_value)}\n\n"
+    success_text += t(user_id, 'success_enjoy')
     
     back_buttons = InlineKeyboardMarkup([
-        [InlineKeyboardButton("🏠 Back to Main Menu", callback_data="back_to_menu")]
+        [InlineKeyboardButton(t(user_id, 'btn_back_to_main_menu'), callback_data="back_to_menu")]
     ])
     
     try:
@@ -5312,6 +5393,23 @@ async def choose_language(update: Update, context: CallbackContext) -> None:
         await query.edit_message_text(text=text, parse_mode=ParseMode.HTML, reply_markup=keyboard)
 
 
+async def terms_menu(update: Update, context: CallbackContext) -> None:
+    query = update.callback_query
+    await query.answer()
+    user_id = query.from_user.id
+    text = t(user_id, 'terms_message')
+
+    keyboard = InlineKeyboardMarkup([
+        [InlineKeyboardButton(t(user_id, 'btn_back'), callback_data='back_to_menu'),
+         InlineKeyboardButton(t(user_id, 'btn_become_reseller'), url='https://t.me/Hayazi_Saheb')]
+    ])
+
+    try:
+        await query.edit_message_caption(caption=text, parse_mode=ParseMode.HTML, reply_markup=keyboard)
+    except Exception:
+        await query.edit_message_text(text=text, parse_mode=ParseMode.HTML, reply_markup=keyboard)
+
+
 async def set_language_english(update: Update, context: CallbackContext) -> None:
     query = update.callback_query
     set_user_language(query.from_user.id, 'en')
@@ -5460,6 +5558,7 @@ def main() -> None:
     application.add_handler(CallbackQueryHandler(remove_8bp_1b_start, pattern="^8bp_remove_1b$"))
     application.add_handler(CallbackQueryHandler(remove_8bp_100m_start, pattern="^8bp_remove_100m$"))
     application.add_handler(CallbackQueryHandler(choose_language, pattern="^choose_language$"))
+    application.add_handler(CallbackQueryHandler(terms_menu, pattern="^terms$"))
     application.add_handler(CallbackQueryHandler(set_language_english, pattern="^set_lang_en$"))
     application.add_handler(CallbackQueryHandler(set_language_arabic, pattern="^set_lang_ar$"))
     # purchase confirmation/cancel
