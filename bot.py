@@ -210,6 +210,221 @@ PRODUCTS = {
 
 API_TOKEN = '8673798950:AAFe8Iko5CVT5UzovpxRNcYg8qk3iP_RgQQ'
 
+LANG_STRINGS = {
+    'en': {
+        'status_vip': '🌟 VIP',
+        'status_active': '🔓 Active',
+        'no_username': 'No username',
+        'no_purchases': 'No purchases yet',
+        'welcome': '<b>👋 Welcome {name}</b>',
+        'label_user_id': '<b>🆔 User ID:</b> <code>{user_id}</code>',
+        'label_username': '<b>💻 Username:</b> {username}',
+        'label_balance': '<b>💰 Balance:</b> ${balance}',
+        'label_status': '<b>⭐ Status:</b> {status}',
+        'label_last_purchase': '<b>🛍️ Last Purchase:</b> {last_purchase}',
+        'menu_intro': '<b>🛒 Enjoy shopping from trusted sellers below ↓</b>',
+        'btn_trusted_seller': '⭐ Trusted Seller',
+        'btn_product': '🛍️ Product',
+        'btn_add_balance': '💳 Add Balance',
+        'btn_history': '📜 History',
+        'btn_profile': '👤 My Profile',
+        'btn_help': '🆘 Help & Support',
+        'btn_choose_language': '🌐 Chose Language',
+        'choose_language_title': '<b>🌐 Choose Language</b>',
+        'choose_language_desc': 'Select your preferred bot language.',
+        'btn_english': '🇬🇧 English',
+        'btn_arabic': '🇸🇦 Arabic',
+        'language_set_en': '✅ English selected. (Default language)',
+        'language_set_ar': '✅ Arabic selected. Bot messages will appear in Arabic.',
+        'btn_back': '🔙 Back',
+        'btn_back_to_menu': '🔙 Back to Menu',
+        'btn_back_to_main_menu': '🏠 Back to Main Menu',
+        'product_title': '<b>🛍️ What you want?</b>',
+        'product_desc_1': '<b>Please select a category below 👇</b>',
+        'product_desc_2': '🎮 <b>Account:</b> Buy game accounts',
+        'product_desc_3': '🔧 <b>Hackes:</b> Browse premium tools & packages',
+        'btn_account': '🎮 Account',
+        'btn_hackes': '🔧 Hackes',
+        'account_title': '<b>🎮 Game Accounts</b>',
+        'account_desc': '<b>Choose your account type below 👇</b>\nBuy premium game accounts with coins and features.',
+        'hackes_title': '<b>🔧 Hackes Categories</b>',
+        'hackes_desc': '<b>Please select a category below 👇</b>\nChoose your game and explore available tools & premium packages.',
+        'no_resellers': '❌ No resellers available yet.',
+        'trusted_sellers_title': '⭐ <b>Trusted Sellers</b>',
+        'trusted_sellers_footer': '📞 Contact any seller to purchase!',
+        'help_title': '<b>🛠 Need Help?</b>',
+        'help_purchase_error_title': '<b>⚠ Purchase Error</b>',
+        'help_purchase_error_body': 'If you are facing any error during purchase.',
+        'help_apk_title': '<b>📦 APK Link</b>',
+        'help_apk_body': "If you purchased any hack but don't have APK link.",
+        'help_any_title': '<b>🆘 Any Type of Help</b>',
+        'help_any_body': 'Click the button below to connect with Admin Support.',
+        'btn_help_short': '🆘 Help',
+        'profile_title': '<b>👤 My Profile</b>',
+        'profile_name': '<b>👤 Name:</b> {name}',
+        'profile_username': '<b>💻 Username:</b> @{username}',
+        'profile_member_since': '<b>📅 Member Since:</b> {date}',
+        'btn_purchase_history': '📜 Purchase History',
+        'add_balance_title': '<b>╔════════════════════╗</b>\n<b>   ADD BALANCE CENTER</b>\n<b>╚════════════════════╝</b>',
+        'add_balance_1': '<b>Want to add balance 💰</b>',
+        'add_balance_2': '<b>Copy your User ID, then tap the Deposit button below 👇</b>',
+        'add_balance_3': '<b>Your ID:</b>',
+        'add_balance_4': '<b>After payment, send your screenshot to admin.</b>',
+        'btn_deposit_now': '💳 Deposit Now',
+        'btn_contact_admin': '💬 Contact Admin',
+        'btn_refresh': '🔄 Refresh',
+        'history_empty': 'No purchase history found.',
+        'history_title': '<b>🕓 Your Purchase History:</b>',
+        'history_page': '<b>Page {page}/{total}</b>',
+        'history_product': '<b>📦 Product:</b> {product}',
+        'history_duration': '<b>⏳ Duration:</b> {duration}',
+        'history_key': '<b>🔑 Key:</b> <code>{key}</code>',
+        'history_status_expired': '<b>📅 Status:</b> Expired ❌',
+        'history_status_active': '<b>📅 Status:</b> Active ✅',
+        'history_expired_on': '<i>Expired on: {date}</i>',
+        'history_expires_on': '<i>Expires on: {date}</i>',
+        'btn_previous': '⬅️ Previous',
+        'btn_next': 'Next ➡️',
+    },
+    'ar': {
+        'status_vip': '🌟 VIP',
+        'status_active': '🔓 نشط',
+        'no_username': 'بدون اسم مستخدم',
+        'no_purchases': 'لا توجد عمليات شراء بعد',
+        'welcome': '<b>👋 مرحبا {name}</b>',
+        'label_user_id': '<b>🆔 معرف المستخدم:</b> <code>{user_id}</code>',
+        'label_username': '<b>💻 اسم المستخدم:</b> {username}',
+        'label_balance': '<b>💰 الرصيد:</b> ${balance}',
+        'label_status': '<b>⭐ الحالة:</b> {status}',
+        'label_last_purchase': '<b>🛍️ اخر عملية شراء:</b> {last_purchase}',
+        'menu_intro': '<b>🛒 تسوق من البائعين الموثوقين بالاسفل ↓</b>',
+        'btn_trusted_seller': '⭐ بائع موثوق',
+        'btn_product': '🛍️ المنتجات',
+        'btn_add_balance': '💳 اضافة رصيد',
+        'btn_history': '📜 السجل',
+        'btn_profile': '👤 ملفي الشخصي',
+        'btn_help': '🆘 المساعدة والدعم',
+        'btn_choose_language': '🌐 اختيار اللغة',
+        'choose_language_title': '<b>🌐 اختيار اللغة</b>',
+        'choose_language_desc': 'اختر لغة البوت المفضلة لديك.',
+        'btn_english': '🇬🇧 الانجليزية',
+        'btn_arabic': '🇸🇦 العربية',
+        'language_set_en': '✅ تم اختيار الانجليزية (اللغة الافتراضية)',
+        'language_set_ar': '✅ تم اختيار العربية. ستظهر رسائل البوت بالعربية.',
+        'btn_back': '🔙 رجوع',
+        'btn_back_to_menu': '🔙 رجوع للقائمة',
+        'btn_back_to_main_menu': '🏠 رجوع للقائمة الرئيسية',
+        'product_title': '<b>🛍️ ماذا تريد؟</b>',
+        'product_desc_1': '<b>اختر فئة من الاسفل 👇</b>',
+        'product_desc_2': '🎮 <b>حسابات:</b> شراء حسابات العاب',
+        'product_desc_3': '🔧 <b>هاكات:</b> تصفح الادوات والباقات المميزة',
+        'btn_account': '🎮 حسابات',
+        'btn_hackes': '🔧 هاكات',
+        'account_title': '<b>🎮 حسابات الالعاب</b>',
+        'account_desc': '<b>اختر نوع الحساب من الاسفل 👇</b>\nشراء حسابات العاب مميزة مع العملات والمميزات.',
+        'hackes_title': '<b>🔧 فئات الهاكات</b>',
+        'hackes_desc': '<b>اختر فئة من الاسفل 👇</b>\nاختر لعبتك واستكشف الادوات والباقات المتاحة.',
+        'no_resellers': '❌ لا يوجد بائعون حاليا.',
+        'trusted_sellers_title': '⭐ <b>البائعون الموثوقون</b>',
+        'trusted_sellers_footer': '📞 تواصل مع اي بائع للشراء!',
+        'help_title': '<b>🛠 تحتاج مساعدة؟</b>',
+        'help_purchase_error_title': '<b>⚠ خطأ في الشراء</b>',
+        'help_purchase_error_body': 'اذا واجهت اي خطأ اثناء الشراء.',
+        'help_apk_title': '<b>📦 رابط APK</b>',
+        'help_apk_body': 'اذا اشتريت اي هاك ولم تحصل على رابط APK.',
+        'help_any_title': '<b>🆘 اي نوع من المساعدة</b>',
+        'help_any_body': 'اضغط الزر بالاسفل للتواصل مع دعم الادمن.',
+        'btn_help_short': '🆘 مساعدة',
+        'profile_title': '<b>👤 ملفي الشخصي</b>',
+        'profile_name': '<b>👤 الاسم:</b> {name}',
+        'profile_username': '<b>💻 اسم المستخدم:</b> @{username}',
+        'profile_member_since': '<b>📅 عضو منذ:</b> {date}',
+        'btn_purchase_history': '📜 سجل المشتريات',
+        'add_balance_title': '<b>╔════════════════════╗</b>\n<b>   مركز اضافة الرصيد</b>\n<b>╚════════════════════╝</b>',
+        'add_balance_1': '<b>هل تريد اضافة رصيد 💰</b>',
+        'add_balance_2': '<b>انسخ معرفك ثم اضغط زر الايداع بالاسفل 👇</b>',
+        'add_balance_3': '<b>معرفك:</b>',
+        'add_balance_4': '<b>بعد الدفع ارسل صورة التحويل للادمن.</b>',
+        'btn_deposit_now': '💳 ايداع الان',
+        'btn_contact_admin': '💬 تواصل مع الادمن',
+        'btn_refresh': '🔄 تحديث',
+        'history_empty': 'لا يوجد سجل مشتريات.',
+        'history_title': '<b>🕓 سجل مشترياتك:</b>',
+        'history_page': '<b>الصفحة {page}/{total}</b>',
+        'history_product': '<b>📦 المنتج:</b> {product}',
+        'history_duration': '<b>⏳ المدة:</b> {duration}',
+        'history_key': '<b>🔑 المفتاح:</b> <code>{key}</code>',
+        'history_status_expired': '<b>📅 الحالة:</b> منتهي ❌',
+        'history_status_active': '<b>📅 الحالة:</b> فعال ✅',
+        'history_expired_on': '<i>انتهى بتاريخ: {date}</i>',
+        'history_expires_on': '<i>ينتهي بتاريخ: {date}</i>',
+        'btn_previous': '⬅️ السابق',
+        'btn_next': 'التالي ➡️',
+    }
+}
+
+
+def get_user_language(user_id: int, db=None) -> str:
+    local_db = db if db is not None else load_db()
+    user = local_db.get('users', {}).get(str(user_id), {})
+    lang = user.get('language', 'en')
+    return lang if lang in LANG_STRINGS else 'en'
+
+
+def set_user_language(user_id: int, language: str) -> None:
+    if language not in LANG_STRINGS:
+        language = 'en'
+    db = load_db()
+    users = db.setdefault('users', {})
+    uid = str(user_id)
+    if uid not in users:
+        users[uid] = {
+            'balance': 0.0,
+            'purchases': [],
+            'member_since': datetime.now().strftime('%Y-%m-%d'),
+            'language': language,
+        }
+    else:
+        users[uid]['language'] = language
+    save_db(db)
+
+
+def t(user_id: int, key: str, **kwargs) -> str:
+    lang = get_user_language(user_id)
+    template = LANG_STRINGS.get(lang, LANG_STRINGS['en']).get(key, LANG_STRINGS['en'].get(key, key))
+    try:
+        return template.format(**kwargs)
+    except Exception:
+        return template
+
+
+def build_main_menu(user_id: int) -> InlineKeyboardMarkup:
+    return InlineKeyboardMarkup([
+        [InlineKeyboardButton(t(user_id, 'btn_trusted_seller'), callback_data='trusted_seller')],
+        [InlineKeyboardButton(t(user_id, 'btn_product'), callback_data='product')],
+        [InlineKeyboardButton(t(user_id, 'btn_add_balance'), callback_data='add_balance'),
+         InlineKeyboardButton(t(user_id, 'btn_history'), callback_data='history')],
+        [InlineKeyboardButton(t(user_id, 'btn_profile'), callback_data='my_profile'),
+         InlineKeyboardButton(t(user_id, 'btn_help'), callback_data='help_support')],
+        [InlineKeyboardButton(t(user_id, 'btn_choose_language'), callback_data='choose_language')]
+    ])
+
+
+def build_main_profile_text(user_id: int, name_user: str, username: str, balance: float, status_text: str, last_purchase_text: str = '', show_last_purchase: bool = False) -> str:
+    lines = [
+        t(user_id, 'welcome', name=name_user),
+        '',
+        t(user_id, 'label_user_id', user_id=user_id),
+        t(user_id, 'label_username', username=username),
+        t(user_id, 'label_balance', balance=balance),
+        t(user_id, 'label_status', status=status_text),
+    ]
+    if show_last_purchase:
+        lines.append(t(user_id, 'label_last_purchase', last_purchase=last_purchase_text))
+    lines.append('')
+    lines.append(t(user_id, 'menu_intro'))
+    return '\n'.join(lines)
+
 async def start(update: Update, context: CallbackContext) -> None:
     logger.info(f"START command received from user: {update.effective_user.id}")
     user = update.effective_user
@@ -230,38 +445,30 @@ async def start(update: Update, context: CallbackContext) -> None:
             'purchases': [], 
             'member_since': datetime.now().strftime("%Y-%m-%d"),
             'username': username,
-            'first_name': name_user
+            'first_name': name_user,
+            'language': 'en'
         }
         save_db(db)
     else:
         # Update username and first_name if changed
+        changed = False
         if users[uid].get('username') != username or users[uid].get('first_name') != name_user:
             users[uid]['username'] = username
             users[uid]['first_name'] = name_user
+            changed = True
+        if users[uid].get('language') not in LANG_STRINGS:
+            users[uid]['language'] = 'en'
+            changed = True
+        if changed:
             save_db(db)
 
     balance = users.get(uid, {}).get('balance', 0.0)
-    purchases = users.get(uid, {}).get('purchases', [])
+    display_username = user.username or t(user_id, 'no_username')
 
     # Check VIP status
-    status_text = "🌟 VIP" if is_vip(user_id) else "🔓 Active"
-
-    profile_text = f"<b>👋 Welcome {name_user}</b>\n\n"
-    profile_text += f"<b>🆔 User ID:</b> <code>{user_id}</code>\n"
-    profile_text += f"<b>💻 Username:</b> {username}\n"
-    profile_text += f"<b>💰 Balance:</b> ${balance}\n"
-    profile_text += f"<b>⭐ Status:</b> {status_text}\n"
-    profile_text += "\n"
-    profile_text += "<b>🛒 Enjoy shopping from trusted sellers below ↓</b>"
-
-    menu = InlineKeyboardMarkup([
-        [InlineKeyboardButton("⭐ Trusted Seller", callback_data="trusted_seller")],
-        [InlineKeyboardButton("🛍️ Product", callback_data="product")],
-        [InlineKeyboardButton("💳 Add Balance", callback_data="add_balance"),
-         InlineKeyboardButton("📜 History", callback_data="history")],
-        [InlineKeyboardButton("👤 My Profile", callback_data="my_profile"),
-         InlineKeyboardButton("🆘 Help & Support", callback_data="help_support")]
-    ])
+    status_text = t(user_id, 'status_vip') if is_vip(user_id) else t(user_id, 'status_active')
+    profile_text = build_main_profile_text(user_id, name_user, display_username, balance, status_text)
+    menu = build_main_menu(user_id)
 
     await update.message.reply_photo(
         photo="https://i.postimg.cc/k4kRGdVK/file-00000000ca8c71faadd50d667e4a0509.png",
@@ -458,15 +665,16 @@ async def product(update: Update, context: CallbackContext) -> None:
     query = update.callback_query
     await query.answer()
 
-    product_text = "<b>🛍️ What you want?</b>\n\n"
-    product_text += "<b>Please select a category below 👇</b>\n\n"
-    product_text += "🎮 <b>Account:</b> Buy game accounts\n"
-    product_text += "🔧 <b>Hackes:</b> Browse premium tools & packages"
+    user_id = query.from_user.id
+    product_text = t(user_id, 'product_title') + "\n\n"
+    product_text += t(user_id, 'product_desc_1') + "\n\n"
+    product_text += t(user_id, 'product_desc_2') + "\n"
+    product_text += t(user_id, 'product_desc_3')
 
     product_menu = InlineKeyboardMarkup([
-        [InlineKeyboardButton("🎮 Account", callback_data="product_accounts"),
-         InlineKeyboardButton("🔧 Hackes", callback_data="product_hackes")],
-        [InlineKeyboardButton("🔙 Back", callback_data="back_to_menu")]
+        [InlineKeyboardButton(t(user_id, 'btn_account'), callback_data="product_accounts"),
+         InlineKeyboardButton(t(user_id, 'btn_hackes'), callback_data="product_hackes")],
+        [InlineKeyboardButton(t(user_id, 'btn_back'), callback_data="back_to_menu")]
     ])
 
     await query.edit_message_media(
@@ -483,13 +691,13 @@ async def product_accounts(update: Update, context: CallbackContext) -> None:
     query = update.callback_query
     await query.answer()
 
-    account_text = "<b>🎮 Game Accounts</b>\n\n"
-    account_text += "<b>Choose your account type below 👇</b>\n"
-    account_text += "Buy premium game accounts with coins and features."
+    user_id = query.from_user.id
+    account_text = t(user_id, 'account_title') + "\n\n"
+    account_text += t(user_id, 'account_desc')
 
     account_menu = InlineKeyboardMarkup([
         [InlineKeyboardButton("🎱 8 Ball Pool Account", callback_data="product_8bp_account")],
-        [InlineKeyboardButton("🔙 Back", callback_data="product")]
+        [InlineKeyboardButton(t(user_id, 'btn_back'), callback_data="product")]
     ])
 
     await query.edit_message_media(
@@ -506,9 +714,9 @@ async def product_hackes(update: Update, context: CallbackContext) -> None:
     query = update.callback_query
     await query.answer()
 
-    product_text = "<b>🔧 Hackes Categories</b>\n\n"
-    product_text += "<b>Please select a category below 👇</b>\n"
-    product_text += "Choose your game and explore available tools & premium packages."
+    user_id = query.from_user.id
+    product_text = t(user_id, 'hackes_title') + "\n\n"
+    product_text += t(user_id, 'hackes_desc')
 
     product_menu = InlineKeyboardMarkup([
         [InlineKeyboardButton("🎱 8 Ball Pool", callback_data="product_8ball"),
@@ -516,7 +724,7 @@ async def product_hackes(update: Update, context: CallbackContext) -> None:
         [InlineKeyboardButton("⚽ Score Star", callback_data="product_scorestar"),
          InlineKeyboardButton("🔥 Free Fire", callback_data="product_freefire")],
         [InlineKeyboardButton("📗 Certificate iOS", callback_data="product_certificate_ios")],
-        [InlineKeyboardButton("🔙 Back", callback_data="product")]
+        [InlineKeyboardButton(t(user_id, 'btn_back'), callback_data="product")]
     ])
 
     await query.edit_message_media(
@@ -2804,14 +3012,14 @@ async def history_handler(update: Update, context: CallbackContext) -> None:
     purchases = db.get('users', {}).get(str(user_id), {}).get('purchases', [])
     
     if not purchases:
-        keyboard = InlineKeyboardMarkup([[InlineKeyboardButton("⬅️ Back to Main Menu", callback_data="back_to_menu")]])
+        keyboard = InlineKeyboardMarkup([[InlineKeyboardButton(t(user_id, 'btn_back_to_main_menu'), callback_data="back_to_menu")]])
         if hasattr(update, 'callback_query') and update.callback_query:
             try:
-                await update.callback_query.edit_message_text("No purchase history found.", reply_markup=keyboard)
+                await update.callback_query.edit_message_text(t(user_id, 'history_empty'), reply_markup=keyboard)
             except Exception:
-                await update.callback_query.edit_message_caption(caption="No purchase history found.", reply_markup=keyboard)
+                await update.callback_query.edit_message_caption(caption=t(user_id, 'history_empty'), reply_markup=keyboard)
         else:
-            await update.message.reply_text("No purchase history found.", reply_markup=keyboard)
+            await update.message.reply_text(t(user_id, 'history_empty'), reply_markup=keyboard)
         return
     
     # Reset to page 0 when viewing history
@@ -2843,8 +3051,9 @@ async def display_history_page(update: Update, context: CallbackContext, db, pur
     end_idx = start_idx + items_per_page
     page_items = reversed_purchases[start_idx:end_idx]
     
-    msg = f"<b>🕓 Your Purchase History:</b>\n"
-    msg += f"<b>Page {current_page + 1}/{total_pages}</b>\n\n"
+    user_id = update.effective_user.id
+    msg = f"{t(user_id, 'history_title')}\n"
+    msg += f"{t(user_id, 'history_page', page=current_page + 1, total=total_pages)}\n\n"
     
     now = datetime.now()
     
@@ -2872,18 +3081,18 @@ async def display_history_page(update: Update, context: CallbackContext, db, pur
                 pass
         
         # Format the history message
-        msg += f"<b>📦 Product:</b> {product_name}\n"
-        msg += f"<b>⏳ Duration:</b> {duration_label}\n"
-        msg += f"<b>🔑 Key:</b> <code>{key}</code>\n"
+        msg += f"{t(user_id, 'history_product', product=product_name)}\n"
+        msg += f"{t(user_id, 'history_duration', duration=duration_label)}\n"
+        msg += f"{t(user_id, 'history_key', key=key)}\n"
         
         if status == "expired":
-            msg += f"<b>📅 Status:</b> Expired ❌\n"
+            msg += f"{t(user_id, 'history_status_expired')}\n"
             if expire_date:
-                msg += f"<i>Expired on: {expire_date}</i>\n"
+                msg += f"{t(user_id, 'history_expired_on', date=expire_date)}\n"
         else:
-            msg += f"<b>📅 Status:</b> Active ✅\n"
+            msg += f"{t(user_id, 'history_status_active')}\n"
             if expire_date:
-                msg += f"<i>Expires on: {expire_date}</i>\n"
+                msg += f"{t(user_id, 'history_expires_on', date=expire_date)}\n"
         
         msg += "\n"
     
@@ -2896,17 +3105,17 @@ async def display_history_page(update: Update, context: CallbackContext, db, pur
     
     # Add Previous button if not on first page
     if current_page > 0:
-        nav_buttons.append(InlineKeyboardButton("⬅️ Previous", callback_data="prev_history"))
+        nav_buttons.append(InlineKeyboardButton(t(user_id, 'btn_previous'), callback_data="prev_history"))
     
     # Add Next button if not on last page
     if current_page < total_pages - 1:
-        nav_buttons.append(InlineKeyboardButton("Next ➡️", callback_data="next_history"))
+        nav_buttons.append(InlineKeyboardButton(t(user_id, 'btn_next'), callback_data="next_history"))
     
     if nav_buttons:
         buttons.append(nav_buttons)
     
     # Add Back to Main Menu button
-    buttons.append([InlineKeyboardButton("🏠 Back to Main Menu", callback_data="back_to_menu")])
+    buttons.append([InlineKeyboardButton(t(user_id, 'btn_back_to_main_menu'), callback_data="back_to_menu")])
     
     keyboard = InlineKeyboardMarkup(buttons)
     
@@ -3099,20 +3308,22 @@ async def trusted_seller(update: Update, context: CallbackContext) -> None:
     db = load_db()
     reseller_list = db.get('reseller_list', '')
     
+    user_id = query.from_user.id
+
     if not reseller_list:
-        text = "❌ No resellers available yet."
+        text = t(user_id, 'no_resellers')
         keyboard = InlineKeyboardMarkup([
-            [InlineKeyboardButton("🔙 Back to Menu", callback_data="back_to_menu")]
+            [InlineKeyboardButton(t(user_id, 'btn_back_to_menu'), callback_data="back_to_menu")]
         ])
         await query.message.reply_text(text, reply_markup=keyboard)
         return
     
-    text = "⭐ <b>Trusted Sellers</b>\n\n"
+    text = f"{t(user_id, 'trusted_sellers_title')}\n\n"
     text += reseller_list + "\n\n"
-    text += "📞 Contact any seller to purchase!"
+    text += t(user_id, 'trusted_sellers_footer')
     
     keyboard = InlineKeyboardMarkup([
-        [InlineKeyboardButton("🔙 Back to Menu", callback_data="back_to_menu")]
+        [InlineKeyboardButton(t(user_id, 'btn_back_to_menu'), callback_data="back_to_menu")]
     ])
     
     try:
@@ -3458,19 +3669,20 @@ async def help_support(update: Update, context: CallbackContext) -> None:
     query = update.callback_query
     await query.answer()
     
+    user_id = query.from_user.id
     text = (
-        "<b>🛠 Need Help?</b>\n\n"
-        "<b>⚠ Purchase Error</b>\n"
-        "If you are facing any error during purchase.\n\n"
-        "<b>📦 APK Link</b>\n"
-        "If you purchased any hack but don't have APK link.\n\n"
-        "<b>🆘 Any Type of Help</b>\n"
-        "Click the button below to connect with Admin Support."
+        f"{t(user_id, 'help_title')}\n\n"
+        f"{t(user_id, 'help_purchase_error_title')}\n"
+        f"{t(user_id, 'help_purchase_error_body')}\n\n"
+        f"{t(user_id, 'help_apk_title')}\n"
+        f"{t(user_id, 'help_apk_body')}\n\n"
+        f"{t(user_id, 'help_any_title')}\n"
+        f"{t(user_id, 'help_any_body')}"
     )
     
     keyboard = InlineKeyboardMarkup([
-        [InlineKeyboardButton("🆘 Help", url="https://t.me/Hayazi_Saheb")],
-        [InlineKeyboardButton("🔙 Back", callback_data="help_support_back")]
+        [InlineKeyboardButton(t(user_id, 'btn_help_short'), url="https://t.me/Hayazi_Saheb")],
+        [InlineKeyboardButton(t(user_id, 'btn_back'), callback_data="help_support_back")]
     ])
     
     try:
@@ -3528,18 +3740,18 @@ async def my_profile(update: Update, context: CallbackContext) -> None:
         last_purchase_text = f"{product_name}"
     
     # Build profile message
-    profile_text = f"<b>👤 My Profile</b>\n\n"
-    profile_text += f"<b>👤 Name:</b> {first_name}\n"
-    profile_text += f"<b>💻 Username:</b> @{username}\n"
-    profile_text += f"<b>🆔 User ID:</b> <code>{user_id}</code>\n"
-    profile_text += f"<b>📅 Member Since:</b> {member_since}\n"
-    profile_text += f"<b>💰 Balance:</b> ${balance}\n"
-    profile_text += f"<b>🛍️ Last Purchase:</b> {last_purchase_text}\n"
+    profile_text = f"{t(user_id, 'profile_title')}\n\n"
+    profile_text += f"{t(user_id, 'profile_name', name=first_name)}\n"
+    profile_text += f"{t(user_id, 'profile_username', username=username)}\n"
+    profile_text += f"{t(user_id, 'label_user_id', user_id=user_id)}\n"
+    profile_text += f"{t(user_id, 'profile_member_since', date=member_since)}\n"
+    profile_text += f"{t(user_id, 'label_balance', balance=balance)}\n"
+    profile_text += f"{t(user_id, 'label_last_purchase', last_purchase=last_purchase_text)}\n"
     
     keyboard = InlineKeyboardMarkup([
-        [InlineKeyboardButton("💳 Add Balance", callback_data="add_balance"),
-         InlineKeyboardButton("📜 Purchase History", callback_data="history")],
-        [InlineKeyboardButton("🔙 Back to Menu", callback_data="back_to_menu")]
+        [InlineKeyboardButton(t(user_id, 'btn_add_balance'), callback_data="add_balance"),
+         InlineKeyboardButton(t(user_id, 'btn_purchase_history'), callback_data="history")],
+        [InlineKeyboardButton(t(user_id, 'btn_back_to_menu'), callback_data="back_to_menu")]
     ])
     
     try:
@@ -4977,10 +5189,13 @@ async def admin_message_handler(update: Update, context: CallbackContext) -> Non
 async def back_to_menu(update: Update, context: CallbackContext) -> None:
     # Reuse verify logic for returning to main profile menu
     query = update.callback_query
-    await query.answer()
+    try:
+        await query.answer()
+    except Exception:
+        pass
 
     name_user = query.from_user.first_name
-    username = query.from_user.username or "No username"
+    username = query.from_user.username or t(query.from_user.id, 'no_username')
     user_id = query.from_user.id
     db = load_db()
     users = db.get('users', {})
@@ -4988,31 +5203,26 @@ async def back_to_menu(update: Update, context: CallbackContext) -> None:
     balance = users.get(uid, {}).get('balance', 0.0)
     purchases = users.get(uid, {}).get('purchases', [])
 
-    last_purchase_text = "No purchases yet"
+    last_purchase_text = t(user_id, 'no_purchases')
     if purchases:
         last_purchase = purchases[-1]
         product_name = HACK_INFO.get(last_purchase.get('product', ''), {}).get('name', last_purchase.get('product', 'Unknown'))
         last_purchase_text = product_name
 
     # Check VIP status
-    status_text = "🌟 VIP" if is_vip(user_id) else "🔓 Active"
+    status_text = t(user_id, 'status_vip') if is_vip(user_id) else t(user_id, 'status_active')
 
-    profile_text = f"<b>👋 Welcome {name_user}</b>\n\n"
-    profile_text += f"<b>🆔 User ID:</b> <code>{user_id}</code>\n"
-    profile_text += f"<b>💻 Username:</b> {username}\n"
-    profile_text += f"<b>💰 Balance:</b> ${balance}\n"
-    profile_text += f"<b>⭐ Status:</b> {status_text}\n"
-    profile_text += f"<b>🛍️ Last Purchase:</b> {last_purchase_text}\n\n"
-    profile_text += "<b>🛒 Enjoy shopping from trusted sellers below ↓</b>"
+    profile_text = build_main_profile_text(
+        user_id,
+        name_user,
+        username,
+        balance,
+        status_text,
+        last_purchase_text=last_purchase_text,
+        show_last_purchase=True,
+    )
 
-    menu = InlineKeyboardMarkup([
-        [InlineKeyboardButton("⭐ Trusted Seller", callback_data="trusted_seller")],
-        [InlineKeyboardButton("🛍️ Product", callback_data="product")],
-        [InlineKeyboardButton("💳 Add Balance", callback_data="add_balance"),
-         InlineKeyboardButton("📜 History", callback_data="history")],
-        [InlineKeyboardButton("👤 My Profile", callback_data="my_profile"),
-         InlineKeyboardButton("🆘 Help & Support", callback_data="help_support")]
-    ])
+    menu = build_main_menu(user_id)
 
     await query.edit_message_media(
         media=InputMediaPhoto(
@@ -5032,20 +5242,18 @@ async def add_balance(update: Update, context: CallbackContext) -> None:
     encoded_text = quote_plus(prefill)
     deposit_url = f"https://t.me/{deposit_username}?text={encoded_text}"
     text = (
-        "<b>╔════════════════════╗</b>\n"
-        "<b>   ADD BALANCE CENTER</b>\n"
-        "<b>╚════════════════════╝</b>\n\n"
-        "<b>Want to add balance 💰</b>\n"
-        "<b>Copy your User ID, then tap the Deposit button below 👇</b>\n\n"
-        "<b>Your ID:</b>\n"
+        f"{t(user_id, 'add_balance_title')}\n\n"
+        f"{t(user_id, 'add_balance_1')}\n"
+        f"{t(user_id, 'add_balance_2')}\n\n"
+        f"{t(user_id, 'add_balance_3')}\n"
         f"<code>{user_id}</code>\n\n"
-        "<b>After payment, send your screenshot to admin.</b>"
+        f"{t(user_id, 'add_balance_4')}"
     )
     buttons = InlineKeyboardMarkup([
-        [InlineKeyboardButton("💳 Deposit Now", url=deposit_url),
-         InlineKeyboardButton("💬 Contact Admin", url="https://t.me/Hayazi_Saheb")],
-        [InlineKeyboardButton("🔄 Refresh", callback_data="add_balance"),
-         InlineKeyboardButton("🔙 Back", callback_data="add_balance_back")]
+        [InlineKeyboardButton(t(user_id, 'btn_deposit_now'), url=deposit_url),
+         InlineKeyboardButton(t(user_id, 'btn_contact_admin'), url="https://t.me/Hayazi_Saheb")],
+        [InlineKeyboardButton(t(user_id, 'btn_refresh'), callback_data="add_balance"),
+         InlineKeyboardButton(t(user_id, 'btn_back'), callback_data="add_balance_back")]
     ])
     try:
         await query.edit_message_text(
@@ -5061,6 +5269,38 @@ async def add_balance(update: Update, context: CallbackContext) -> None:
         )
 
 async def add_balance_back(update: Update, context: CallbackContext) -> None:
+    await back_to_menu(update, context)
+
+
+async def choose_language(update: Update, context: CallbackContext) -> None:
+    query = update.callback_query
+    await query.answer()
+    user_id = query.from_user.id
+
+    text = f"{t(user_id, 'choose_language_title')}\n\n{t(user_id, 'choose_language_desc')}"
+    keyboard = InlineKeyboardMarkup([
+        [InlineKeyboardButton(t(user_id, 'btn_english'), callback_data='set_lang_en'),
+         InlineKeyboardButton(t(user_id, 'btn_arabic'), callback_data='set_lang_ar')],
+        [InlineKeyboardButton(t(user_id, 'btn_back'), callback_data='back_to_menu')],
+    ])
+
+    try:
+        await query.edit_message_caption(caption=text, parse_mode=ParseMode.HTML, reply_markup=keyboard)
+    except Exception:
+        await query.edit_message_text(text=text, parse_mode=ParseMode.HTML, reply_markup=keyboard)
+
+
+async def set_language_english(update: Update, context: CallbackContext) -> None:
+    query = update.callback_query
+    set_user_language(query.from_user.id, 'en')
+    await query.answer(t(query.from_user.id, 'language_set_en'), show_alert=False)
+    await back_to_menu(update, context)
+
+
+async def set_language_arabic(update: Update, context: CallbackContext) -> None:
+    query = update.callback_query
+    set_user_language(query.from_user.id, 'ar')
+    await query.answer(t(query.from_user.id, 'language_set_ar'), show_alert=False)
     await back_to_menu(update, context)
 async def pre_handle_update(update: Update, context) -> None:
     """Log all incoming updates before handler processing."""
@@ -5197,6 +5437,9 @@ def main() -> None:
     application.add_handler(CallbackQueryHandler(remove_8bp_2b_start, pattern="^8bp_remove_2b$"))
     application.add_handler(CallbackQueryHandler(remove_8bp_1b_start, pattern="^8bp_remove_1b$"))
     application.add_handler(CallbackQueryHandler(remove_8bp_100m_start, pattern="^8bp_remove_100m$"))
+    application.add_handler(CallbackQueryHandler(choose_language, pattern="^choose_language$"))
+    application.add_handler(CallbackQueryHandler(set_language_english, pattern="^set_lang_en$"))
+    application.add_handler(CallbackQueryHandler(set_language_arabic, pattern="^set_lang_ar$"))
     # purchase confirmation/cancel
     application.add_handler(CallbackQueryHandler(confirm_buy, pattern="^confirm_buy_"))
     application.add_handler(CallbackQueryHandler(cancel_buy, pattern="^cancel_buy_"))
