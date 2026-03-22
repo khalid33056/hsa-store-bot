@@ -218,7 +218,7 @@ LANG_STRINGS = {
         'no_username': 'No username',
         'no_purchases': 'No purchases yet',
         'welcome': '<b>👋 Welcome {name}</b>',
-        'label_user_id': '<b>🆔 User ID:</b> <code>{user_id}</code>',
+        'label_user_id': '<b>🆔 User ID:</b> <code>{uid}</code>',
         'label_username': '<b>💻 Username:</b> {username}',
         'label_balance': '<b>💰 Balance:</b> ${balance}',
         'label_status': '<b>⭐ Status:</b> {status}',
@@ -293,7 +293,7 @@ LANG_STRINGS = {
         'no_username': 'بدون اسم مستخدم',
         'no_purchases': 'لا توجد عمليات شراء بعد',
         'welcome': '<b>👋 مرحبا {name}</b>',
-        'label_user_id': '<b>🆔 معرف المستخدم:</b> <code>{user_id}</code>',
+        'label_user_id': '<b>🆔 معرف المستخدم:</b> <code>{uid}</code>',
         'label_username': '<b>💻 اسم المستخدم:</b> {username}',
         'label_balance': '<b>💰 الرصيد:</b> ${balance}',
         'label_status': '<b>⭐ الحالة:</b> {status}',
@@ -415,7 +415,7 @@ def build_main_profile_text(user_id: int, name_user: str, username: str, balance
     lines = [
         t(user_id, 'welcome', lang=lang, name=name_user),
         '',
-        t(user_id, 'label_user_id', lang=lang, user_id=user_id),
+        t(user_id, 'label_user_id', lang=lang, uid=user_id),
         t(user_id, 'label_username', lang=lang, username=username),
         t(user_id, 'label_balance', lang=lang, balance=balance),
         t(user_id, 'label_status', lang=lang, status=status_text),
@@ -3759,7 +3759,7 @@ async def my_profile(update: Update, context: CallbackContext) -> None:
     profile_text = f"{t(user_id, 'profile_title')}\n\n"
     profile_text += f"{t(user_id, 'profile_name', name=safe_first_name)}\n"
     profile_text += f"{t(user_id, 'profile_username', username=safe_username)}\n"
-    profile_text += f"{t(user_id, 'label_user_id', user_id=user_id)}\n"
+    profile_text += f"{t(user_id, 'label_user_id', uid=user_id)}\n"
     profile_text += f"{t(user_id, 'profile_member_since', date=member_since)}\n"
     profile_text += f"{t(user_id, 'label_balance', balance=balance)}\n"
     profile_text += f"{t(user_id, 'label_last_purchase', last_purchase=safe_last_purchase)}\n"
