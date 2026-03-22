@@ -282,7 +282,7 @@ LANG_STRINGS = {
         'history_page': '<b>Page {page}/{total}</b>',
         'history_product': '<b>📦 Product:</b> {product}',
         'history_duration': '<b>⏳ Duration:</b> {duration}',
-        'history_key': '<b>🔑 Key:</b> <code>{key}</code>',
+        'history_key': '<b>🔑 Key:</b> <code>{purchase_key}</code>',
         'history_status_expired': '<b>📅 Status:</b> Expired ❌',
         'history_status_active': '<b>📅 Status:</b> Active ✅',
         'history_expired_on': '<i>Expired on: {date}</i>',
@@ -312,7 +312,7 @@ LANG_STRINGS = {
         'success_product': '<b>📦 Product:</b> {product}',
         'success_duration': '<b>⏳ Duration:</b> {duration}',
         'success_remaining': '<b>💰 Remaining Balance:</b> {balance}$',
-        'success_key': '<b>🔑 Your Key:</b> <code>{key}</code>',
+        'success_key': '<b>🔑 Your Key:</b> <code>{purchase_key}</code>',
         'success_enjoy': '<b>Enjoy your premium access 🚀</b>',
         'account_not_available_title': '❌ Account Not Available',
         'account_not_available_body': 'Sorry, no accounts are available at the moment.\nPlease contact admin or try again later.',
@@ -397,7 +397,7 @@ LANG_STRINGS = {
         'history_page': '<b>الصفحة {page}/{total}</b>',
         'history_product': '<b>📦 المنتج:</b> {product}',
         'history_duration': '<b>⏳ المدة:</b> {duration}',
-        'history_key': '<b>🔑 المفتاح:</b> <code>{key}</code>',
+        'history_key': '<b>🔑 المفتاح:</b> <code>{purchase_key}</code>',
         'history_status_expired': '<b>📅 الحالة:</b> منتهي ❌',
         'history_status_active': '<b>📅 الحالة:</b> فعال ✅',
         'history_expired_on': '<i>انتهى بتاريخ: {date}</i>',
@@ -427,7 +427,7 @@ LANG_STRINGS = {
         'success_product': '<b>📦 المنتج:</b> {product}',
         'success_duration': '<b>⏳ المدة:</b> {duration}',
         'success_remaining': '<b>💰 الرصيد المتبقي:</b> {balance}$',
-        'success_key': '<b>🔑 مفتاحك:</b> <code>{key}</code>',
+        'success_key': '<b>🔑 مفتاحك:</b> <code>{purchase_key}</code>',
         'success_enjoy': '<b>استمتع بصلاحياتك المميزة 🚀</b>',
         'account_not_available_title': '❌ الحساب غير متاح',
         'account_not_available_body': 'عذراً، لا توجد حسابات متاحة في الوقت الحالي.\nالرجاء التواصل مع الادمن أو المحاولة لاحقاً.',
@@ -3175,7 +3175,7 @@ async def display_history_page(update: Update, context: CallbackContext, db, pur
         # Format the history message
         msg += f"{t(user_id, 'history_product', product=product_name)}\n"
         msg += f"{t(user_id, 'history_duration', duration=duration_label)}\n"
-        msg += f"{t(user_id, 'history_key', key=key)}\n"
+        msg += f"{t(user_id, 'history_key', purchase_key=key)}\n"
         
         if status == "expired":
             msg += f"{t(user_id, 'history_status_expired')}\n"
@@ -3982,7 +3982,7 @@ async def confirm_buy(update: Update, context: CallbackContext) -> None:
     success_text += f"{t(user_id, 'success_product', product=HACK_INFO.get(hack, {}).get('name', hack))}\n"
     success_text += f"{t(user_id, 'success_duration', duration=product['label'])}\n"
     success_text += f"{t(user_id, 'success_remaining', balance=users[uid]['balance'])}\n"
-    success_text += f"{t(user_id, 'success_key', key=key_value)}\n\n"
+    success_text += f"{t(user_id, 'success_key', purchase_key=key_value)}\n\n"
     success_text += t(user_id, 'success_enjoy')
     
     back_buttons = InlineKeyboardMarkup([
