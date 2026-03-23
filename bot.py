@@ -240,10 +240,14 @@ LANG_STRINGS = {
         'btn_arabic': '🇸🇦 Arabic',
         'btn_persian': '🇮🇷 Persian',
         'btn_hindi': '🇮🇳 Hindi',
+        'btn_colombian': '🇨🇴 Colombian',
+        'btn_indonesian': '🇮🇩 Indonesian',
         'language_set_en': '✅ English selected. (Default language)',
         'language_set_ar': '✅ Arabic selected. Bot messages will appear in Arabic.',
         'language_set_fa': '✅ Persian selected. Bot messages will appear in Persian where available.',
         'language_set_hi': '✅ Hindi selected. Bot messages will appear in Hindi where available.',
+        'language_set_es': '✅ Colombian Spanish selected. Bot messages will appear in Spanish where available.',
+        'language_set_id': '✅ Indonesian selected. Bot messages will appear in Indonesian where available.',
         'btn_back': '🔙 Back',
         'btn_back_to_menu': '🔙 Back to Menu',
         'btn_back_to_main_menu': '🏠 Back to Main Menu',
@@ -359,10 +363,14 @@ LANG_STRINGS = {
         'btn_arabic': '🇸🇦 العربية',
         'btn_persian': '🇮🇷 الفارسية',
         'btn_hindi': '🇮🇳 الهندية',
+        'btn_colombian': '🇨🇴 الكولومبية',
+        'btn_indonesian': '🇮🇩 الإندونيسية',
         'language_set_en': '✅ تم اختيار الانجليزية (اللغة الافتراضية)',
         'language_set_ar': '✅ تم اختيار العربية. ستظهر رسائل البوت بالعربية.',
         'language_set_fa': '✅ تم اختيار الفارسية. ستظهر رسائل البوت بالفارسية عندما تكون متاحة.',
         'language_set_hi': '✅ تم اختيار الهندية. ستظهر رسائل البوت بالهندية عندما تكون متاحة.',
+        'language_set_es': '✅ تم اختيار الإسبانية الكولومبية. ستظهر رسائل البوت بالإسبانية عندما تكون متاحة.',
+        'language_set_id': '✅ تم اختيار الإندونيسية. ستظهر رسائل البوت بالإندونيسية عندما تكون متاحة.',
         'btn_back': '🔙 رجوع',
         'btn_back_to_menu': '🔙 رجوع للقائمة',
         'btn_back_to_main_menu': '🏠 رجوع للقائمة الرئيسية',
@@ -478,10 +486,14 @@ LANG_STRINGS = {
         'btn_arabic': '🇸🇦 عربی',
         'btn_persian': '🇮🇷 فارسی',
         'btn_hindi': '🇮🇳 هندی',
+        'btn_colombian': '🇨🇴 کلمبیایی',
+        'btn_indonesian': '🇮🇩 اندونزیایی',
         'language_set_en': '✅ زبان انگلیسی انتخاب شد. (پیش‌فرض)',
         'language_set_ar': '✅ زبان عربی انتخاب شد. پیام‌های ربات به عربی نمایش داده می‌شود.',
         'language_set_fa': '✅ زبان فارسی انتخاب شد. پیام‌های ربات به فارسی نمایش داده می‌شود.',
         'language_set_hi': '✅ زبان هندی انتخاب شد. پیام‌های ربات به هندی نمایش داده می‌شود.',
+        'language_set_es': '✅ زبان اسپانیایی کلمبیایی انتخاب شد. پیام‌های ربات به اسپانیایی در صورت موجود بودن نمایش داده می‌شود.',
+        'language_set_id': '✅ زبان اندونزیایی انتخاب شد. پیام‌های ربات به اندونزیایی در صورت موجود بودن نمایش داده می‌شود.',
         'btn_back': '🔙 بازگشت',
         'btn_back_to_menu': '🔙 بازگشت به منو',
         'btn_back_to_main_menu': '🏠 بازگشت به منوی اصلی',
@@ -597,10 +609,14 @@ LANG_STRINGS = {
         'btn_arabic': '🇸🇦 अरबी',
         'btn_persian': '🇮🇷 फ़ारसी',
         'btn_hindi': '🇮🇳 हिंदी',
+        'btn_colombian': '🇨🇴 कोलंबियन',
+        'btn_indonesian': '🇮🇩 इंडोनेशियन',
         'language_set_en': '✅ इंग्लिश चुनी गई। (डिफ़ॉल्ट भाषा)',
         'language_set_ar': '✅ अरबी चुनी गई। बॉट संदेश अरबी में दिखेंगे।',
         'language_set_fa': '✅ फ़ारसी चुनी गई। बॉट संदेश फ़ारसी में दिखेंगे।',
         'language_set_hi': '✅ हिंदी चुनी गई। बॉट संदेश हिंदी में दिखेंगे।',
+        'language_set_es': '✅ कोलंबियन स्पेनिश चुनी गई। बॉट संदेश उपलब्ध होने पर स्पेनिश में दिखेंगे।',
+        'language_set_id': '✅ इंडोनेशियन चुनी गई। बॉट संदेश उपलब्ध होने पर इंडोनेशियन में दिखेंगे।',
         'btn_back': '🔙 वापस',
         'btn_back_to_menu': '🔙 मेनू पर वापस',
         'btn_back_to_main_menu': '🏠 मुख्य मेनू पर वापस',
@@ -687,6 +703,44 @@ LANG_STRINGS = {
         'insuf_your_balance': '💳 <b>आपका बैलेंस:</b> ${balance}',
         'insuf_shortfall': '📊 <b>कमी:</b> ${shortfall}',
         'insuf_footer': 'कृपया अपने अकाउंट में बैलेंस जोड़ें।',
+    },
+    'es': {
+        'btn_choose_language': '🌐 Elegir idioma',
+        'choose_language_title': '<b>🌐 Elegir idioma</b>',
+        'choose_language_desc': 'Selecciona tu idioma preferido del bot.',
+        'btn_english': '🇬🇧 Ingles',
+        'btn_arabic': '🇸🇦 Arabe',
+        'btn_persian': '🇮🇷 Persa',
+        'btn_hindi': '🇮🇳 Hindi',
+        'btn_colombian': '🇨🇴 Colombiano',
+        'btn_indonesian': '🇮🇩 Indonesio',
+        'language_set_en': '✅ Ingles seleccionado.',
+        'language_set_ar': '✅ Arabe seleccionado.',
+        'language_set_fa': '✅ Persa seleccionado.',
+        'language_set_hi': '✅ Hindi seleccionado.',
+        'language_set_es': '✅ Espanol colombiano seleccionado.',
+        'language_set_id': '✅ Indonesio seleccionado.',
+        'btn_back': '🔙 Atras',
+        'btn_back_to_menu': '🔙 Volver al menu',
+    },
+    'id': {
+        'btn_choose_language': '🌐 Pilih bahasa',
+        'choose_language_title': '<b>🌐 Pilih bahasa</b>',
+        'choose_language_desc': 'Pilih bahasa bot yang kamu inginkan.',
+        'btn_english': '🇬🇧 Inggris',
+        'btn_arabic': '🇸🇦 Arab',
+        'btn_persian': '🇮🇷 Persia',
+        'btn_hindi': '🇮🇳 Hindi',
+        'btn_colombian': '🇨🇴 Kolombia',
+        'btn_indonesian': '🇮🇩 Indonesia',
+        'language_set_en': '✅ Bahasa Inggris dipilih.',
+        'language_set_ar': '✅ Bahasa Arab dipilih.',
+        'language_set_fa': '✅ Bahasa Persia dipilih.',
+        'language_set_hi': '✅ Bahasa Hindi dipilih.',
+        'language_set_es': '✅ Bahasa Spanyol Kolombia dipilih.',
+        'language_set_id': '✅ Bahasa Indonesia dipilih.',
+        'btn_back': '🔙 Kembali',
+        'btn_back_to_menu': '🔙 Kembali ke menu',
     }
 }
 
@@ -5642,6 +5696,8 @@ async def choose_language(update: Update, context: CallbackContext) -> None:
          InlineKeyboardButton(t(user_id, 'btn_arabic'), callback_data='set_lang_ar')],
         [InlineKeyboardButton(t(user_id, 'btn_persian'), callback_data='set_lang_fa'),
          InlineKeyboardButton(t(user_id, 'btn_hindi'), callback_data='set_lang_hi')],
+        [InlineKeyboardButton(t(user_id, 'btn_colombian'), callback_data='set_lang_es'),
+         InlineKeyboardButton(t(user_id, 'btn_indonesian'), callback_data='set_lang_id')],
         [InlineKeyboardButton(t(user_id, 'btn_back'), callback_data='back_to_menu')],
     ])
 
@@ -5693,6 +5749,20 @@ async def set_language_hindi(update: Update, context: CallbackContext) -> None:
     query = update.callback_query
     await query.answer(t(query.from_user.id, 'language_set_hi'), show_alert=False)
     set_user_language(query.from_user.id, 'hi')
+    await back_to_menu(update, context)
+
+
+async def set_language_colombian(update: Update, context: CallbackContext) -> None:
+    query = update.callback_query
+    await query.answer(t(query.from_user.id, 'language_set_es'), show_alert=False)
+    set_user_language(query.from_user.id, 'es')
+    await back_to_menu(update, context)
+
+
+async def set_language_indonesian(update: Update, context: CallbackContext) -> None:
+    query = update.callback_query
+    await query.answer(t(query.from_user.id, 'language_set_id'), show_alert=False)
+    set_user_language(query.from_user.id, 'id')
     await back_to_menu(update, context)
 
 
@@ -5837,6 +5907,8 @@ def main() -> None:
     application.add_handler(CallbackQueryHandler(set_language_arabic, pattern="^set_lang_ar$"))
     application.add_handler(CallbackQueryHandler(set_language_persian, pattern="^set_lang_fa$"))
     application.add_handler(CallbackQueryHandler(set_language_hindi, pattern="^set_lang_hi$"))
+    application.add_handler(CallbackQueryHandler(set_language_colombian, pattern="^set_lang_es$"))
+    application.add_handler(CallbackQueryHandler(set_language_indonesian, pattern="^set_lang_id$"))
     # purchase confirmation/cancel
     application.add_handler(CallbackQueryHandler(confirm_buy, pattern="^confirm_buy_"))
     application.add_handler(CallbackQueryHandler(cancel_buy, pattern="^cancel_buy_"))
