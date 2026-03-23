@@ -1950,6 +1950,7 @@ async def vip_tool_gatekeeper(update: Update, context: CallbackContext) -> None:
     if not query:
         return
 
+    await query.answer()
     data = query.data or ""
     tool_map = {
         'item_snake': ('snake_engine', 'product_8ball'),
@@ -1979,7 +1980,7 @@ async def vip_tool_gatekeeper(update: Update, context: CallbackContext) -> None:
     if has_vip_access(user_id):
         return
 
-    await query.answer("VIP only", show_alert=False)
+    await query.answer("⭐ VIP Only", show_alert=True)
     hack_key, back_callback = tool_map[data]
     image_url = HACK_INFO.get(hack_key, {}).get('image', 'https://i.postimg.cc/k4kRGdVK/file-00000000ca8c71faadd50d667e4a0509.png')
     await show_vip_required_screen(query, image_url, back_callback)
@@ -4271,6 +4272,12 @@ async def admin_balance_users(update: Update, context: CallbackContext) -> None:
 
 async def admin_back(update: Update, context: CallbackContext) -> None:
     # return to admin panel
+    query = update.callback_query
+    if query:
+        try:
+            await query.answer()
+        except Exception:
+            pass
     await admin_command(update, context)
 
 
@@ -5412,15 +5419,15 @@ async def terms_menu(update: Update, context: CallbackContext) -> None:
 
 async def set_language_english(update: Update, context: CallbackContext) -> None:
     query = update.callback_query
-    set_user_language(query.from_user.id, 'en')
     await query.answer(t(query.from_user.id, 'language_set_en'), show_alert=False)
+    set_user_language(query.from_user.id, 'en')
     await back_to_menu(update, context)
 
 
 async def set_language_arabic(update: Update, context: CallbackContext) -> None:
     query = update.callback_query
-    set_user_language(query.from_user.id, 'ar')
     await query.answer(t(query.from_user.id, 'language_set_ar'), show_alert=False)
+    set_user_language(query.from_user.id, 'ar')
     await back_to_menu(update, context)
 async def pre_handle_update(update: Update, context) -> None:
     """Log all incoming updates before handler processing."""
