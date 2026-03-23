@@ -3096,7 +3096,7 @@ async def history_handler(update: Update, context: CallbackContext) -> None:
         await query.answer()
 
     user_id = update.effective_user.id if update.effective_user else update.from_user.id
-    db = load_db()
+    db = await asyncio.get_event_loop().run_in_executor(None, load_db)
     
     # Get user purchases from the new structure
     purchases = db.get('users', {}).get(str(user_id), {}).get('purchases', [])
@@ -3149,6 +3149,7 @@ async def display_history_page(update: Update, context: CallbackContext, db, pur
     msg += f"{t(user_id, 'history_page', page=current_page + 1, total=total_pages)}\n\n"
     
     now = datetime.now()
+    status_changed = False
     
     # Process each purchase on this page
     for item in page_items:
@@ -3170,6 +3171,7 @@ async def display_history_page(update: Update, context: CallbackContext, db, pur
                 if now > expire_dt:
                     status = "expired"
                     item['status'] = "expired"  # Update status in db
+                    status_changed = True
             except Exception:
                 pass
         
@@ -3189,8 +3191,9 @@ async def display_history_page(update: Update, context: CallbackContext, db, pur
         
         msg += "\n"
     
-    # Save updated statuses
-    save_db(db)
+    # Save updated statuses only if something changed
+    if status_changed:
+        await asyncio.get_event_loop().run_in_executor(None, save_db, db)
     
     # Create pagination buttons
     buttons = []
@@ -3229,7 +3232,7 @@ async def next_history(update: Update, context: CallbackContext) -> None:
     await query.answer()
     
     user_id = update.effective_user.id
-    db = load_db()
+    db = await asyncio.get_event_loop().run_in_executor(None, load_db)
     purchases = db.get('users', {}).get(str(user_id), {}).get('purchases', [])
     
     if not purchases:
@@ -3247,7 +3250,7 @@ async def prev_history(update: Update, context: CallbackContext) -> None:
     await query.answer()
     
     user_id = update.effective_user.id
-    db = load_db()
+    db = await asyncio.get_event_loop().run_in_executor(None, load_db)
     purchases = db.get('users', {}).get(str(user_id), {}).get('purchases', [])
     
     if not purchases:
