@@ -238,8 +238,12 @@ LANG_STRINGS = {
         'choose_language_desc': 'Select your preferred bot language.',
         'btn_english': '🇬🇧 English',
         'btn_arabic': '🇸🇦 Arabic',
+        'btn_persian': '🇮🇷 Persian',
+        'btn_hindi': '🇮🇳 Hindi',
         'language_set_en': '✅ English selected. (Default language)',
         'language_set_ar': '✅ Arabic selected. Bot messages will appear in Arabic.',
+        'language_set_fa': '✅ Persian selected. Bot messages will appear in Persian where available.',
+        'language_set_hi': '✅ Hindi selected. Bot messages will appear in Hindi where available.',
         'btn_back': '🔙 Back',
         'btn_back_to_menu': '🔙 Back to Menu',
         'btn_back_to_main_menu': '🏠 Back to Main Menu',
@@ -353,8 +357,12 @@ LANG_STRINGS = {
         'choose_language_desc': 'اختر لغة البوت المفضلة لديك.',
         'btn_english': '🇬🇧 الانجليزية',
         'btn_arabic': '🇸🇦 العربية',
+        'btn_persian': '🇮🇷 الفارسية',
+        'btn_hindi': '🇮🇳 الهندية',
         'language_set_en': '✅ تم اختيار الانجليزية (اللغة الافتراضية)',
         'language_set_ar': '✅ تم اختيار العربية. ستظهر رسائل البوت بالعربية.',
+        'language_set_fa': '✅ تم اختيار الفارسية. ستظهر رسائل البوت بالفارسية عندما تكون متاحة.',
+        'language_set_hi': '✅ تم اختيار الهندية. ستظهر رسائل البوت بالهندية عندما تكون متاحة.',
         'btn_back': '🔙 رجوع',
         'btn_back_to_menu': '🔙 رجوع للقائمة',
         'btn_back_to_main_menu': '🏠 رجوع للقائمة الرئيسية',
@@ -441,6 +449,36 @@ LANG_STRINGS = {
         'insuf_your_balance': '💳 <b>رصيدك:</b> ${balance}',
         'insuf_shortfall': '📊 <b>الفرق:</b> ${shortfall}',
         'insuf_footer': 'الرجاء إضافة رصيد إلى حسابك.',
+    },
+    'fa': {
+        'btn_choose_language': '🌐 انتخاب زبان',
+        'choose_language_title': '<b>🌐 انتخاب زبان</b>',
+        'choose_language_desc': 'زبان دلخواه خود را انتخاب کنید.',
+        'btn_english': '🇬🇧 انگلیسی',
+        'btn_arabic': '🇸🇦 عربی',
+        'btn_persian': '🇮🇷 فارسی',
+        'btn_hindi': '🇮🇳 هندی',
+        'language_set_en': '✅ زبان انگلیسی انتخاب شد.',
+        'language_set_ar': '✅ زبان عربی انتخاب شد.',
+        'language_set_fa': '✅ زبان فارسی انتخاب شد.',
+        'language_set_hi': '✅ زبان هندی انتخاب شد.',
+        'btn_back': '🔙 بازگشت',
+        'btn_back_to_menu': '🔙 بازگشت به منو',
+    },
+    'hi': {
+        'btn_choose_language': '🌐 भाषा चुनें',
+        'choose_language_title': '<b>🌐 भाषा चुनें</b>',
+        'choose_language_desc': 'अपनी पसंदीदा भाषा चुनें।',
+        'btn_english': '🇬🇧 इंग्लिश',
+        'btn_arabic': '🇸🇦 अरबी',
+        'btn_persian': '🇮🇷 फ़ारसी',
+        'btn_hindi': '🇮🇳 हिंदी',
+        'language_set_en': '✅ अंग्रेजी भाषा चुनी गई।',
+        'language_set_ar': '✅ अरबी भाषा चुनी गई।',
+        'language_set_fa': '✅ फ़ारसी भाषा चुनी गई।',
+        'language_set_hi': '✅ हिंदी भाषा चुनी गई।',
+        'btn_back': '🔙 वापस',
+        'btn_back_to_menu': '🔙 मेनू पर वापस',
     }
 }
 
@@ -5394,6 +5432,8 @@ async def choose_language(update: Update, context: CallbackContext) -> None:
     keyboard = InlineKeyboardMarkup([
         [InlineKeyboardButton(t(user_id, 'btn_english'), callback_data='set_lang_en'),
          InlineKeyboardButton(t(user_id, 'btn_arabic'), callback_data='set_lang_ar')],
+        [InlineKeyboardButton(t(user_id, 'btn_persian'), callback_data='set_lang_fa'),
+         InlineKeyboardButton(t(user_id, 'btn_hindi'), callback_data='set_lang_hi')],
         [InlineKeyboardButton(t(user_id, 'btn_back'), callback_data='back_to_menu')],
     ])
 
@@ -5432,6 +5472,22 @@ async def set_language_arabic(update: Update, context: CallbackContext) -> None:
     await query.answer(t(query.from_user.id, 'language_set_ar'), show_alert=False)
     set_user_language(query.from_user.id, 'ar')
     await back_to_menu(update, context)
+
+
+async def set_language_persian(update: Update, context: CallbackContext) -> None:
+    query = update.callback_query
+    await query.answer(t(query.from_user.id, 'language_set_fa'), show_alert=False)
+    set_user_language(query.from_user.id, 'fa')
+    await back_to_menu(update, context)
+
+
+async def set_language_hindi(update: Update, context: CallbackContext) -> None:
+    query = update.callback_query
+    await query.answer(t(query.from_user.id, 'language_set_hi'), show_alert=False)
+    set_user_language(query.from_user.id, 'hi')
+    await back_to_menu(update, context)
+
+
 async def pre_handle_update(update: Update, context) -> None:
     """Log all incoming updates before handler processing."""
     user_id = update.effective_user.id if update.effective_user else "unknown"
@@ -5571,6 +5627,8 @@ def main() -> None:
     application.add_handler(CallbackQueryHandler(terms_menu, pattern="^terms$"))
     application.add_handler(CallbackQueryHandler(set_language_english, pattern="^set_lang_en$"))
     application.add_handler(CallbackQueryHandler(set_language_arabic, pattern="^set_lang_ar$"))
+    application.add_handler(CallbackQueryHandler(set_language_persian, pattern="^set_lang_fa$"))
+    application.add_handler(CallbackQueryHandler(set_language_hindi, pattern="^set_lang_hi$"))
     # purchase confirmation/cancel
     application.add_handler(CallbackQueryHandler(confirm_buy, pattern="^confirm_buy_"))
     application.add_handler(CallbackQueryHandler(cancel_buy, pattern="^cancel_buy_"))
