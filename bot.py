@@ -2334,7 +2334,7 @@ async def wizard_hack(update: Update, context: CallbackContext) -> None:
 # --- database helpers ---
 
 def _default_db_structure() -> dict:
-    return {"users": {}, "keys": {}}
+    return {"users": {}, "keys": {}, "maintenance_mode": False}
 
 
 def _ensure_db_structure(db: dict) -> dict:
@@ -2344,6 +2344,8 @@ def _ensure_db_structure(db: dict) -> dict:
         db['users'] = {}
     if 'keys' not in db or not isinstance(db['keys'], dict):
         db['keys'] = {}
+    if 'maintenance_mode' not in db or not isinstance(db['maintenance_mode'], bool):
+        db['maintenance_mode'] = False
     for user_data in db.get('users', {}).values():
         if isinstance(user_data, dict) and 'purchases' not in user_data:
             user_data['purchases'] = []
@@ -2534,6 +2536,17 @@ def is_vip(user_id: int) -> bool:
 def has_vip_access(user_id: int) -> bool:
     """VIP access includes VIP users and admins."""
     return is_admin(user_id) or is_vip(user_id)
+
+
+def is_maintenance_mode_enabled(db: dict | None = None) -> bool:
+    local_db = db if db is not None else load_db()
+    return bool(local_db.get('maintenance_mode', False))
+
+
+def set_maintenance_mode(enabled: bool) -> None:
+    db = load_db()
+    db['maintenance_mode'] = bool(enabled)
+    save_db(db)
 
 def _vip_contact_url(user_id: int) -> str:
     prefill = f"🚨 VIP Activation Request\n\n👤 User ID: {user_id}\n\n❗ Admin, please activate VIP access for my account."
@@ -4707,6 +4720,8 @@ async def admin_command(update: Update, context: CallbackContext) -> None:
             return
     
     query = update.callback_query if update.callback_query else None
+    maintenance_enabled = is_maintenance_mode_enabled()
+    maintenance_label = "🟢 Maintenance Mode: ON" if maintenance_enabled else "🔴 Maintenance Mode: OFF"
     
     buttons = InlineKeyboardMarkup([
         [InlineKeyboardButton("🔑 Manage Keys", callback_data="admin_keys"),
@@ -4719,6 +4734,7 @@ async def admin_command(update: Update, context: CallbackContext) -> None:
         [InlineKeyboardButton("🌟 Manage Sellers", callback_data="manage_reseller"),
          InlineKeyboardButton("📦 See Stock", callback_data="admin_see_stock")],
         [InlineKeyboardButton("🎱 Manage 8BP Account", callback_data="manage_8bp_accounts")],
+        [InlineKeyboardButton(maintenance_label, callback_data="admin_toggle_maintenance")],
         [InlineKeyboardButton("❌ Close", callback_data="admin_close")]
     ])
     
@@ -4734,7 +4750,8 @@ async def admin_command(update: Update, context: CallbackContext) -> None:
         "📢 <b>Mailing:</b> Send messages to all users\n"
         "🌟 <b>Sellers:</b> Manage seller/reseller list\n"
         "🎱 <b>8BP Account:</b> Manage game accounts\n"
-        "📦 <b>Stock:</b> View available keys stock"
+        "📦 <b>Stock:</b> View available keys stock\n"
+        f"🛠 <b>Maintenance:</b> {'ON 🟢' if maintenance_enabled else 'OFF 🔴'}"
     )
     
     if query:
@@ -6119,6 +6136,74 @@ async def set_language_brazilian(update: Update, context: CallbackContext) -> No
     await back_to_menu(update, context)
 
 
+def _maintenance_text() -> str:
+    return (
+        "<b>🛠 BOT UNDER MAINTENANCE</b>\n\n"
+        "━━━━━━━━━━━━━━━━━━━━\n"
+        "<b>⚠️ We are upgrading the bot</b>\n"
+        "━━━━━━━━━━━━━━━━━━━━\n\n"
+        "<b>Please come back later.</b>\n"
+        "Thanks for your patience 🙏"
+    )
+
+
+async def _show_maintenance_message(update: Update) -> None:
+    text = _maintenance_text()
+    query = update.callback_query
+    if query:
+        try:
+            await query.answer("🛠 Bot under maintenance. Please come back later.", show_alert=True)
+        except Exception:
+            pass
+        try:
+            await query.edit_message_text(text, parse_mode=ParseMode.HTML)
+            return
+        except Exception:
+            try:
+                await query.edit_message_caption(caption=text, parse_mode=ParseMode.HTML)
+                return
+            except Exception:
+                if query.message:
+                    await query.message.reply_text(text, parse_mode=ParseMode.HTML)
+                return
+
+    if update.message:
+        await update.message.reply_text(text, parse_mode=ParseMode.HTML)
+
+
+async def maintenance_gatekeeper(update: Update, context: CallbackContext) -> None:
+    """Stop non-admin usage when maintenance mode is enabled."""
+    db = load_db()
+    if not is_maintenance_mode_enabled(db):
+        return
+
+    effective_user = update.effective_user
+    if not effective_user:
+        return
+    if is_admin(effective_user.id):
+        return
+
+    await _show_maintenance_message(update)
+    raise ApplicationHandlerStop
+
+
+async def admin_toggle_maintenance(update: Update, context: CallbackContext) -> None:
+    query = update.callback_query
+
+    if not is_admin(query.from_user.id):
+        await query.answer("❌ Access Denied!", show_alert=True)
+        return
+
+    db = load_db()
+    new_state = not is_maintenance_mode_enabled(db)
+    db['maintenance_mode'] = new_state
+    save_db(db)
+
+    status_text = "🟢 Maintenance mode is now ON" if new_state else "🔴 Maintenance mode is now OFF"
+    await query.answer(status_text, show_alert=True)
+    await admin_command(update, context)
+
+
 async def pre_handle_update(update: Update, context) -> None:
     """Log all incoming updates before handler processing."""
     user_id = update.effective_user.id if update.effective_user else "unknown"
@@ -6166,6 +6251,8 @@ def main() -> None:
         .get_updates_pool_timeout(30)
         .build()
     )
+
+    application.add_handler(TypeHandler(Update, maintenance_gatekeeper), group=-3)
 
     vip_tool_pattern = r"^(item_snake|item_aimx|kos_mode|kos_virtual|item_ninja|item_wolf|item_wizard|aimking_nonroot|ak_loader_root|carrom_se|carrom_ak|score_se|score_ak|ff_android_drip_select|ff_android_kos_select|ff_ios|esign|gbox)$"
     application.add_handler(CallbackQueryHandler(vip_tool_gatekeeper, pattern=vip_tool_pattern), group=-2)
@@ -6263,6 +6350,7 @@ def main() -> None:
     application.add_handler(CallbackQueryHandler(set_language_colombian, pattern="^set_lang_es$"))
     application.add_handler(CallbackQueryHandler(set_language_indonesian, pattern="^set_lang_id$"))
     application.add_handler(CallbackQueryHandler(set_language_brazilian, pattern="^set_lang_pt$"))
+    application.add_handler(CallbackQueryHandler(admin_toggle_maintenance, pattern="^admin_toggle_maintenance$"))
     # purchase confirmation/cancel
     application.add_handler(CallbackQueryHandler(confirm_buy, pattern="^confirm_buy_"))
     application.add_handler(CallbackQueryHandler(cancel_buy, pattern="^cancel_buy_"))
