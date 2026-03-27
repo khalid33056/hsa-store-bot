@@ -2538,6 +2538,78 @@ def has_vip_access(user_id: int) -> bool:
     return is_admin(user_id) or is_vip(user_id)
 
 
+def _format_expiry_username(user_record: dict) -> str:
+    username = (user_record or {}).get('username', '')
+    first_name = (user_record or {}).get('first_name', '')
+    if username:
+        return f"@{username}"
+    if first_name:
+        return first_name
+    return "No username"
+
+
+def _build_expiry_message(user_record: dict, purchase: dict) -> str:
+    product_key = purchase.get('product', 'Unknown')
+    product_name = HACK_INFO.get(product_key, {}).get('name', product_key)
+    return (
+        "<b>🔴 KEY EXPIRED</b>\n\n"
+        f"<b>👤 Username:</b> {_format_expiry_username(user_record)}\n"
+        f"<b>📦 Product:</b> {html.escape(str(product_name))}\n"
+        f"<b>🔑 Key:</b> <code>{html.escape(str(purchase.get('key', 'N/A')))}</code>\n"
+        f"<b>📅 Buy Date:</b> {html.escape(str(purchase.get('buy_date', 'N/A')))}\n"
+        f"<b>⏰ Expire Date:</b> {html.escape(str(purchase.get('expire_date', 'N/A')))}\n\n"
+        "<b>Please click Product button if you need a renewal.</b>"
+    )
+
+
+async def check_expired_keys_job(context: CallbackContext) -> None:
+    """Notify users once when a purchased key expires."""
+    try:
+        loop = asyncio.get_running_loop()
+        db = await loop.run_in_executor(None, load_db)
+        users = db.get('users', {})
+        now = datetime.now()
+        db_changed = False
+
+        for user_id_str, user_record in users.items():
+            purchases = user_record.get('purchases', [])
+            for purchase in purchases:
+                expire_date = str(purchase.get('expire_date', '')).strip()
+                if not expire_date:
+                    continue
+
+                try:
+                    expire_dt = datetime.strptime(expire_date, '%Y-%m-%d')
+                except Exception:
+                    continue
+
+                if now <= expire_dt:
+                    continue
+
+                if purchase.get('status') != 'expired':
+                    purchase['status'] = 'expired'
+                    db_changed = True
+
+                if purchase.get('expiry_notified'):
+                    continue
+
+                try:
+                    await context.bot.send_message(
+                        chat_id=int(user_id_str),
+                        text=_build_expiry_message(user_record, purchase),
+                        parse_mode=ParseMode.HTML
+                    )
+                    purchase['expiry_notified'] = True
+                    db_changed = True
+                except Exception as exc:
+                    logger.warning(f"Failed to send expiry notification to {user_id_str}: {exc}")
+
+        if db_changed:
+            await loop.run_in_executor(None, save_db, db)
+    except Exception as exc:
+        logger.exception(f"Expired key notification job failed: {exc}")
+
+
 def is_maintenance_mode_enabled(db: dict | None = None) -> bool:
     local_db = db if db is not None else load_db()
     return bool(local_db.get('maintenance_mode', False))
@@ -3742,7 +3814,8 @@ def save_purchase_history(user_id, product, key_value, duration, expire_date=Non
         'key': key_value or '',
         'buy_date': datetime.now().strftime('%Y-%m-%d'),
         'expire_date': expire_date or '',
-        'status': 'active'  # Default status is active
+        'status': 'active',  # Default status is active
+        'expiry_notified': False
     }
     
     users[uid]['purchases'].append(entry)
@@ -4589,7 +4662,8 @@ async def confirm_buy(update: Update, context: CallbackContext) -> None:
                     'key': key_value,
                     'buy_date': datetime.now().strftime('%Y-%m-%d'),
                     'expire_date': expire_date or '',
-                    'status': 'active'
+                    'status': 'active',
+                    'expiry_notified': False
                 }
                 users[uid]['purchases'].append(entry)
                 
@@ -6387,6 +6461,16 @@ def main() -> None:
 
     # Add error handler
     application.add_error_handler(error_handler)
+
+    if application.job_queue:
+        application.job_queue.run_repeating(
+            check_expired_keys_job,
+            interval=3600,
+            first=10,
+            name="expired-key-notifier",
+        )
+    else:
+        logger.warning("Job queue is unavailable. Expiry notifications are disabled.")
 
     # Add pre-processor to log all updates (must be first handler)
     application.add_handler(TypeHandler(Update, pre_handle_update), group=-1)
