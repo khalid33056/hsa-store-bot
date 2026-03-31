@@ -1133,7 +1133,8 @@ def build_main_menu(user_id: int, lang: str | None = None) -> InlineKeyboardMark
         [InlineKeyboardButton(t(user_id, 'btn_profile', lang=lang), callback_data='my_profile'),
          InlineKeyboardButton(t(user_id, 'btn_help', lang=lang), callback_data='help_support')],
         [InlineKeyboardButton(t(user_id, 'btn_choose_language', lang=lang), callback_data='choose_language'),
-         InlineKeyboardButton(t(user_id, 'btn_terms', lang=lang), callback_data='terms')]
+         InlineKeyboardButton(t(user_id, 'btn_terms', lang=lang), callback_data='terms')],
+        [InlineKeyboardButton('🚨 Alert', callback_data='view_alerts')]
     ])
 
 
@@ -2725,65 +2726,10 @@ async def admin_edit_or_reply(query, text: str, reply_markup=None, parse_mode=No
         except Exception:
             await query.message.reply_text(text, reply_markup=reply_markup, parse_mode=parse_mode)
 
-async def admin_manage_keys(update: Update, context: CallbackContext) -> None:
-    query = update.callback_query
-    await query.answer()
-    
-    # Check if user is admin
-    if not is_admin(query.from_user.id):
-        await query.answer("❌ Access Denied!", show_alert=True)
-        return
-    
-    buttons = InlineKeyboardMarkup([
-        [InlineKeyboardButton("➕ Add Key", callback_data="admin_key_add"),
-         InlineKeyboardButton("➖ Remove Key", callback_data="admin_key_remove")],
-        [InlineKeyboardButton("💲 Edit Price", callback_data="admin_edit_price")],
-        [InlineKeyboardButton("🔙 Back", callback_data="admin_key_back")]
-    ])
-    await admin_edit_or_reply(
-        query,
-        "🔐 Key Management Panel\n\nHere you can manage product keys & stock.\n\nSelect an option below 👇",
-        reply_markup=buttons
-    )
+# --- admin key management support helpers ---
 
-async def admin_key_action(update: Update, context: CallbackContext) -> None:
-    query = update.callback_query
-    await query.answer()
-    action = 'add' if query.data == 'admin_key_add' else 'remove'
-    context.user_data['key_flow'] = {'action': action}
-    
-    # Show product categories
-    categories = [
-        ("8_ball_pool", "🎱 8 Ball Pool"),
-        ("carrom_pool", "🥏 Carrom Pool"),
-        ("score_star", "⚽ Score Star"),
-        ("special", "🔥 Special Tools"),
-        ("free_fire", "🔥 Free Fire Tools"),
-        ("certificate_ios", "📗 Certificate iOS")
-    ]
-    
-    kb = []
-    for i in range(0, len(categories), 2):
-        row = []
-        for cat_id, label in categories[i:i+2]:
-            row.append(InlineKeyboardButton(label, callback_data=f"admin_category_{cat_id}"))
-        kb.append(row)
-    kb.append([InlineKeyboardButton("🔙 Back", callback_data="admin_key_back")])
-    
-    await admin_edit_or_reply(
-        query,
-        "📂 Select a category to {} keys:".format("add" if action=='add' else "remove"),
-        reply_markup=InlineKeyboardMarkup(kb)
-    )
-
-async def admin_select_category(update: Update, context: CallbackContext) -> None:
-    query = update.callback_query
-    await query.answer()
-    category = query.data.replace("admin_category_", "")
-    context.user_data['key_flow']['category'] = category
-    
-    # Map categories to hacks
-    category_map = {
+def _get_admin_category_map():
+    return {
         '8_ball_pool': [
             ("snake_engine", "🐍 Snake Engine"),
             ("aim_x", "🎯 Aim X"),
@@ -2813,10 +2759,123 @@ async def admin_select_category(update: Update, context: CallbackContext) -> Non
         'certificate_ios': [
             ("esign", "📘 E-Sign Certificate"),
             ("gbox", "🗳️ GBOX Certificate")
+        ],
+        'all_hacks': [
+            (hack_key, HACK_INFO.get(hack_key, {}).get('name', hack_key))
+            for hack_key in HACK_INFO.keys()
         ]
     }
+
+
+def _get_admin_duration_map():
+    return {
+        'snake_engine': [('3_days', '3 Days'), ('10_days', '10 Days'), ('30_days', '30 Days')],
+        'ninja_engine': [('3_days', '3 Days'), ('7_days', '7 Days'), ('30_days', '30 Days')],
+        'aim_x': [('1_day','1 Day'),('2_days','2 Days'),('7_days','7 Days'),('15_days','15 Days'),('30_days','30 Days')],
+        'aim_king_nonroot': [('7_days','7 Days'),('30_days','30 Days'),('90_days','90 Days')],
+        'ak_loader_root': [('7_days','7 Days'),('30_days','30 Days'),('90_days','90 Days')],
+        'carrom_se': [('3_days', '3 Days'), ('10_days', '10 Days'), ('30_days', '30 Days')],
+        'carrom_ak': [
+            ('auto_7_days', 'Auto 7 Days'),
+            ('auto_30_days', 'Auto 30 Days'),
+            ('normal_7_days', 'Normal 7 Days'),
+            ('normal_30_days', 'Normal 30 Days')
+        ],
+        'score_se': [('3_days', '3 Days'), ('10_days', '10 Days'), ('30_days', '30 Days')],
+        'score_ak': [('7_days', '7 Days'), ('30_days', '30 Days'), ('90_days', '90 Days')],
+        'kos_mode': [('1_day', '1 Day'), ('7_days', '7 Days'), ('15_days', '15 Days'), ('30_days', '30 Days')],
+        'kos_virtual': [('1_day', '1 Day'), ('7_days', '7 Days'), ('15_days', '15 Days'), ('30_days', '30 Days')],
+        'wolf_hack': [('1_day','1 Day'),('7_days','7 Days'),('30_days','30 Days')],
+        'wizard_ios': [('1_day','1 Day'),('7_days','7 Days'),('30_days','30 Days')],
+        'ff_ios': [('1_day', '1 Day'), ('3_days', '3 Days'), ('7_days', '7 Days'), ('30_days', '30 Days')],
+        'ff_android_drip': [('1_day', '1 Day'), ('7_days', '7 Days'), ('30_days', '30 Days')],
+        'ff_android_kos': [('1_day', '1 Day'), ('3_days', '3 Days'), ('7_days', '7 Days'), ('30_days', '30 Days')],
+        'esign': [('30_days_iphone', '30 Days iPhone'), ('90_days_iphone', '90 Days iPhone'), ('360_days_ipad', '360 Days iPad')],
+        'gbox': [('1_year', '1 Year')]
+    }
+
+
+def _get_durations_for_hack(hack: str):
+    # priority static map + fallback to PRODUCTS
+    duration_map = _get_admin_duration_map()
+    if hack in duration_map:
+        return duration_map[hack]
+    options = []
+    for product_id, product_info in PRODUCTS.items():
+        if product_info.get('hack') == hack:
+            options.append((product_info.get('duration'), product_info.get('label')))
+    # Remove duplicates and preserve order
+    seen = set(); result = []
+    for d, label in options:
+        if d not in seen:
+            seen.add(d);
+            result.append((d,label))
+    return result
+
+
+async def admin_manage_keys(update: Update, context: CallbackContext) -> None:
+    query = update.callback_query
+    await query.answer()
     
+    # Check if user is admin
+    if not is_admin(query.from_user.id):
+        await query.answer("❌ Access Denied!", show_alert=True)
+        return
+    
+    buttons = InlineKeyboardMarkup([
+        [InlineKeyboardButton("➕ Add Key", callback_data="admin_key_add"),
+         InlineKeyboardButton("➖ Remove Key", callback_data="admin_key_remove")],
+        [InlineKeyboardButton("💲 Edit Price", callback_data="admin_edit_price")],
+        [InlineKeyboardButton("🔙 Back", callback_data="admin_key_back")]
+    ])
+    await admin_edit_or_reply(
+        query,
+        "🔐 Key Management Panel\n\nHere you can manage product keys & stock.\n\nSelect an option below 👇",
+        reply_markup=buttons
+    )
+
+async def admin_key_action(update: Update, context: CallbackContext) -> None:
+    query = update.callback_query
+    await query.answer()
+    action = 'add' if query.data == 'admin_key_add' else 'remove'
+    context.user_data['key_flow'] = {'action': action}
+    
+    # Show product categories
+    categories = [
+        ("all_hacks", "🌐 All Hacks"),
+        ("8_ball_pool", "🎱 8 Ball Pool"),
+        ("carrom_pool", "🥏 Carrom Pool"),
+        ("score_star", "⚽ Score Star"),
+        ("special", "🔥 Special Tools"),
+        ("free_fire", "🔥 Free Fire Tools"),
+        ("certificate_ios", "📗 Certificate iOS")
+    ]
+    
+    kb = []
+    for i in range(0, len(categories), 2):
+        row = []
+        for cat_id, label in categories[i:i+2]:
+            row.append(InlineKeyboardButton(label, callback_data=f"admin_category_{cat_id}"))
+        kb.append(row)
+    kb.append([InlineKeyboardButton("🔙 Back", callback_data="admin_key_back")])
+    
+    await admin_edit_or_reply(
+        query,
+        "📂 Select a category to {} keys:".format("add" if action=='add' else "remove"),
+        reply_markup=InlineKeyboardMarkup(kb)
+    )
+
+async def admin_select_category(update: Update, context: CallbackContext) -> None:
+    query = update.callback_query
+    await query.answer()
+    category = query.data.replace("admin_category_", "")
+    context.user_data['key_flow']['category'] = category
+    
+    category_map = _get_admin_category_map()
     hacks = category_map.get(category, [])
+    if not hacks:
+        await admin_edit_or_reply(query, "❌ Category not found. Please choose a valid category.")
+        return
     kb = []
     for i in range(0, len(hacks), 2):
         row = []
@@ -2836,30 +2895,10 @@ async def admin_select_hack(update: Update, context: CallbackContext) -> None:
     await query.answer()
     hack = query.data.replace("admin_hack_", "")
     context.user_data['key_flow']['hack'] = hack
-    # display durations according to hack
-    durations_map = {
-        'snake_engine': [('3_days', '3 Days'), ('10_days', '10 Days'), ('30_days', '30 Days')],
-        'ninja_engine': [('3_days', '3 Days'), ('7_days', '7 Days'), ('30_days', '30 Days')],
-        'aim_x': [('1_day','1 Day'),('2_days','2 Days'),('7_days','7 Days'),('15_days','15 Days'),('30_days','30 Days')],
-        'aim_king_nonroot': [('7_days','7 Days'),('30_days','30 Days'),('90_days','90 Days')],
-        'ak_loader_root': [('7_days','7 Days'),('30_days','30 Days'),('90_days','90 Days')],
-        'carrom_se': [('3_days', '3 Days'), ('10_days', '10 Days'), ('30_days', '30 Days')],
-        'carrom_ak': [
-            ('auto_7_days', 'Auto 7 Days'),
-            ('auto_30_days', 'Auto 30 Days'),
-            ('normal_7_days', 'Normal 7 Days'),
-            ('normal_30_days', 'Normal 30 Days')
-        ],
-        'score_se': [('3_days', '3 Days'), ('10_days', '10 Days'), ('30_days', '30 Days')],
-        'score_ak': [('7_days', '7 Days'), ('30_days', '30 Days'), ('90_days', '90 Days')],
-        'kos_mode': [('1_day', '1 Day'), ('7_days', '7 Days'), ('15_days', '15 Days'), ('30_days', '30 Days')],
-        'kos_virtual': [('1_day', '1 Day'), ('7_days', '7 Days'), ('15_days', '15 Days'), ('30_days', '30 Days')],
-        'wolf_hack': [('1_day','1 Day'),('7_days','7 Days'),('30_days','30 Days')],
-        'wizard_ios': [('1_day','1 Day'),('7_days','7 Days'),('30_days','30 Days')],
-        'esign': [('30_days_iphone', '30 Days iPhone'), ('90_days_iphone', '90 Days iPhone'), ('360_days_ipad', '360 Days iPad')],
-        'gbox': [('1_year', '1 Year')]
-    }
-    options = durations_map.get(hack, [])
+    options = _get_durations_for_hack(hack)
+    if not options:
+        await admin_edit_or_reply(query, f"❌ No durations configured for {hack}. Please configure in PRODUCTS or helper maps.")
+        return
     kb = []
     for i in range(0, len(options), 2):
         row = []
@@ -3820,6 +3859,153 @@ def save_purchase_history(user_id, product, key_value, duration, expire_date=Non
     
     users[uid]['purchases'].append(entry)
     save_db(db)
+
+async def view_alerts(update: Update, context: CallbackContext) -> None:
+    query = update.callback_query
+    if query:
+        await query.answer()
+
+    user_id = update.effective_user.id if update.effective_user else update.from_user.id
+    db = await asyncio.get_event_loop().run_in_executor(None, load_db)
+    
+    # Get user purchases from the new structure
+    purchases = db.get('users', {}).get(str(user_id), {}).get('purchases', [])
+    
+    # Filter only expired purchases
+    expired_purchases = [p for p in purchases if p.get('status') == 'expired']
+    
+    if not expired_purchases:
+        keyboard = InlineKeyboardMarkup([[InlineKeyboardButton('🔙 Back to Menu', callback_data="back_to_menu")]]) 
+        msg = "<b>🚨 Product Expire Alerts</b>\n\n✅ No expired products. All your keys are active!"
+        if hasattr(update, 'callback_query') and update.callback_query:
+            try:
+                await update.callback_query.edit_message_text(msg, reply_markup=keyboard, parse_mode=ParseMode.HTML)
+            except Exception:
+                try:
+                    await update.callback_query.edit_message_caption(caption=msg, reply_markup=keyboard, parse_mode=ParseMode.HTML)
+                except Exception:
+                    await update.callback_query.message.reply_text(msg, reply_markup=keyboard, parse_mode=ParseMode.HTML)
+        else:
+            await update.message.reply_text(msg, reply_markup=keyboard, parse_mode=ParseMode.HTML)
+        return
+    
+    # Reset to page 0 when viewing alerts
+    context.user_data['alerts_page'] = 0
+    await display_alerts_page(update, context, db, expired_purchases)
+
+
+async def display_alerts_page(update: Update, context: CallbackContext, db, expired_purchases) -> None:
+    """Display a page of expired product alerts with pagination."""
+    items_per_page = 5
+    current_page = context.user_data.get('alerts_page', 0)
+    
+    # Reverse purchases (newest first)
+    reversed_purchases = list(reversed(expired_purchases))
+    
+    # Calculate pagination
+    total_items = len(reversed_purchases)
+    total_pages = (total_items + items_per_page - 1) // items_per_page
+    
+    # Ensure page is within bounds
+    if current_page >= total_pages:
+        current_page = total_pages - 1
+    if current_page < 0:
+        current_page = 0
+    
+    context.user_data['alerts_page'] = current_page
+    
+    # Get items for current page
+    start_idx = current_page * items_per_page
+    end_idx = start_idx + items_per_page
+    page_items = reversed_purchases[start_idx:end_idx]
+    
+    user_id = update.effective_user.id
+    users = db.get('users', {})
+    user_record = users.get(str(user_id), {})
+    
+    msg = f"<b>🚨 Product Expire</b>\n\n"
+    msg += f"<b>Page {current_page + 1}/{total_pages}</b>\n\n"
+    
+    # Process each expired purchase
+    for item in page_items:
+        product_key = item.get("product", "unknown")
+        product_name = html.escape(str(HACK_INFO.get(product_key, {}).get('name', product_key)))
+        key = html.escape(str(item.get("key", "N/A")))
+        duration_key = item.get("duration", "N/A")
+        duration_label = html.escape(str(duration_key).replace('_', ' ').title())
+        price = item.get('price', 0.0)
+        expire_date = str(item.get("expire_date", "N/A"))
+        buy_date = str(item.get("buy_date", "N/A"))
+        
+        # Get username from user record or fallback
+        username = user_record.get('username', 'Unknown')
+        first_name = user_record.get('first_name', '')
+        if username == 'No username':
+            username = first_name if first_name else 'Unknown'
+        if username != 'Unknown' and not username.startswith('@'):
+            display_username = f"@{username}"
+        else:
+            display_username = username
+        
+        msg += f"👤 User name: {html.escape(display_username)}\n"
+        msg += f"📦 Product: {product_name}\n"
+        msg += f"⏳ Duration: {duration_label}\n"
+        msg += f"🔑 Key: <code>{key}</code>\n"
+        msg += f"💰 Price: {price}$\n"
+        msg += f"📅 Purchase Date: {buy_date}\n"
+        msg += f"❌ Expired Date: {expire_date}\n\n"
+    
+    # Build pagination buttons
+    buttons_list = []
+    
+    # Previous and Next buttons
+    nav_buttons = []
+    if current_page > 0:
+        nav_buttons.append(InlineKeyboardButton("⬅️ Previous", callback_data=f"alerts_page_{current_page-1}"))
+    if current_page < total_pages - 1:
+        nav_buttons.append(InlineKeyboardButton("Next ➡️", callback_data=f"alerts_page_{current_page+1}"))
+    
+    if nav_buttons:
+        buttons_list.append(nav_buttons)
+    
+    # Back button
+    buttons_list.append([InlineKeyboardButton('🔙 Back to Menu', callback_data="back_to_menu")])
+    
+    buttons = InlineKeyboardMarkup(buttons_list)
+    
+    # Edit or reply with message
+    query = update.callback_query
+    if query:
+        try:
+            await query.edit_message_text(text=msg, parse_mode=ParseMode.HTML, reply_markup=buttons)
+        except Exception:
+            try:
+                await query.edit_message_caption(caption=msg, parse_mode=ParseMode.HTML, reply_markup=buttons)
+            except Exception:
+                await query.message.reply_text(msg, parse_mode=ParseMode.HTML, reply_markup=buttons)
+    else:
+        await update.message.reply_text(msg, parse_mode=ParseMode.HTML, reply_markup=buttons)
+
+
+async def alerts_page_handler(update: Update, context: CallbackContext) -> None:
+    """Handle pagination for alerts."""
+    query = update.callback_query
+    await query.answer()
+    
+    user_id = query.from_user.id
+    data = query.data  # alerts_page_0, alerts_page_1, etc
+    try:
+        page = int(data.split('_')[-1])
+    except:
+        page = 0
+    
+    context.user_data['alerts_page'] = page
+    db = await asyncio.get_event_loop().run_in_executor(None, load_db)
+    purchases = db.get('users', {}).get(str(user_id), {}).get('purchases', [])
+    expired_purchases = [p for p in purchases if p.get('status') == 'expired']
+    
+    await display_alerts_page(update, context, db, expired_purchases)
+
 
 async def history_handler(update: Update, context: CallbackContext) -> None:
     query = update.callback_query
@@ -6431,6 +6617,8 @@ def main() -> None:
     application.add_handler(CallbackQueryHandler(history_handler, pattern="^history$"))
     application.add_handler(CallbackQueryHandler(next_history, pattern="^next_history$"))
     application.add_handler(CallbackQueryHandler(prev_history, pattern="^prev_history$"))
+    application.add_handler(CallbackQueryHandler(view_alerts, pattern="^view_alerts$"))
+    application.add_handler(CallbackQueryHandler(alerts_page_handler, pattern="^alerts_page_"))
     application.add_handler(CallbackQueryHandler(my_profile, pattern="^my_profile$"))
 
     # admin key management handlers
