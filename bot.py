@@ -133,6 +133,10 @@ HACK_INFO = {
     'gbox': {
         'name': 'GBOX Certificate',
         'image': 'https://i.postimg.cc/cLSDX1Sd/IMG-20260302-170714.png'
+    },
+    '8bp_accounts': {
+        'name': '8 Ball Pool Accounts',
+        'image': 'https://i.postimg.cc/63SX4GDG/IMG-20260301-213107.png'
     }
 }
 
@@ -207,6 +211,11 @@ PRODUCTS = {
     'buy_esign_360_ipad': {'price': 7.0, 'hack': 'esign', 'duration': '360_days_ipad', 'label': '360 Days iPad'},
     # gbox certificate
     'buy_gbox_1year': {'price': 8.0, 'hack': 'gbox', 'duration': '1_year', 'label': '1 Year'},
+    # 8 ball pool accounts
+    'buy_8bp_1b': {'price': 2.8, 'hack': '8bp_accounts', 'duration': '1b_coins', 'label': '1B Coins'},
+    'buy_8bp_2b': {'price': 5.5, 'hack': '8bp_accounts', 'duration': '2b_coins', 'label': '2B Coins'},
+    'buy_8bp_3b': {'price': 8.0, 'hack': '8bp_accounts', 'duration': '3b_coins', 'label': '3B Coins'},
+    'buy_8bp_100m': {'price': 2.4, 'hack': '8bp_accounts', 'duration': '100m_coins', 'label': '100M Coins'},
 }
 
 API_TOKEN = '8673798950:AAFe8Iko5CVT5UzovpxRNcYg8qk3iP_RgQQ'
@@ -1571,7 +1580,7 @@ async def buy_8bp_1b(update: Update, context: CallbackContext) -> None:
         users[uid] = {'balance': 0.0, 'purchases': [], 'member_since': datetime.now().strftime("%Y-%m-%d")}
     
     balance = users[uid].get('balance', 0.0)
-    price = 2.8
+    price = get_price('8bp_accounts', '1b_coins')
     
     # Show confirmation message
     text = f"<b>🏷 1B Coin Account  →  ${price}</b>\n\n"
@@ -1613,7 +1622,7 @@ async def buy_8bp_100m(update: Update, context: CallbackContext) -> None:
         users[uid] = {'balance': 0.0, 'purchases': [], 'member_since': datetime.now().strftime("%Y-%m-%d")}
     
     balance = users[uid].get('balance', 0.0)
-    price = 2.4
+    price = get_price('8bp_accounts', '100m_coins')
     
     # Show confirmation message
     text = f"<b>🏷 100M Coin Account  →  ${price}</b>\n\n"
@@ -1656,7 +1665,7 @@ async def buy_8bp_2b(update: Update, context: CallbackContext) -> None:
         users[uid] = {'balance': 0.0, 'purchases': [], 'member_since': datetime.now().strftime("%Y-%m-%d")}
 
     balance = users[uid].get('balance', 0.0)
-    price = 5.5
+    price = get_price('8bp_accounts', '2b_coins')
 
     text = f"<b>🏷 2B Coin Account  →  ${price}</b>\n\n"
     text += f"{t(user_id, 'confirm_sure')}\n"
@@ -1698,7 +1707,7 @@ async def buy_8bp_3b(update: Update, context: CallbackContext) -> None:
         users[uid] = {'balance': 0.0, 'purchases': [], 'member_since': datetime.now().strftime("%Y-%m-%d")}
 
     balance = users[uid].get('balance', 0.0)
-    price = 8.0
+    price = get_price('8bp_accounts', '3b_coins')
 
     text = f"<b>🏷 3B Coin Account  →  ${price}</b>\n\n"
     text += f"{t(user_id, 'confirm_sure')}\n"
@@ -2552,14 +2561,21 @@ def _format_expiry_username(user_record: dict) -> str:
 def _build_expiry_message(user_record: dict, purchase: dict) -> str:
     product_key = purchase.get('product', 'Unknown')
     product_name = HACK_INFO.get(product_key, {}).get('name', product_key)
+    buy_date = str(purchase.get('buy_date', 'N/A')).strip()
+    expire_date = str(purchase.get('expire_date', 'N/A')).strip()
+    duration = str(purchase.get('duration', 'N/A')).replace('_', ' ').title()
+    key = html.escape(str(purchase.get('key', 'N/A')))
+    
     return (
         "<b>🔴 KEY EXPIRED</b>\n\n"
-        f"<b>👤 Username:</b> {_format_expiry_username(user_record)}\n"
-        f"<b>📦 Product:</b> {html.escape(str(product_name))}\n"
-        f"<b>🔑 Key:</b> <code>{html.escape(str(purchase.get('key', 'N/A')))}</code>\n"
-        f"<b>📅 Buy Date:</b> {html.escape(str(purchase.get('buy_date', 'N/A')))}\n"
-        f"<b>⏰ Expire Date:</b> {html.escape(str(purchase.get('expire_date', 'N/A')))}\n\n"
-        "<b>Please click Product button if you need a renewal.</b>"
+        f"👤 <b>Username:</b> {_format_expiry_username(user_record)}\n"
+        f"📦 <b>Product:</b> {html.escape(str(product_name))}\n"
+        f"⏳ <b>Duration:</b> {duration}\n"
+        f"🔑 <b>Key:</b> <code>{key}</code>\n"
+        f"💰 <b>Price:</b> ${purchase.get('price', 'N/A')}\n"
+        f"📅 <b>Purchase Date:</b> {buy_date}\n"
+        f"❌ <b>Expired Date:</b> {expire_date}\n\n"
+        "<b>🛒 Click Product button to purchase renewal</b>"
     )
 
 
@@ -3065,7 +3081,8 @@ async def admin_price_select_category(update: Update, context: CallbackContext) 
             ("aim_x", "🎯 Aim X"),
             ("aim_king_nonroot", "🎯 Aim King"),
             ("ak_loader_root", "🔓 AK Loader"),
-            ("ninja_engine", "🥷 Ninja Engine")
+            ("ninja_engine", "🥷 Ninja Engine"),
+            ("8bp_accounts", "🎱 8BP Accounts")
         ],
         'carrom_pool': [
             ("carrom_se", "🥏 Carrom SE"),
@@ -3137,7 +3154,13 @@ async def admin_price_select_hack(update: Update, context: CallbackContext) -> N
         'ff_android_drip': [('1_day', '1 Day'), ('7_days', '7 Days'), ('30_days', '30 Days')],
         'ff_android_kos': [('1_day', '1 Day'), ('3_days', '3 Days'), ('7_days', '7 Days'), ('30_days', '30 Days')],
         'esign': [('30_days_iphone', '30 Days iPhone'), ('90_days_iphone', '90 Days iPhone'), ('360_days_ipad', '360 Days iPad')],
-        'gbox': [('1_year', '1 Year')]
+        'gbox': [('1_year', '1 Year')],
+        '8bp_accounts': [
+            ('1b_coins', '1B Coins'),
+            ('2b_coins', '2B Coins'),
+            ('3b_coins', '3B Coins'),
+            ('100m_coins', '100M Coins')
+        ]
     }
     
     options = durations_map.get(hack, [])
@@ -4848,6 +4871,7 @@ async def confirm_buy(update: Update, context: CallbackContext) -> None:
                     'key': key_value,
                     'buy_date': datetime.now().strftime('%Y-%m-%d'),
                     'expire_date': expire_date or '',
+                    'price': price,
                     'status': 'active',
                     'expiry_notified': False
                 }
