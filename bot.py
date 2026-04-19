@@ -3047,6 +3047,7 @@ async def admin_edit_price(update: Update, context: CallbackContext) -> None:
     
     categories = [
         ("8_ball_pool", "🎱 8 Ball Pool"),
+        ("8bp_accounts", "🎱 8BP Accounts"),
         ("carrom_pool", "🥏 Carrom Pool"),
         ("score_star", "⚽ Score Star"),
         ("special", "🔥 Special Tools"),
@@ -3106,6 +3107,12 @@ async def admin_price_select_category(update: Update, context: CallbackContext) 
         'certificate_ios': [
             ("esign", "📘 E-Sign Certificate"),
             ("gbox", "🗳️ GBOX Certificate")
+        ],
+        '8bp_accounts': [
+            ("1b_coins", "1B Coins"),
+            ("2b_coins", "2B Coins"),
+            ("3b_coins", "3B Coins"),
+            ("100m_coins", "100M Coins")
         ]
     }
     
