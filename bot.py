@@ -3109,10 +3109,7 @@ async def admin_price_select_category(update: Update, context: CallbackContext) 
             ("gbox", "🗳️ GBOX Certificate")
         ],
         '8bp_accounts': [
-            ("1b_coins", "1B Coins"),
-            ("2b_coins", "2B Coins"),
-            ("3b_coins", "3B Coins"),
-            ("100m_coins", "100M Coins")
+            ("8bp_accounts", "🎱 8BP Accounts")
         ]
     }
     
@@ -3178,9 +3175,13 @@ async def admin_price_select_hack(update: Update, context: CallbackContext) -> N
     kb.append([InlineKeyboardButton("🔙 Back", callback_data=f"price_category_{context.user_data['price_flow'].get('category', 'special')}")])
     
     friendly = HACK_INFO.get(hack, {}).get('name', hack)
+    prompt_text = "Select duration to edit:"
+    if hack == '8bp_accounts':
+        prompt_text = "Select account to edit:"
+
     await admin_edit_or_reply(
         query,
-        f"📊 Edit prices for <b>{friendly}</b>\n\nSelect duration to edit:",
+        f"📊 Edit prices for <b>{friendly}</b>\n\n{prompt_text}",
         reply_markup=InlineKeyboardMarkup(kb),
         parse_mode=ParseMode.HTML
     )
@@ -3202,13 +3203,14 @@ async def admin_price_select_duration(update: Update, context: CallbackContext) 
     context.user_data['price_flow']['duration'] = duration
     
     friendly = HACK_INFO.get(hack, {}).get('name', hack)
-    dur_label = duration.replace('_', ' ')
+    account_label = duration.replace('_', ' ').title()
     current_price = get_price(hack, duration)
     
+    label_name = "Account" if hack == '8bp_accounts' else "Duration"
     init_msg = (
         f"<b>💰 Edit Price</b>\n\n"
         f"<b>Tool:</b> {friendly}\n"
-        f"<b>Duration:</b> {dur_label}\n"
+        f"<b>{label_name}:</b> {account_label}\n"
         f"<b>Current Price:</b> ${current_price}\n\n"
         f"Send the new price (e.g., 4.99):"
     )
