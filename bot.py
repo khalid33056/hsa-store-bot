@@ -1740,7 +1740,7 @@ async def confirm_buy_8bp_1b(update: Update, context: CallbackContext) -> None:
         users[uid] = {'balance': 0.0, 'purchases': [], 'member_since': datetime.now().strftime("%Y-%m-%d")}
     
     balance = users[uid].get('balance', 0.0)
-    price = 2.8
+    price = get_price('8bp_accounts', '1b_coins')
 
     if balance >= price:
         # Check if account is available
@@ -1832,7 +1832,7 @@ async def confirm_buy_8bp_100m(update: Update, context: CallbackContext) -> None
         users[uid] = {'balance': 0.0, 'purchases': [], 'member_since': datetime.now().strftime("%Y-%m-%d")}
     
     balance = users[uid].get('balance', 0.0)
-    price = 2.4
+    price = get_price('8bp_accounts', '100m_coins')
 
     if balance >= price:
         # Check if account is available
@@ -1925,7 +1925,7 @@ async def confirm_buy_8bp_2b(update: Update, context: CallbackContext) -> None:
         users[uid] = {'balance': 0.0, 'purchases': [], 'member_since': datetime.now().strftime("%Y-%m-%d")}
 
     balance = users[uid].get('balance', 0.0)
-    price = 5.5
+    price = get_price('8bp_accounts', '2b_coins')
 
     if balance >= price:
         accounts = db.get('8bp_accounts_2b', [])
@@ -2015,7 +2015,7 @@ async def confirm_buy_8bp_3b(update: Update, context: CallbackContext) -> None:
         users[uid] = {'balance': 0.0, 'purchases': [], 'member_since': datetime.now().strftime("%Y-%m-%d")}
 
     balance = users[uid].get('balance', 0.0)
-    price = 8.0
+    price = get_price('8bp_accounts', '3b_coins')
 
     if balance >= price:
         accounts = db.get('8bp_accounts_3b', [])
