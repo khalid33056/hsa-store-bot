@@ -75,11 +75,11 @@ HACK_INFO = {
         'image': 'https://i.postimg.cc/7Zp09B07/IMG-20260301-212442.png'
     },
     'aim_king_nonroot': {
-        'name': 'Aim King Non-Root',
+        'name': 'Aim King Aqe',
         'image': 'https://i.postimg.cc/W1twXFK4/IMG-20260301-213329.png'
     },
     'ak_loader_root': {
-        'name': 'AK Loader Root',
+        'name': 'Aim King Normal',
         'image': 'https://i.postimg.cc/W1twXFK4/IMG-20260301-213329.png'
     },
     'wolf_hack': {
@@ -153,10 +153,12 @@ PRODUCTS = {
     'buy_aimx_15': {'price': 3.6, 'hack': 'aim_x', 'duration': '15_days', 'label': '15 Days'},
     'buy_aimx_30': {'price': 5.6, 'hack': 'aim_x', 'duration': '30_days', 'label': '30 Days'},
     # aim king
+    'buy_aimking_nonroot_3': {'price': 1.0, 'hack': 'aim_king_nonroot', 'duration': '3_days', 'label': '3 Days'},
     'buy_aimking_nonroot_7': {'price': 8.3, 'hack': 'aim_king_nonroot', 'duration': '7_days', 'label': '7 Days'},
     'buy_aimking_nonroot_30': {'price': 19.5, 'hack': 'aim_king_nonroot', 'duration': '30_days', 'label': '30 Days'},
     'buy_aimking_nonroot_90': {'price': 52.0, 'hack': 'aim_king_nonroot', 'duration': '90_days', 'label': '90 Days'},
     # ak loader
+    'buy_akloader_3': {'price': 1.0, 'hack': 'ak_loader_root', 'duration': '3_days', 'label': '3 Days'},
     'buy_akloader_7': {'price': 6.9, 'hack': 'ak_loader_root', 'duration': '7_days', 'label': '7 Days'},
     'buy_akloader_30': {'price': 16.4, 'hack': 'ak_loader_root', 'duration': '30_days', 'label': '30 Days'},
     'buy_akloader_90': {'price': 42.0, 'hack': 'ak_loader_root', 'duration': '90_days', 'label': '90 Days'},
@@ -2749,8 +2751,8 @@ def _get_admin_category_map():
         '8_ball_pool': [
             ("snake_engine", "🐍 Snake Engine"),
             ("aim_x", "🎯 Aim X"),
-            ("aim_king_nonroot", "🎯 Aim King"),
-            ("ak_loader_root", "🔓 AK Loader"),
+            ("aim_king_nonroot", "🎯 Aim King Aqe"),
+            ("ak_loader_root", "🔓 Aim King Normal"),
             ("ninja_engine", "🥷 Ninja Engine")
         ],
         'carrom_pool': [
@@ -2788,8 +2790,8 @@ def _get_admin_duration_map():
         'snake_engine': [('3_days', '3 Days'), ('10_days', '10 Days'), ('30_days', '30 Days')],
         'ninja_engine': [('3_days', '3 Days'), ('7_days', '7 Days'), ('30_days', '30 Days')],
         'aim_x': [('1_day','1 Day'),('2_days','2 Days'),('7_days','7 Days'),('15_days','15 Days'),('30_days','30 Days')],
-        'aim_king_nonroot': [('7_days','7 Days'),('30_days','30 Days'),('90_days','90 Days')],
-        'ak_loader_root': [('7_days','7 Days'),('30_days','30 Days'),('90_days','90 Days')],
+        'aim_king_nonroot': [('3_days','3 Days'),('7_days','7 Days'),('30_days','30 Days'),('90_days','90 Days')],
+        'ak_loader_root': [('3_days','3 Days'),('7_days','7 Days'),('30_days','30 Days'),('90_days','90 Days')],
         'carrom_se': [('3_days', '3 Days'), ('10_days', '10 Days'), ('30_days', '30 Days')],
         'carrom_ak': [
             ('auto_7_days', 'Auto 7 Days'),
@@ -3139,8 +3141,8 @@ async def admin_price_select_hack(update: Update, context: CallbackContext) -> N
         'snake_engine': [('3_days', '3 Days'), ('10_days', '10 Days'), ('30_days', '30 Days')],
         'ninja_engine': [('3_days', '3 Days'), ('7_days', '7 Days'), ('30_days', '30 Days')],
         'aim_x': [('1_day','1 Day'),('2_days','2 Days'),('7_days','7 Days'),('15_days','15 Days'),('30_days','30 Days')],
-        'aim_king_nonroot': [('7_days','7 Days'),('30_days','30 Days'),('90_days','90 Days')],
-        'ak_loader_root': [('7_days','7 Days'),('30_days','30 Days'),('90_days','90 Days')],
+        'aim_king_nonroot': [('3_days','3 Days'),('7_days','7 Days'),('30_days','30 Days'),('90_days','90 Days')],
+        'ak_loader_root': [('3_days','3 Days'),('7_days','7 Days'),('30_days','30 Days'),('90_days','90 Days')],
         'carrom_se': [('3_days', '3 Days'), ('10_days', '10 Days'), ('30_days', '30 Days')],
         'carrom_ak': [
             ('auto_7_days', 'Auto 7 Days'),
@@ -3223,19 +3225,21 @@ async def aimking_nonroot(update: Update, context: CallbackContext) -> None:
     db = load_db()
     balance = db.get('users', {}).get(str(user_id), {}).get('balance', 0.0)
 
-    text = "<b>🎯 Aim King Non-Root</b>\n\n"
+    text = "<b>🎯 Aim King Aqe</b>\n\n"
     text += "Choose your duration ⏳\n\n"
     text += f"<b>💰 Your Balance:</b> {balance}$\n\n"
 
     # Fetch dynamic prices from Firestore
+    price_3 = get_price('aim_king_nonroot', '3_days')
     price_7 = get_price('aim_king_nonroot', '7_days')
     price_30 = get_price('aim_king_nonroot', '30_days')
     price_90 = get_price('aim_king_nonroot', '90_days')
 
     menu = InlineKeyboardMarkup([
-        [InlineKeyboardButton(f"⏳ 7 Days – ${price_7}", callback_data="buy_aimking_nonroot_7"),
-         InlineKeyboardButton(f"⏳ 30 Days – ${price_30}", callback_data="buy_aimking_nonroot_30")],
-        [InlineKeyboardButton(f"⏳ 90 Days – ${price_90}", callback_data="buy_aimking_nonroot_90")],
+        [InlineKeyboardButton(f"⏳ 3 Days – ${price_3}", callback_data="buy_aimking_nonroot_3"),
+         InlineKeyboardButton(f"⏳ 7 Days – ${price_7}", callback_data="buy_aimking_nonroot_7")],
+        [InlineKeyboardButton(f"⏳ 30 Days – ${price_30}", callback_data="buy_aimking_nonroot_30"),
+         InlineKeyboardButton(f"⏳ 90 Days – ${price_90}", callback_data="buy_aimking_nonroot_90")],
         [InlineKeyboardButton("🔙 Back", callback_data="item_aimking")]
     ])
 
@@ -3255,8 +3259,8 @@ async def aim_king(update: Update, context: CallbackContext) -> None:
     text += "Choose your preferred version 👇\n\n"
     
     menu = InlineKeyboardMarkup([
-        [InlineKeyboardButton("🎯 Aim King Non-Root", callback_data="aimking_nonroot"),
-         InlineKeyboardButton("🔓 AK Loader Root", callback_data="ak_loader_root")],
+        [InlineKeyboardButton("🎯 Aim King Aqe", callback_data="aimking_nonroot"),
+         InlineKeyboardButton("🔓 Aim King Normal", callback_data="ak_loader_root")],
         [InlineKeyboardButton("🔙 Back", callback_data="product_8ball")]
     ])
     
@@ -3276,18 +3280,20 @@ async def ak_loader_root(update: Update, context: CallbackContext) -> None:
     db = load_db()
     balance = db.get('users', {}).get(str(user_id), {}).get('balance', 0.0)
 
-    text = "<b>🔓 AK Loader Root</b>\n\n"
+    text = "<b>🔓 Aim King Normal</b>\n\n"
     text += "Choose your duration ⏳\n\n"
     text += f"<b>💰 Your Balance:</b> {balance}$\n\n"
 
+    price_3 = get_price('ak_loader_root', '3_days')
     price_7 = get_price('ak_loader_root', '7_days')
     price_30 = get_price('ak_loader_root', '30_days')
     price_90 = get_price('ak_loader_root', '90_days')
 
     menu = InlineKeyboardMarkup([
-        [InlineKeyboardButton(f"⏳ 7 Days – ${price_7}", callback_data="buy_akloader_7"),
-         InlineKeyboardButton(f"⏳ 30 Days – ${price_30}", callback_data="buy_akloader_30")],
-        [InlineKeyboardButton(f"⏳ 90 Days – ${price_90}", callback_data="buy_akloader_90")],
+        [InlineKeyboardButton(f"⏳ 3 Days – ${price_3}", callback_data="buy_akloader_3"),
+         InlineKeyboardButton(f"⏳ 7 Days – ${price_7}", callback_data="buy_akloader_7")],
+        [InlineKeyboardButton(f"⏳ 30 Days – ${price_30}", callback_data="buy_akloader_30"),
+         InlineKeyboardButton(f"⏳ 90 Days – ${price_90}", callback_data="buy_akloader_90")],
         [InlineKeyboardButton("🔙 Back", callback_data="item_aimking")]
     ])
 
