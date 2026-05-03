@@ -5357,11 +5357,12 @@ async def admin_see_stock(update: Update, context: CallbackContext) -> None:
         await query.answer("❌ Access Denied!", show_alert=True)
         return
     
-    # Get unique hack tools from PRODUCTS
+    # Get unique hack tools from PRODUCTS, excluding specific ones
     hacks = {}
+    excluded_hacks = {'carrom_ak', 'carrom_se', 'ff_android_kos', 'score_se', 'wolf_hack'}
     for product_key, product_data in PRODUCTS.items():
         hack = product_data['hack']
-        if hack not in hacks:
+        if hack not in excluded_hacks and hack not in hacks:
             label = HACK_INFO.get(hack, {}).get('name', hack)
             hacks[hack] = label
     
