@@ -1,6 +1,6 @@
 import logging
-from telegram import Update, ChatPermissions, InlineKeyboardButton, InlineKeyboardMarkup
-from telegram.ext import Application, CommandHandler, MessageHandler, ContextTypes, filters, CallbackQueryHandler, ConversationHandler
+from telegram import Update, ChatPermissions, InlineKeyboardButton, InlineKeyboardMarkup, ChatMember, ChatMemberUpdated
+from telegram.ext import Application, CommandHandler, MessageHandler, ContextTypes, filters, CallbackQueryHandler, ConversationHandler, ChatMemberHandler
 from telegram.error import TelegramError
 import json
 import os
@@ -240,19 +240,43 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await auto_delete(msg, context)
 
 async def welcome_new_member(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    """Welcome new members to the group"""
+    """Welcome new members to the group via service message"""
+    if not update.message or not update.message.new_chat_members:
+        return
+        
     for member in update.message.new_chat_members:
         if not member.is_bot:
-            welcome_text = (
-                f"👋 <b>Welcome {member.first_name}!</b>\n\n"
-                f"✨ Enjoy your stay in <b>Lionx Chat Group</b>!\n"
-                f"📌 Please follow the group rules."
-            )
-            try:
-                msg = await update.message.reply_text(welcome_text, parse_mode="HTML")
-                await auto_delete(msg, context)
-            except TelegramError as e:
-                logger.error(f"Error sending welcome message: {e}")
+            logger.info(f"New member joined (service message): {member.first_name}")
+            await send_welcome(update.effective_chat.id, member.first_name, context)
+
+async def welcome_chat_member(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    """Welcome new members via chat member update (more reliable for supergroups)"""
+    result = update.chat_member
+    if not result:
+        return
+        
+    # Check if the user was previously not in the chat and is now a member
+    was_member = result.old_chat_member.status in [ChatMember.MEMBER, ChatMember.ADMINISTRATOR, ChatMember.OWNER]
+    is_member = result.new_chat_member.status in [ChatMember.MEMBER, ChatMember.ADMINISTRATOR, ChatMember.OWNER]
+    
+    if not was_member and is_member:
+        member = result.new_chat_member.user
+        if not member.is_bot:
+            logger.info(f"New member joined (chat member update): {member.first_name}")
+            await send_welcome(update.effective_chat.id, member.first_name, context)
+
+async def send_welcome(chat_id, first_name, context):
+    """Helper to send the welcome message"""
+    welcome_text = (
+        f"👋 <b>Welcome {first_name}!</b>\n\n"
+        f"✨ Enjoy your stay in <b>Lionx Chat Group</b>!\n"
+        f"📌 Please follow the group rules."
+    )
+    try:
+        msg = await context.bot.send_message(chat_id=chat_id, text=welcome_text, parse_mode="HTML")
+        await auto_delete(msg, context, delay=30)
+    except TelegramError as e:
+        logger.error(f"Error sending welcome message: {e}")
 
 def check_spam(update: Update):
     """Check for spam patterns in text"""
@@ -357,9 +381,12 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
     
     # Only check for violations if the user is NOT an admin
     if not is_admin_user:
+        # Check for forwarded messages
+        if update.message.forward_date or update.message.forward_from or update.message.forward_from_chat:
+            violation_reason = "forwarding messages"
+            
         # Check for spam
-        spam_type = check_spam(update)
-        if spam_type:
+        elif check_spam(update):
             violation_reason = f"spam ({spam_type})"
         
         # Check for abuse
@@ -958,8 +985,9 @@ def main():
     app.add_handler(CommandHandler("clear_warnings", clear_warnings))
     app.add_handler(CommandHandler("warnings", check_warnings))
     
-    # Welcome new members
+    # Welcome new members (two ways for maximum reliability)
     app.add_handler(MessageHandler(filters.StatusUpdate.NEW_CHAT_MEMBERS, welcome_new_member))
+    app.add_handler(ChatMemberHandler(welcome_chat_member, ChatMemberHandler.CHAT_MEMBER))
     
     # Handle all messages
     app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_message))
